@@ -1,0 +1,1 @@
+SELECT name, longitude, latitude FROM building WHERE building_id = %s

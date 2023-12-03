@@ -1,0 +1,1 @@
+SELECT name, top_right_latitude, top_right_longitude, bottom_left_latitude, bottom_left_longitude FROM parking_lot
