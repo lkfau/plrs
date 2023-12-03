@@ -35,11 +35,6 @@ def sort_lots(destination_result, lots_result):
             x2, y2 = get_center(lots_result[j+1][1], lots_result[j+1][2], lots_result[j+1][3], lots_result[j+1][4])
             if distance(destination_result[1], destination_result[2], x1, y1) > distance(destination_result[1], destination_result[2], x2, y2):
                 lots_result[j], lots_result[j + 1] = lots_result[j + 1], lots_result[j]
-
-    x1, y1 = get_center(lots_result[0][1], lots_result[0][2], lots_result[0][3], lots_result[0][4])
-    print("Distance from closest lot the destination: ", distance(destination_result[1], destination_result[2], x1, y1))
-    x2, y2 = get_center(lots_result[1][1], lots_result[1][2], lots_result[1][3], lots_result[1][4])
-    print("Distance from second closest lot the destination: ", distance(destination_result[1], destination_result[2], x2, y2))
     return lots_result
 
 
