@@ -1,1 +1,1 @@
-# plrs
+# Parking Spot Recommendation System (PLRS)
