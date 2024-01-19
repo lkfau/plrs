@@ -30,6 +30,36 @@ def get_best_distance(dest_x, dest_y, lot_rect):
     # coefficient converts decimal latitude degrees to feet
     return min(distances) * 364500 
 
+
+
+
+
+
+
+
+
+#def save_user_feedback (user response array which will include [lot parked in, full(1) or still has room(1), time of response])
+    #take in user feedback and append it to the user feedback table in the Database
+
+#def calc_lot_fullness_floats (list of lots with distance to destination)
+    #access database and grab the list of all user responses that came in within the last x amount of time
+    #use those to calc lot fullness floats 
+    #RETURN a list of the lots with distances to destination and the fullness floats appended onto them
+
+#def sort_lots(list of lots with distance to destination, user prefers lot vacancy or shortest dist)
+    #sort lots by distance
+    #pass to calc_lot_fullness_floats function and save the returned list over as the new lot list now with the fullness floats
+    #remove lots that above the max fullness float value like say 0.8
+    #then for users who prefer lot vacancy remove lots with a fullness float even close to that so like every lot with a fullness float over 0.6
+    #RETURN a list of 5 (maybe more maybe less idk) results of the closest lots that weren't removed from the list
+
+
+
+
+
+
+
+
 # create endpoint
 app_recommend = Blueprint('app_recommend', __name__)
 @app_recommend.route('/recommend', methods=['GET'])
