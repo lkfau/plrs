@@ -1,7 +1,7 @@
 import math
 from flask import request, Blueprint
 
-from db_connection import run_query
+from ..database.db_connection import run_query as query
 
 # LotRecommendation: object return type for /recommend requests
 class LotRecommendation:
@@ -28,7 +28,7 @@ def get_best_distance(dest_x, dest_y, lot_rect):
     ]
 
     # coefficient converts decimal latitude degrees to feet
-    return min(distances) * 364500 
+    return round(min(distances) * 364500)
 
 
 
@@ -70,8 +70,8 @@ def recommend():
     permit_type_id = request.args.get('permit_type_id', default=0, type=int)
 
     # get necessary data
-    lots_result = run_query('get_parking_lots.sql', [permit_type_id], True) #get parking lots
-    destination_result = run_query('get_destination.sql', [building_id], False) #get destination buliding
+    lots_result = query('get_parking_lots.sql', [permit_type_id], "all") #get parking lots
+    destination_result = query('get_destination.sql', [building_id], "one") #get destination buliding
 
     # iteratively deserialize lots into LotRecommendation object array
     lots_result = list(map(lambda lot : LotRecommendation(

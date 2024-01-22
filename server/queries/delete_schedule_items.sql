@@ -1,0 +1,1 @@
+DELETE FROM schedule_item WHERE schedule_id = %s;
