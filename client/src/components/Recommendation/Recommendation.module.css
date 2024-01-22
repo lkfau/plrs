@@ -1,0 +1,16 @@
+.container {
+    border-radius: 1rem;
+    padding: 0.5rem 2rem;
+    background-color: #fff;
+    margin: 1rem 0;
+    filter: drop-shadow(2px 2px 5px #ccc);
+}
+
+.container h2, .container p {
+    margin: 0.7rem 0;
+}
+
+.title {
+    color: blueviolet;
+    margin-bottom: 0;
+}

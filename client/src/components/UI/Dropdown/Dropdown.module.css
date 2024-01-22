@@ -1,0 +1,24 @@
+.header {
+    background-color: #ddd;
+    padding: 0.3rem 1rem;
+    width: 20rem;
+    box-sizing: border-box;
+}
+
+.container {
+    max-height: 20rem;
+    overflow-y: scroll;
+    width: 20rem;
+}
+
+.element {
+    background-color: #eee;
+    padding: 0.3rem 1rem;
+    width: 100%;
+    border-top: 1px solid #AAA;
+    box-sizing: border-box;
+}
+
+.element:hover {
+    background-color: #ddd;
+}
