@@ -1,4 +1,5 @@
 from flask import request, Blueprint, jsonify
+from flask_cors import cross_origin
 from ..database.db_connection import run_query as query
 
 # ParkingLot: object return type for /recommend requests
@@ -10,6 +11,7 @@ class Building:
 # create endpoint
 app_buildings = Blueprint('app_buildings', __name__)
 @app_buildings.route('/buildings', methods=['GET'])
+@cross_origin()
 
 def buildings():
     try:
