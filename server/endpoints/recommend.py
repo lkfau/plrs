@@ -1,21 +1,30 @@
 import math
+from datetime import datetime
+#from feedback import get_user_feedback
+from ..database.db_connection import run_query as query
 from flask import request, Blueprint
 
-from ..database.db_connection import run_query as query
 
 # LotRecommendation: object return type for /recommend requests
 class LotRecommendation:
-    def __init__(self, lot_id, lot_name, feetToDestination):
+    def __init__(self, lot_id, lot_name, feetToDestination, fullness):
         self.lot_id = lot_id
         self.lot_name = lot_name
         self.feetToDestination = feetToDestination
+        self.fullness = fullness
+
+class userProfile:
+    def __init__(self, permits, user_prefers_vacancy, name):
+        self.permits = permits
+        self.user_prefers_vacancy = user_prefers_vacancy
+        self.name = name
 
 # distance(): returns distance between points (x1, y1) and (x2, y2)
 def distance(x1, y1, x2, y2):
     distance = math.sqrt(((x2-x1)**2)+ ((y2-y1)**2))
     return distance
 
-# get-best_distance(): returns closest distance between (dest_x, dest_y) 
+# get_best_distance(): returns closest distance between (dest_x, dest_y) 
 #                      and corners of rectangle defined by lot_rect
 def get_best_distance(dest_x, dest_y, lot_rect):
     # find distance from destination to all four corners of the parking lot
@@ -32,31 +41,39 @@ def get_best_distance(dest_x, dest_y, lot_rect):
 
 
 
+def sort_lots(lots, user_prefers_vacancy):
+    lots.sort(key = lambda lot : lot.feetToDestination)
 
+    for i in range(len(lots)):
+        if user_prefers_vacancy == 1 and lots[i].fullness > 0.5:
+            del lots[i]
+        elif lots[i].fullness > 0.6:
+            del lots[i]
 
+    return lots
 
-
-
-
-#def save_user_feedback (user response array which will include [lot parked in, full(1) or still has room(1), time of response])
-    #take in user feedback and append it to the user feedback table in the Database
-
-#def calc_lot_fullness_floats (list of lots with distance to destination)
-    #access database and grab the list of all user responses that came in within the last x amount of time
-    #use those to calc lot fullness floats 
-    #RETURN a list of the lots with distances to destination and the fullness floats appended onto them
-
-#def sort_lots(list of lots with distance to destination, user prefers lot vacancy or shortest dist)
-    #sort lots by distance
-    #pass to calc_lot_fullness_floats function and save the returned list over as the new lot list now with the fullness floats
-    #remove lots that above the max fullness float value like say 0.8
-    #then for users who prefer lot vacancy remove lots with a fullness float even close to that so like every lot with a fullness float over 0.6
-    #RETURN a list of 5 (maybe more maybe less idk) results of the closest lots that weren't removed from the list
-
-
-
-
-
+def calc_lot_fullness_float(lot_id):
+    user_responses = get_user_feedback(30) #grab all user responses that came in the last 30 minutes
+    lot_fullness_float = 0
+    i = 0
+    curtime = datetime.now()
+    for response in user_responses:
+        if response[0] == lot_id:
+            timediff = curtime - response[2]
+            #make the response become weighted less as it gets older
+            if timediff.total_seconds() < 5 * 60:
+                lot_fullness_float += response[1]
+            elif timediff.total_seconds() > 5 * 60 and timediff.total_seconds() < 10 * 60:
+                lot_fullness_float += response[1] / 1.25
+            elif timediff.total_seconds() > 10 * 60 and timediff.total_seconds() < 15 * 60:
+                lot_fullness_float += response[1] / 1.5
+            elif timediff.total_seconds() > 15 * 60 and timediff.total_seconds() < 25 * 60:
+                lot_fullness_float += response[1] / 1.75
+            elif timediff.total_seconds() > 25 * 60:
+                lot_fullness_float += response[1] / 2
+            i += 1
+    lot_fullness_float = lot_fullness_float / i 
+    return lot_fullness_float
 
 
 
@@ -77,11 +94,11 @@ def recommend():
     lots_result = list(map(lambda lot : LotRecommendation(
         lot_id=lot[0], 
         lot_name=lot[1], 
-        feetToDestination=get_best_distance(destination_result[1],  destination_result[2], lot[2:6])
+        feetToDestination=get_best_distance(destination_result[1],  destination_result[2], lot[2:6]),
+        fullness=calc_lot_fullness_float(lot[0])
     ), lots_result))
 
-    # sort lots by distance to building
-    lots_result.sort(key = lambda lot : lot.feetToDestination)
-
+    #sort lots and call the function with user not preferring vacancy just to test
+    lots_result = sort_lots(lots_result, 0)
     # return top 3 results
     return list(map(lambda lot: lot.__dict__, lots_result[0:3]))

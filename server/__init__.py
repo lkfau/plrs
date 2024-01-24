@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from server.endpoints.buildings import app_buildings
+from server.endpoints.feedback import app_feedback
 from server.endpoints.recommend import app_recommend
 from server.endpoints.schedules import app_schedules
 from server.endpoints.settings import app_settings
@@ -13,6 +14,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 # register /recommend blueprint route
 app.register_blueprint(app_buildings)
+app.register_blueprint(app_feedback)
 app.register_blueprint(app_recommend)
 app.register_blueprint(app_schedules)
 app.register_blueprint(app_settings)
