@@ -10,18 +10,18 @@ class UserFeedback:
             self.user_id = request_data['user_id']
             self.lot_is_full = request_data['lot_is_full']
         elif (query_result != None):
-            self.lot_id = request_data['lot_id']
-            self.user_id = request_data['user_id']
-            self.lot_is_full = request_data['lot_is_full']
-            self.date_created = request_data['date_created']
+            self.lot_id = request_data[0]
+            self.lot_is_full = request_data[1]
+            self.date_created = request_data[2]
 
-def get_user_feedback(time_threshold):
-
-    #calculate the timestamp x amount of time ago from the current time
-    timestamp_threshold = datetime.now() - timedelta(minutes=time_threshold)
+def get_user_feedback(max_minutes_ago):
 
     #run query
-    return query("get_user_feedback.sql", [timestamp_threshold], "all")
+    query_result = query("get_feedback.sql", [max_minutes_ago], "all")
+    print(query_result)
+    #deserialize result into UserFeedback array
+    feedback_result = list(map(lambda feedback : UserFeedback(query_result=feedback), query_result))
+    return feedback_result
 
 
 def save_user_feedback(feedback):

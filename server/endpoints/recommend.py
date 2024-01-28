@@ -1,23 +1,23 @@
 import math
 from datetime import datetime
-#from feedback import get_user_feedback
+from ..endpoints.buildings import get_destination
+from ..endpoints.feedback import get_user_feedback
 from ..database.db_connection import run_query as query
-from flask import request, Blueprint
+from flask import request, Blueprint, jsonify
 
 
 # LotRecommendation: object return type for /recommend requests
+# constructed from query on lot and destination
 class LotRecommendation:
-    def __init__(self, lot_id, lot_name, feetToDestination, fullness):
-        self.lot_id = lot_id
-        self.lot_name = lot_name
-        self.feetToDestination = feetToDestination
-        self.fullness = fullness
+    def __init__(self, query_result):
+        self.lot_id = query_result[0]
+        self.lot_name = query_result[1]
+        self.lot_rect = query_result[2:6]
 
-class userProfile:
-    def __init__(self, permits, user_prefers_vacancy, name):
-        self.permits = permits
-        self.user_prefers_vacancy = user_prefers_vacancy
-        self.name = name
+def get_parking_lots(permit_type_id):
+    query_result = query('get_parking_lots.sql', [permit_type_id], "all") #get parking lots
+    lots_result = list(map(lambda lot : LotRecommendation(query_result=lot), query_result))
+    return lots_result
 
 # distance(): returns distance between points (x1, y1) and (x2, y2)
 def distance(x1, y1, x2, y2):
@@ -39,41 +39,28 @@ def get_best_distance(dest_x, dest_y, lot_rect):
     # coefficient converts decimal latitude degrees to feet
     return round(min(distances) * 364500)
 
-
-
 def sort_lots(lots, user_prefers_vacancy):
-    lots.sort(key = lambda lot : lot.feetToDestination)
+    lots.sort(key = lambda lot : lot.feet_to_destination)
 
-    for i in range(len(lots)):
-        if user_prefers_vacancy == 1 and lots[i].fullness > 0.5:
+    for i in range(len(lots)-1):
+        if user_prefers_vacancy == 1 and lots[i].fullness > 0.4:
             del lots[i]
-        elif lots[i].fullness > 0.6:
+        elif lots[i].fullness > 0.7:
             del lots[i]
 
     return lots
 
-def calc_lot_fullness_float(lot_id):
-    user_responses = get_user_feedback(30) #grab all user responses that came in the last 30 minutes
-    lot_fullness_float = 0
-    i = 0
-    curtime = datetime.now()
-    for response in user_responses:
-        if response[0] == lot_id:
-            timediff = curtime - response[2]
-            #make the response become weighted less as it gets older
-            if timediff.total_seconds() < 5 * 60:
-                lot_fullness_float += response[1]
-            elif timediff.total_seconds() > 5 * 60 and timediff.total_seconds() < 10 * 60:
-                lot_fullness_float += response[1] / 1.25
-            elif timediff.total_seconds() > 10 * 60 and timediff.total_seconds() < 15 * 60:
-                lot_fullness_float += response[1] / 1.5
-            elif timediff.total_seconds() > 15 * 60 and timediff.total_seconds() < 25 * 60:
-                lot_fullness_float += response[1] / 1.75
-            elif timediff.total_seconds() > 25 * 60:
-                lot_fullness_float += response[1] / 2
-            i += 1
-    lot_fullness_float = lot_fullness_float / i 
-    return lot_fullness_float
+def calc_lot_fullness_float(lot_feedback):
+    lot_fullness_total = 0
+    for response in lot_feedback:
+        timediff: datetime.timedelta = datetime.now() - response.date_created
+        
+        # make the response become weighted less as it gets older
+        response_weight = (-timediff.total_seconds()/3600 + 1) if timediff.total_seconds() < 30 * 60 else 0
+        lot_fullness_float += response.lot_is_full * response_weight
+
+    # return average of lot fullness weights
+    return 0.5 if len(lot_feedback) == 0 else lot_fullness_total / len(lot_feedback)
 
 
 
@@ -87,18 +74,18 @@ def recommend():
     permit_type_id = request.args.get('permit_type_id', default=0, type=int)
 
     # get necessary data
-    lots_result = query('get_parking_lots.sql', [permit_type_id], "all") #get parking lots
-    destination_result = query('get_destination.sql', [building_id], "one") #get destination buliding
+    lots = get_parking_lots(permit_type_id)
+    destination = get_destination(building_id)
+    feedback = get_user_feedback(30)
 
     # iteratively deserialize lots into LotRecommendation object array
-    lots_result = list(map(lambda lot : LotRecommendation(
-        lot_id=lot[0], 
-        lot_name=lot[1], 
-        feetToDestination=get_best_distance(destination_result[1],  destination_result[2], lot[2:6]),
-        fullness=calc_lot_fullness_float(lot[0])
-    ), lots_result))
+    for lot in lots:
+        lot.feet_to_destination = get_best_distance(destination.latitude, destination.longitude, lot.lot_rect)
+        del lot.lot_rect
+        feedback_for_lot = [response for response in feedback if response.lot_id == lot.lot_id]
+        lot.fullness = calc_lot_fullness_float(feedback_for_lot)
 
-    #sort lots and call the function with user not preferring vacancy just to test
-    lots_result = sort_lots(lots_result, 0)
-    # return top 3 results
-    return list(map(lambda lot: lot.__dict__, lots_result[0:3]))
+    # sort lots and call the function with user not preferring vacancy just to test
+    lots = sort_lots(lots, 0)
+
+    return jsonify(list(map(lambda lot: lot.__dict__, lots[0:3]))), 200

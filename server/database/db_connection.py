@@ -33,7 +33,6 @@ def run_query(query_name, query_params, return_type='none', execute_many=False):
 
         # execute query, pass in parameters
         query = open('queries/' + query_name, 'r').read()
-        print(query, query_params)
         if execute_many:
             cur.executemany(query, query_params)
         else:
