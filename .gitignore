@@ -22,3 +22,8 @@ __pycache__/
 /client/npm-debug.log*
 /client/yarn-debug.log*
 /client/yarn-error.log*
+
+# elastic beanstalk
+/server/.elasticbeanstalk/*
+!/server/.elasticbeanstalk/*.cfg.yml
+!/server/.elasticbeanstalk/*.global.yml
