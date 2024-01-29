@@ -11,11 +11,6 @@ class Building:
             self.latitude = query_result[2]
             self.longitude = query_result[3]
 
-# create endpoint
-app_buildings = Blueprint('app_buildings', __name__)
-@app_buildings.route('/buildings', methods=['GET'])
-@cross_origin()
-
 def get_buildings():
         query_result = query('get_buildings.sql', [], "all")
         buildings = list(map(lambda building : Building(query_result=building), query_result))
@@ -26,11 +21,18 @@ def get_destination(building_id):
         buildings = Building(query_result=query_result)
         return buildings
 
+
+
+# create endpoint
+app_buildings = Blueprint('app_buildings', __name__)
+@app_buildings.route('/buildings', methods=['GET'])
+@cross_origin()
+
 def buildings():
     try:
         buildings = get_buildings()
         return jsonify(list(map(lambda building: building.__dict__, buildings))), 200
     
     except Exception as error:
-        print(error)
+        print('ERROR', error)
         return 'Server error', 500
