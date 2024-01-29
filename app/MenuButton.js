@@ -15,7 +15,7 @@ const MenuButton = ({ options }) => {
   return (
     <View>
       <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
-        <Text>☰</Text>
+        <Text style={styles.menuIcon}>☰</Text>
       </TouchableOpacity>
       <Modal
         animationType="slide"
@@ -42,6 +42,9 @@ const MenuButton = ({ options }) => {
 const styles = StyleSheet.create({
   button: {
     marginRight: 10,
+  },
+  menuIcon: {
+    fontSize: 24, // Increase the font size to make the icon larger
   },
   modalContainer: {
     marginTop: 60,
