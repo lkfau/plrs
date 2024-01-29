@@ -7,6 +7,10 @@ import LoginPage from './LoginPage';
 import MenuButton from './MenuButton';
 import HomePage from './HomePage';
 import CustomHeader from './CustomHeader';
+import Account from './MyAccount';
+import Schedules from './SavedSchedules';
+import Recommendation from './Recommendation';
+import About from './About';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +18,10 @@ const options = [
   { title: 'Home', screenName: 'Home' },
   { title: 'Create Account', screenName: 'CreateAccount' },
   { title: 'Log In', screenName: 'Login' },
+  { title: 'Account', screenName: 'Account'},
+  { title: 'Schedules', screenName: 'Schedules'},
+  { title: 'Recommendation', screenName: 'Recommendation'},
+  { title: 'About', screenName: 'About'},
 ];
 
 const headerTitle = ({ navigation }) => (
@@ -49,6 +57,42 @@ export default function App() {
           component={LoginPage} 
           options={({ navigation }) => ({
             title: 'Log In',
+            headerTitle: () => <CustomHeader navigation={navigation} />,
+            headerRight: () => <MenuButton options={options} />,
+          })}
+        />
+        <Stack.Screen 
+          name="Account" 
+          component={Account} 
+          options={({ navigation }) => ({
+            title: 'Account',
+            headerTitle: () => <CustomHeader navigation={navigation} />,
+            headerRight: () => <MenuButton options={options} />,
+          })}
+        />
+        <Stack.Screen 
+          name="Schedules" 
+          component={Schedules} 
+          options={({ navigation }) => ({
+            title: 'Schedules',
+            headerTitle: () => <CustomHeader navigation={navigation} />,
+            headerRight: () => <MenuButton options={options} />,
+          })}
+        />
+        <Stack.Screen 
+          name="Recommendation" 
+          component={Recommendation} 
+          options={({ navigation }) => ({
+            title: 'Recommendation',
+            headerTitle: () => <CustomHeader navigation={navigation} />,
+            headerRight: () => <MenuButton options={options} />,
+          })}
+        />
+        <Stack.Screen 
+          name="About" 
+          component={About} 
+          options={({ navigation }) => ({
+            title: 'About',
             headerTitle: () => <CustomHeader navigation={navigation} />,
             headerRight: () => <MenuButton options={options} />,
           })}

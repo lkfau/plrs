@@ -9,7 +9,7 @@ const HomePage = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate('Home')}>
         <Text style={styles.header}>Parking Lot Recommendation System</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MyAccount')}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Account')}>
         <Text style={styles.buttonText}>My Account</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Schedules')}>
