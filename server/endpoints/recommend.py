@@ -1,6 +1,6 @@
 import math
 from datetime import datetime
-#from feedback import get_user_feedback
+from feedback import get_user_feedback
 from ..database.db_connection import run_query as query
 from flask import request, Blueprint
 
@@ -26,14 +26,26 @@ def distance(x1, y1, x2, y2):
 
 # get_best_distance(): returns closest distance between (dest_x, dest_y) 
 #                      and corners of rectangle defined by lot_rect
-def get_best_distance(dest_x, dest_y, lot_rect):
-    # find distance from destination to all four corners of the parking lot
+def get_best_distance(dest_x1, dest_y1, dest_x2, dest_y2, lot_x1, lot_y1, lot_x2, lot_y2):
+    # find distance from destination to all four corners of the parking lot and all four corners of destination
     # return the closest distance found to give each lot the best chance
     distances = [
-        distance(lot_rect[0], lot_rect[1],dest_x, dest_y),
-        distance(lot_rect[2], lot_rect[3],dest_x, dest_y),
-        distance(lot_rect[0], lot_rect[3],dest_x, dest_y),
-        distance(lot_rect[2], lot_rect[1],dest_x, dest_y)
+        distance(lot_x1, lot_y1, dest_x1, dest_y1),
+        distance(lot_x1, lot_y2, dest_x1, dest_y1),
+        distance(lot_x2, lot_y1, dest_x1, dest_y1),
+        distance(lot_x2, lot_y2, dest_x1, dest_y1),
+        distance(lot_x1, lot_y1, dest_x1, dest_y2),
+        distance(lot_x1, lot_y2, dest_x1, dest_y2),
+        distance(lot_x2, lot_y1, dest_x1, dest_y2),
+        distance(lot_x2, lot_y2, dest_x1, dest_y2),
+        distance(lot_x1, lot_y1, dest_x2, dest_y1),
+        distance(lot_x1, lot_y2, dest_x2, dest_y1),
+        distance(lot_x2, lot_y1, dest_x2, dest_y1),
+        distance(lot_x2, lot_y2, dest_x2, dest_y1),
+        distance(lot_x1, lot_y1, dest_x2, dest_y2),
+        distance(lot_x1, lot_y2, dest_x2, dest_y2),
+        distance(lot_x2, lot_y1, dest_x2, dest_y2),
+        distance(lot_x2, lot_y2, dest_x2, dest_y2)
     ]
 
     # coefficient converts decimal latitude degrees to feet
@@ -94,7 +106,7 @@ def recommend():
     lots_result = list(map(lambda lot : LotRecommendation(
         lot_id=lot[0], 
         lot_name=lot[1], 
-        feetToDestination=get_best_distance(destination_result[1],  destination_result[2], lot[2:6]),
+        feetToDestination=get_best_distance(destination_result[1],  destination_result[2], destination_result[1],  destination_result[2], lot[3], lot[4], lot[5], lot[6]),
         fullness=calc_lot_fullness_float(lot[0])
     ), lots_result))
 
