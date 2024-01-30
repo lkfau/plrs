@@ -3,7 +3,7 @@ import psycopg2
 
 # config(): grab database connection configuration
 #           looks for params in filename at .ini section
-def config(filename='database/database.ini', section='postgresql'):
+def config(filename='src/database/database.ini', section='postgresql'):
     parser = ConfigParser()
     parser.read(filename)
     db = {}
@@ -32,8 +32,7 @@ def run_query(query_name, query_params, return_type='none', execute_many=False):
         cur = conn.cursor()
 
         # execute query, pass in parameters
-        query = open('queries/' + query_name, 'r').read()
-        print(query, query_params)
+        query = open('src/queries/' + query_name, 'r').read()
         if execute_many:
             cur.executemany(query, query_params)
         else:

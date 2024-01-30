@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  gap: 1rem;
+  position: fixed;
+  top: 0; 
+  width: 100%;  
+  padding: 0.2rem 10rem;
+  overflow: hidden;
+  background-color: var(--primary);
+}
+
+.contents {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.logo {
+    height: 3rem;
+}
+
+.logo img {
+    height: 100%;
+}
+
+.container a {
+    color: white;
+    text-decoration: none;
+}
+
+.container a:hover {
+    transition: all 0.1s linear;
+    color: var(--secondary);
+}
+
+
+.container a + a {
+    margin-left: 1rem;
+}
