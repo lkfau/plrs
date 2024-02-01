@@ -73,18 +73,13 @@ def calc_lot_fullness_float(lot_id):
         if response[0] == lot_id:
             timediff = curtime - response[2]
             #make the response become weighted less as it gets older
-            if timediff.total_seconds() < 5 * 60:
-                lot_fullness_float += response[1]
-            elif timediff.total_seconds() > 5 * 60 and timediff.total_seconds() < 10 * 60:
-                lot_fullness_float += response[1] / 1.25
-            elif timediff.total_seconds() > 10 * 60 and timediff.total_seconds() < 15 * 60:
-                lot_fullness_float += response[1] / 1.5
-            elif timediff.total_seconds() > 15 * 60 and timediff.total_seconds() < 25 * 60:
-                lot_fullness_float += response[1] / 1.75
-            elif timediff.total_seconds() > 25 * 60:
-                lot_fullness_float += response[1] / 2
+            if response[]
+            lot_fullness_float += 1 - (1.02 ** (-((2101 - timediff.total_seconds()) / 7.1)))
             i += 1
-    lot_fullness_float = lot_fullness_float / i 
+    if i > 0:
+        lot_fullness_float = lot_fullness_float / i
+    else:
+        lot_fullness_float = 0
     return lot_fullness_float
 
 
