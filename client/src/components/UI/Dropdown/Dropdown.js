@@ -1,23 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import styles from './Dropdown.module.css'
 
-function Dropdown({ data, onBuildingSelect }) {
-  const [selectedElement, setSelectedElement] = useState('test');
+function Dropdown({ data, defaultValue, onSelect }) {
+  const [selectedElement, setSelectedElement] = useState(data.find(d => d.key === defaultValue) ?? data[0]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  useEffect(() => {
-    setSelectedElement(data[0])
-  }, [data]);
 
   const onSelectElement = (el) => {
     setSelectedElement(el);
-    onBuildingSelect(el.key);
+    onSelect(el.key);
     setDropdownOpen(false)
   }
 
   return (
-    <div>
+    <div style={{position: 'relative'}}>
       <div className={styles.header} onClick={() => setDropdownOpen((o) => !o)}>
         {selectedElement.value}
       </div>

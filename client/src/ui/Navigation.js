@@ -5,7 +5,7 @@ const Navigation = () => {
     <a href="/" className={styles.logo}><img src={logo} alt="PLRS"></img></a>
     <div className={styles.contents}>
       <a href="/recommend">Recommendations</a>
-      <a href="/schedule">Schedules</a>
+      <a href="/schedules">Schedules</a>
     </div> 
   </div>
 }

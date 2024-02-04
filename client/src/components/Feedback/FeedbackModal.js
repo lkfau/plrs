@@ -2,10 +2,10 @@ import Modal from '../UI/Modal/Modal';
 import styles from './FeedbackModal.module.css'
 const FeedbackModal = ({ lot, onHide }) => {
     const submitFeedback = async(lotIsFull) => {
-        const response = await fetch("http://localhost:5000/feedback", {
-            method: "POST",
+        await fetch('http://localhost:5000/feedback', {
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 lot_id: lot.lot_id,
@@ -15,7 +15,7 @@ const FeedbackModal = ({ lot, onHide }) => {
         });
     }
     
-    return <Modal onHide={onHide}>
+    return <Modal onHide={onHide} size='small'>
         <h3>Parking Feedback</h3>
         <p>When you parked, approximately how full was {lot.lot_name}?</p>
         <div className={styles.choice}>

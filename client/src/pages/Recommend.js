@@ -30,7 +30,7 @@ function Recommend() {
     <>
       <p>Choose your building.</p>
       {buildings && <div style={{display: "flex"}}>
-        <Dropdown data={buildings} onBuildingSelect={setSelectedBuilding}/>
+        <Dropdown data={buildings} onSelect={setSelectedBuilding}/>
         <div>
           <button className={styles.recommendationButton} onClick={getRecommendations}>Get Recommendation</button>
         </div>

@@ -1,14 +1,17 @@
 .header {
     background-color: #ddd;
     padding: 0.3rem 1rem;
-    width: 20rem;
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 .container {
-    max-height: 20rem;
+    position: absolute;
+    width: 100%;
+    max-height: 15rem;
     overflow-y: scroll;
-    width: 20rem;
+    z-index: 10; 
+    filter: drop-shadow(2px 2px 5px #ccc);
 }
 
 .element {

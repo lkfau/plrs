@@ -5,9 +5,7 @@ import styles from './Recommendation.module.css'
 function Recommendation({ number, parkingLot }) {
   const [feedbackOpen, setFeedbackOpen] = useState(false);
 
-  const toggleFeedbackModal = () => {
-    setFeedbackOpen(f => !f)
-  }
+  const toggleFeedbackModal = () => setFeedbackOpen(f => !f);
   return (
     <>
       {feedbackOpen && <FeedbackModal lot={parkingLot} onHide={toggleFeedbackModal} />}

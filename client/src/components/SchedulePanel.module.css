@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: #eee;
+    padding: 0.5rem 2rem;
+    width: 250px;
+}
+
+.container h3 {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.container hr {
+    width: 100%;
+    margin: 0.8rem 0;
+}
+
+.options {
+    margin: auto 0 0.5rem 0;
+    display: flex;
+    gap: 1rem;
+    
+}
+
+.options > button {
+    width: 100%;
+    padding: 0.5rem 0;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: var(--secondary);
+}
+
+.options > button:hover {
+    filter: brightness(1.1);
+    transition: all 0.1s linear;
+}
+
+.weekdays {
+    margin: 0 0 1rem 0;
+    line-height: 2em;
+}
+
+.muted {
+    color: var(--muted);
+}

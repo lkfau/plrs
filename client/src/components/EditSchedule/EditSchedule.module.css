@@ -1,0 +1,64 @@
+.main {
+    display: flex;
+    flex-direction: column;
+}
+
+.main hr {
+    width: 100%;
+    border: 1px solid var(--muted);
+    border-bottom: none;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.container:not(.options) > :last-child {
+    flex-grow: 1;
+}
+
+.container input {
+    height: 1.8em;
+    padding: 0 .5rem;
+    font-size: 1.1em;
+}
+
+.item {
+    padding: 0.5rem;
+    border: 1px solid var(--muted);
+    background-color: #fafafa;
+    width: 100%;
+    margin-top: 1rem;
+    box-sizing: border-box;
+}
+
+.weekdays {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.weekdays p {
+    margin: 0;
+}
+
+.options {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.options > button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: var(--secondary);
+}
+
+.options > button:hover {
+    filter: brightness(1.1);
+    transition: all 0.1s linear;
+}

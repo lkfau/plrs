@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import styles from './Modal.module.css'
 
-const Modal = ({ onHide, children, className }) => {
+const Modal = ({ onHide, children, size, className }) => {
   const [transitionClass, setTransitionClass] = useState(false);
   const overlayRef = useRef(null);
 
@@ -31,11 +31,7 @@ const Modal = ({ onHide, children, className }) => {
         id="modal-bg"
         className={styles.overlay}
       ></div>
-      <div className={`${styles.modal} ${className || ""}`}
-        // className={mx-6 w-full max-w-4xl bg-white drop-shadow-2xl rounded-xl mt-10 overflow-y-auto transition-all duration-300 ${
-        //   transitionClass ? "translate-y-0" : "-translate-y-10"
-        // } ${className}`}
-      >
+      <div className={`${styles.modal} ${size ? styles[size] : styles.small} ${className}`}>
         {children}
       </div>
     </div>,
