@@ -1,23 +1,23 @@
 import math
 from datetime import datetime
-from ..endpoints.buildings import get_destination
-from ..endpoints.feedback import get_user_feedback
+from feedback import get_user_feedback
 from ..database.db_connection import run_query as query
-from flask import request, Blueprint, jsonify
+from flask import request, Blueprint
 
 
 # LotRecommendation: object return type for /recommend requests
-# constructed from query on lot and destination
 class LotRecommendation:
-    def __init__(self, query_result):
-        self.lot_id = query_result[0]
-        self.lot_name = query_result[1]
-        self.lot_rect = query_result[2:6]
+    def __init__(self, lot_id, lot_name, feetToDestination, fullness):
+        self.lot_id = lot_id
+        self.lot_name = lot_name
+        self.feetToDestination = feetToDestination
+        self.fullness = fullness
 
-def get_parking_lots(permit_type_id):
-    query_result = query('get_parking_lots.sql', [permit_type_id], "all") #get parking lots
-    lots_result = list(map(lambda lot : LotRecommendation(query_result=lot), query_result))
-    return lots_result
+class userProfile:
+    def __init__(self, permits, user_prefers_vacancy, name):
+        self.permits = permits
+        self.user_prefers_vacancy = user_prefers_vacancy
+        self.name = name
 
 # distance(): returns distance between points (x1, y1) and (x2, y2)
 def distance(x1, y1, x2, y2):
@@ -52,13 +52,14 @@ def get_best_distance(dest_x1, dest_y1, dest_x2, dest_y2, lot_x1, lot_y1, lot_x2
     return round(min(distances) * 364500)
 
 
-def sort_lots(lots, user_prefers_vacancy):
-    lots.sort(key = lambda lot : lot.feet_to_destination)
 
-    for i in range(len(lots)-1):
-        if user_prefers_vacancy == 1 and lots[i].fullness > 0.4:
+def sort_lots(lots, user_prefers_vacancy):
+    lots.sort(key = lambda lot : lot.feetToDestination)
+
+    for i in range(len(lots)):
+        if user_prefers_vacancy == 1 and lots[i].fullness > 0.5:
             del lots[i]
-        elif lots[i].fullness > 0.7:
+        elif lots[i].fullness > 0.6:
             del lots[i]
 
     return lots
@@ -69,17 +70,19 @@ def calc_lot_fullness_float(lot_id):
     i = 0
     curtime = datetime.now()
     for response in user_responses:
-        if response.lot_id == lot_id:
-            timediff = curtime - response.date_created
+        if response[0] == lot_id:
+            timediff = curtime - response[2]
             #make the response become weighted less as it gets older
-            if response.lot_is_full == 1:
-                lot_fullness_float += 1 - (1.02 ** (-((2101 - timediff.total_seconds()) / 7.1)))
+            if response[]
+            lot_fullness_float += 1 - (1.02 ** (-((2101 - timediff.total_seconds()) / 7.1)))
             i += 1
     if i > 0:
         lot_fullness_float = lot_fullness_float / i
     else:
         lot_fullness_float = 0
     return lot_fullness_float
+
+
 
 # create endpoint
 app_recommend = Blueprint('app_recommend', __name__)
@@ -91,17 +94,18 @@ def recommend():
     permit_type_id = request.args.get('permit_type_id', default=0, type=int)
 
     # get necessary data
-    lots = get_parking_lots(permit_type_id)
-    destination = get_destination(building_id)
-
+    lots_result = query('get_parking_lots.sql', [permit_type_id], "all") #get parking lots
+    destination_result = query('get_destination.sql', [building_id], "one") #get destination buliding
 
     # iteratively deserialize lots into LotRecommendation object array
-    for lot in lots:
-        lot.feet_to_destination = get_best_distance(destination.latitude, destination.longitude, destination.latitude, destination.longitude, lot.lot_rect[0], lot.lot_rect[1], lot.lot_rect[2], lot.lot_rect[3])
-        del lot.lot_rect
-        lot.fullness = calc_lot_fullness_float(lot.lot_id)
+    lots_result = list(map(lambda lot : LotRecommendation(
+        lot_id=lot[0], 
+        lot_name=lot[1], 
+        feetToDestination=get_best_distance(destination_result[1],  destination_result[2], destination_result[1],  destination_result[2], lot[3], lot[4], lot[5], lot[6]),
+        fullness=calc_lot_fullness_float(lot[0])
+    ), lots_result))
 
-    # sort lots and call the function with user not preferring vacancy just to test
-    lots = sort_lots(lots, 0)
-
-    return jsonify(list(map(lambda lot: lot.__dict__, lots[0:3]))), 200
+    #sort lots and call the function with user not preferring vacancy just to test
+    lots_result = sort_lots(lots_result, 0)
+    # return top 3 results
+    return list(map(lambda lot: lot.__dict__, lots_result[0:3]))
