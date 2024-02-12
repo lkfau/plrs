@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './Schedules.module.css';
-import SchedulePanel from '../components/SchedulePanel';
+import SchedulePanel from '../components/Schedules/SchedulePanel';
 
 function Schedules() {
   const [schedules, setSchedules] = useState(null)
@@ -17,7 +17,9 @@ function Schedules() {
 
   return (
     <div className={styles.flex}>
-      {schedules && schedules.map(schedule => <SchedulePanel key={schedule.schedule_id} schedule={schedule} onSave={getSchedules}/>)}
+      {schedules && schedules.map(schedule => {
+        return <SchedulePanel key={schedule.schedule_id} schedule={schedule} onSave={getSchedules}/>
+      })}
     </div>
   );
 }

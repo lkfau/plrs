@@ -3,21 +3,11 @@
     flex-direction: column;
     background-color: #eee;
     padding: 0.5rem 2rem;
-    width: 250px;
-}
-
-.container h3 {
-    text-align: center;
-    margin-bottom: 0;
-}
-
-.container hr {
-    width: 100%;
-    margin: 0.8rem 0;
+    width: 400px;
 }
 
 .options {
-    margin: auto 0 0.5rem 0;
+    margin: 2rem 0 0.5rem 0;
     display: flex;
     gap: 1rem;
     
