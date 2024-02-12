@@ -1,7 +1,8 @@
 // HomePage.js
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import MenuButton from './MenuButton';
+
+const pageOptions = ['Account', 'Schedules', 'Recommendation', 'About']
 
 const HomePage = ({ navigation }) => {
   return (
@@ -9,18 +10,9 @@ const HomePage = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate('Home')}>
         <Text style={styles.header}>Parking Lot Recommendation System</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Account')}>
-        <Text style={styles.buttonText}>My Account</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Schedules')}>
-        <Text style={styles.buttonText}>Schedules</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Recommendation')}>
-        <Text style={styles.buttonText}>Recommendation</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('About')}>
-        <Text style={styles.buttonText}>About</Text>
-      </TouchableOpacity>
+      {pageOptions.map(option => <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(option)}>
+        <Text style={styles.buttonText}>{option}</Text>
+      </TouchableOpacity>)}
     </View>
   );
 };
@@ -44,12 +36,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#007bff',
     paddingVertical: 15,
     paddingHorizontal: 30,
+    width: 250,
+   
     borderRadius: 10,
     marginTop: 20,
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
+    textAlign: 'center',
   },
 });
 

@@ -1,7 +1,8 @@
 // MenuButton.js
-import React, { useState } from 'react';
-import { TouchableOpacity, Text, View, Modal, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { TouchableOpacity, Text, Animated, View, Modal, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const MenuButton = ({ options }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -12,28 +13,44 @@ const MenuButton = ({ options }) => {
     navigation.navigate(screenName);
   };
 
+  const [slideAnim] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: modalVisible ? 1 : 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [modalVisible]);
+
+  const translateY = slideAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-100, -50],
+  });
+
   return (
     <View>
       <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
-        <Text style={styles.menuIcon}>☰</Text>
+      <Ionicons name={modalVisible ? 'close' : 'menu-outline'} size={32} />
       </TouchableOpacity>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
+        <TouchableOpacity style={styles.close} onPress={() => setModalVisible(false)}></TouchableOpacity>
+        <Animated.View style={[styles.modalContainer, { transform: [{ translateY }] }]}>
           {options.map((option, index) => (
             <TouchableOpacity
               key={index}
-              style={styles.option}
+              style={[styles.option, index < options.length-1 && styles.optionBorder]}
               onPress={() => handleOptionPress(option.screenName)}
             >
-              <Text>{option.title}</Text>
+              <Text style={styles.optionText}>{option.title}</Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </Animated.View>
       </Modal>
     </View>
   );
@@ -43,21 +60,29 @@ const styles = StyleSheet.create({
   button: {
     marginRight: 10,
   },
-  menuIcon: {
-    fontSize: 24, // Increase the font size to make the icon larger
-  },
   modalContainer: {
-    marginTop: 60,
+    marginTop: 40,
     backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
     elevation: 5,
   },
   option: {
-    paddingVertical: 10,
+    padding: 10,
+  },
+  optionBorder: {
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
+  optionText: {
+    fontSize: 20
+  },
+  close: {
+    width: 40,
+    marginLeft: 'auto',
+    height: 60,
+    elevation: 100
+  }
 });
 
 export default MenuButton;
