@@ -30,7 +30,7 @@ def save_user_feedback(feedback):
     user_feedback_result = query("add_user_feedback.sql", [
         feedback.lot_id, 
         feedback.user_id, 
-        1 if feedback.lot_is_full else 0, 
+        feedback.lot_is_full,
         datetime.now()
     ])
     print('result', user_feedback_result)
@@ -43,7 +43,7 @@ app_feedback = Blueprint('app_feedback', __name__)
 
 def feedback():
     request_data = request.get_json()
-
+    print(request_data)
     # get feedback from request
     feedback = UserFeedback(request_data=request_data)
 
