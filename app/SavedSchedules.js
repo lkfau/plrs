@@ -11,6 +11,13 @@ const locations = [
   // Add more locations here...
 ];
 
+const locations2 = [
+  "Administration Building",
+  "Alexander D. Henderson University School",
+  "Alexander D. Henderson Classroom 2",
+  "Alexander D. Henderson University School Gymnasium",
+];
+
 const Schedules = () => {
   const navigation = useNavigation();
 
@@ -18,22 +25,24 @@ const Schedules = () => {
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');
   const [editedLocation, setEditedLocation] = useState(locations[0]);
+  const [editedLocation2, setEditedLocation2] = useState(locations2[0]);
 
   useEffect(() => {
     // Add initial schedule when component mounts
-    setSchedules([{ id: 1, title: 'Schedule 1', location: locations[0], info: '' }]);
+    setSchedules([{ id: 1, title: 'Schedule 1', location: locations[0], location2: locations2[0], info: '' }]);
   }, []);
 
   const handleSchedulePress = (schedule) => {
     setSelectedSchedule(schedule);
     setEditedTitle(schedule.title);
     setEditedLocation(schedule.location);
+    setEditedLocation2(schedule.location2);
   };
 
   const saveChanges = () => {
     setSchedules(schedules.map(schedule =>
       schedule.id === selectedSchedule.id
-        ? { ...schedule, title: editedTitle, location: editedLocation }
+        ? { ...schedule, title: editedTitle, location: editedLocation, location2: editedLocation2 }
         : schedule
     ));
     setSelectedSchedule(null);
@@ -44,6 +53,7 @@ const Schedules = () => {
       id: schedules.length + 1,
       title: `Schedule ${schedules.length + 1}`,
       location: locations[0], // Default location
+      location2: locations2[0],
       info: '',
     };
     setSchedules([...schedules, newSchedule]);
@@ -117,6 +127,11 @@ const Schedules = () => {
                   defaultValue={editedLocation}
                   onSelect={(index, value) => setEditedLocation(value)}
                 />
+                <ModalDropdown
+                  options={locations2}
+                  defaultValue={editedLocation2}
+                  onSelect={(index, value) => setEditedLocation2(value)}
+                />
                 <TouchableOpacity onPress={saveChanges}>
                   <Text>Save</Text>
                 </TouchableOpacity>
@@ -125,6 +140,7 @@ const Schedules = () => {
               <View>
                 <Text style={styles.title}>{schedule.title}</Text>
                 <Text>{schedule.location}</Text>
+                <Text>{schedule.location2}</Text>
               </View>
             )}
           </TouchableOpacity>
