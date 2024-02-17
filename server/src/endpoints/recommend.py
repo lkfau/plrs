@@ -63,11 +63,9 @@ def sort_lots(lots, user_prefers_vacancy):
 
     return lots
 
-def calc_lot_fullness_float(lot_id):
-    user_responses = get_user_feedback(30) #grab all user responses that came in the last 30 minutes
+def calc_lot_fullness_float(lot_id, curtime, user_responses):
     lot_fullness_float = 0
     i = 0
-    curtime = datetime.now()
     for response in user_responses:
         if response.lot_id == lot_id:
             timediff = curtime - response.date_created
@@ -89,6 +87,8 @@ def recommend():
     # get parameters
     building_id = request.args.get('building_id', default=0, type=int)
     permit_type_id = request.args.get('permit_type_id', default=0, type=int)
+    user_responses = get_user_feedback(30) #get all user responses from last 30 mins
+    curtime = request.args.get('test_date', default=datetime.now(), type=str)
 
     # get necessary data
     lots = get_parking_lots(permit_type_id)
@@ -99,7 +99,7 @@ def recommend():
     for lot in lots:
         lot.feet_to_destination = get_best_distance(destination.latitude, destination.longitude, destination.latitude, destination.longitude, lot.lot_rect[0], lot.lot_rect[1], lot.lot_rect[2], lot.lot_rect[3])
         del lot.lot_rect
-        lot.fullness = calc_lot_fullness_float(lot.lot_id)
+        lot.fullness = calc_lot_fullness_float(lot.lot_id, curtime, user_responses)
 
     # sort lots and call the function with user not preferring vacancy just to test
     lots = sort_lots(lots, 0)
