@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\client",
+    "\\client\\src",
+    "\\client\\src\\components",
+    "\\client\\src\\components\\UI",
+    "\\server",
+    "\\server\\endpoints",
+    "\\server\\src",
+    "\\server\\src\\database",
+    "\\server\\src\\endpoints",
+    "\\server\\src\\queries"
+  ],
+  "SelectedNode": "\\app\\package.json",
+  "PreviewInSolutionExplorer": false
+}

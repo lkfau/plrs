@@ -8,9 +8,9 @@ from src.endpoints.settings import app_settings
 from src.endpoints.test import app_test
 
 
-# create flask app
+# create flask app 
 app = Flask(__name__)
-cors = CORS(app)
+cors = CORS(app) 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # register /recommend blueprint route

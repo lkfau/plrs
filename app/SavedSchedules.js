@@ -32,6 +32,36 @@ const Schedules = () => {
     setSchedules([{ id: 1, title: 'Schedule 1', location: locations[0], location2: locations2[0], info: '' }]);
   }, []);
 
+  async function fetchData() {
+    try {
+        const response = await fetch('http://54.210.243.185/buildings');
+        console.log(response)
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        const buildingNames = data.map(building => building.building_name);
+        // Update the state with fetched building names
+        setLocations(buildingNames);
+        setLocations2(buildingNames); // Assuming locations2 is also fetched similarly
+
+        // Set default values for editedLocation and editedLocation2 once data is fetched
+        if (buildingNames.length > 0) {
+          setEditedLocation(buildingNames[0]);
+          setEditedLocation2(buildingNames[0]);
+        }
+
+        console.log(data); // Print the result to the console
+        return data; // Return the result if you need to further manipulate it    
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error; // Rethrow the error if needed
+    }
+}
+
+
   const handleSchedulePress = (schedule) => {
     setSelectedSchedule(schedule);
     setEditedTitle(schedule.title);
