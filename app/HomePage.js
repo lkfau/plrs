@@ -10,7 +10,7 @@ const HomePage = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate('Home')}>
         <Text style={styles.header}>Parking Lot Recommendation System</Text>
       </TouchableOpacity>
-      {pageOptions.map(option => <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(option)}>
+      {pageOptions.map(option => <TouchableOpacity key={option }style={styles.button} onPress={() => navigation.navigate(option)}>
         <Text style={styles.buttonText}>{option}</Text>
       </TouchableOpacity>)}
     </View>
