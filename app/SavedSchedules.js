@@ -3,24 +3,11 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal 
 import ModalDropdown from 'react-native-modal-dropdown'; // Import the dropdown component
 import { useNavigation } from '@react-navigation/native';
 
-const locations = [
-  "Administration Building",
-  "Alexander D. Henderson University School",
-  "Alexander D. Henderson Classroom 2",
-  "Alexander D. Henderson University School Gymnasium",
-  // Add more locations here...
-];
-
-const locations2 = [
-  "Administration Building",
-  "Alexander D. Henderson University School",
-  "Alexander D. Henderson Classroom 2",
-  "Alexander D. Henderson University School Gymnasium",
-];
-
 const Schedules = () => {
   const navigation = useNavigation();
 
+  const [locations, setLocations] = useState([]);
+  const [locations2, setLocations2] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');
@@ -30,6 +17,7 @@ const Schedules = () => {
   useEffect(() => {
     // Add initial schedule when component mounts
     setSchedules([{ id: 1, title: 'Schedule 1', location: locations[0], location2: locations2[0], info: '' }]);
+    fetchData();
   }, []);
 
   async function fetchData() {
