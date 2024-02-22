@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import styles from './SchedulePanel.module.css';
-import EditScheduleModal from '../EditSchedule/EditScheduleModal';
+import AddEditScheduleModal from '../EditSchedule/AddEditScheduleModal';
 import ScheduleDisplay from '../UI/ScheduleDisplay/ScheduleDisplay';
 
-const SchedulePanel = ({ schedule, onSave }) => {
+const SchedulePanel = ({ schedule, onSave, onDelete }) => {
     const [editOpen, setEditOpen] = useState(false);
     const toggleEditModal = () => {
         setEditOpen(f => !f);
@@ -11,13 +11,13 @@ const SchedulePanel = ({ schedule, onSave }) => {
     }
 
     return <>
-        {editOpen && <EditScheduleModal schedule={schedule} onHide={toggleEditModal} />}
+        {editOpen && <AddEditScheduleModal schedule={schedule} onHide={toggleEditModal} />}
         <div className={styles.container}>
-            <h1>{schedule.name}</h1>
+            <h2>{schedule.name}</h2>
             <ScheduleDisplay schedule={schedule} />
             <div className={styles.options}>
                 <button onClick={toggleEditModal}>Edit</button>
-                <button>Delete</button>
+                <button onClick={onDelete}>Delete</button>
             </div>
         </div>
     </>

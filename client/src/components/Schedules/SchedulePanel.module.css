@@ -3,8 +3,26 @@
     flex-direction: column;
     background-color: #eee;
     padding: 0.5rem 2rem;
-    width: 400px;
+    width: 300px;
+    min-width: 200px;
 }
+
+.addContainer {
+    align-items: center;
+    min-height: 100%;
+    cursor: pointer;
+    padding: 8rem 2rem;
+}
+
+.addContainer h2 {
+    font-size: 4em;
+    font-weight: 100;
+}
+
+.addContainer h2, .addContainer p {
+    margin: 0;
+}
+
 
 .options {
     margin: 2rem 0 0.5rem 0;

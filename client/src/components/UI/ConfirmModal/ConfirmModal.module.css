@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    flex-direction: column
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.closeButton {
+    font-size: 1.5em;
+    border: none;
+    background-color: transparent;
+    color: var(--muted);
+    height: fit-content;
+    padding: 0;
+}
+
+.closeButton:hover {
+    filter: brightness(0.8);
+    transition: all 0.1s linear;
+}
+
+.footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.footer > button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: var(--secondary);
+}
+
+.footer > button:hover {
+    filter: brightness(1.1);
+    transition: all 0.1s linear;
+}
+

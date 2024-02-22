@@ -18,12 +18,12 @@
 }
 
 .choice > *:nth-child(1) {
-  background-color: rgb(255, 139, 135);
+  background-color: var(--danger);
 }
 
 .choice > *:nth-child(2) {
-  background-color: rgb(253, 255, 131);
+  background-color: var(--warning);
 }
 .choice > *:nth-child(3) {
-  background-color: rgb(122, 245, 122);
+  background-color: var(--success);
 }

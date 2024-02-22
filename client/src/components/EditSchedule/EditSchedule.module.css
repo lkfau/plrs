@@ -12,6 +12,7 @@
 
 .container {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 1rem;
 }
@@ -27,7 +28,7 @@
 }
 
 .item {
-    padding: 0.5rem;
+    padding: 0.3rem 1rem;
     border: 1px solid var(--muted);
     background-color: #fafafa;
     width: 100%;
@@ -37,7 +38,8 @@
 
 .weekdays {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 1rem;
     align-items: center;
 }
 
@@ -47,18 +49,24 @@
 
 .options {
     margin-top: auto;
+    padding-top: 2rem;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
-.options > button {
+.options > button, .button {
+    max-width: fit-content;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     border: none;
     background-color: var(--secondary);
 }
 
-.options > button:hover {
+.options > button:hover, .button:hover { 
     filter: brightness(1.1);
     transition: all 0.1s linear;
+}
+
+.danger {
+    background-color: var(--danger);
 }
