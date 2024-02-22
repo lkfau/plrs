@@ -38,3 +38,7 @@
 .container a + a {
     margin-left: 1rem;
 }
+
+.contents div:last-child {
+    margin-left: auto;
+}

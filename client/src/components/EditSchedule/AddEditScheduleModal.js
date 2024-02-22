@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import AuthContext from "../../context/auth-context";
+import ScheduleItem from './ScheduleItem';
 import Modal from '../UI/Modal/Modal';
 import styles from './EditSchedule.module.css'
-import ScheduleItem from './ScheduleItem';
 
 const AddEditScheduleModal = ({ schedule, onHide }) => {
     const [scheduleName, setScheduleName] = useState(schedule.name || "");
     const [scheduleItems, setScheduleItems] = useState(schedule.items);
     const [buildings, setBuildings] = useState(null);
     const [saveResult, setSaveResult] = useState(null);
+    const ctx = useContext(AuthContext);
 
     const saveSchedule = async () => {       
         const response = await fetch('http://localhost:5000/schedules', {
@@ -20,7 +22,7 @@ const AddEditScheduleModal = ({ schedule, onHide }) => {
                 name: scheduleName,
                 items: scheduleItems
             } : {
-                user_id: 1,
+                user_id: ctx.user_id,
                 name: scheduleName,
                 items: scheduleItems
             })
