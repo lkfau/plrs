@@ -22,7 +22,7 @@ function Schedules() {
                 }
             })
             if(response) {
-                if (response.status == 200) getSchedules();
+                if (response.status === 200) getSchedules();
                 setScheduleToDelete(null);
             }          
         } else {
@@ -38,7 +38,7 @@ function Schedules() {
     return <>
         {scheduleToDelete != null && <ConfirmModal
             title={'Delete Schedule'}
-            content={'Are you sure you want to delete the schedule' + scheduleToDelete.name + '?'}
+            content={'Are you sure you want to delete the schedule ' + scheduleToDelete.name + '?'}
             onConfirm={confirmDeleteModalHandler} />}
         <div className={styles.flex}>
             {schedules && schedules.map(schedule => 

@@ -53,20 +53,3 @@
     display: flex;
     justify-content: space-between;
 }
-
-.options > button, .button {
-    max-width: fit-content;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    border: none;
-    background-color: var(--secondary);
-}
-
-.options > button:hover, .button:hover { 
-    filter: brightness(1.1);
-    transition: all 0.1s linear;
-}
-
-.danger {
-    background-color: var(--danger);
-}

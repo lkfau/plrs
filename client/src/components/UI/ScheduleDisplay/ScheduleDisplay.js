@@ -19,7 +19,7 @@ const ScheduleDisplay = ({ schedule }) => {
     const formatTime = (time) => {
         const [hours, minutes, seconds] = time.split(':');
         const am = hours <= 12;
-        return `${hours%12}:${minutes} ${am ? 'a.m.' : 'p.m.'}`
+        return `${hours%12}:${minutes}${seconds !== '00' ? (':' + seconds) : ''} ${am ? 'a.m.' : 'p.m.'}`
 
     }
     useEffect(() => {

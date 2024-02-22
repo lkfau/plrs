@@ -37,6 +37,7 @@
     border-radius: 0.5rem;
     border: none;
     background-color: var(--secondary);
+    cursor: pointer;
 }
 
 .options > button:hover {
