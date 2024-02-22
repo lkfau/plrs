@@ -15,7 +15,7 @@ function Recommendation({ number, parkingLot }) {
           <p><em>{parkingLot.feet_to_destination} feet from your destination</em></p>
           
         </div>
-        <div className={styles['parked-button']}>
+        <div className={styles.parked}>
           <button onClick={toggleFeedbackModal}>Park here</button>
         </div>
       </div>
