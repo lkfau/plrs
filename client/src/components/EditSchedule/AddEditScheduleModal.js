@@ -11,7 +11,7 @@ const AddEditScheduleModal = ({ schedule, onHide }) => {
     const [saveResult, setSaveResult] = useState(null);
 
     const saveSchedule = async () => {       
-        const response = await fetch('http://localhost:5000/schedules', {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/schedules`, {
             method: schedule?.schedule_id ? 'PUT' : 'POST',
             headers: {
                 'Content-Type': 'application/json',

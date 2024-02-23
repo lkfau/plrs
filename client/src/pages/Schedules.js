@@ -8,14 +8,14 @@ function Schedules() {
     const [schedules, setSchedules] = useState(null);
     const [scheduleToDelete, setScheduleToDelete] = useState(null);
     const getSchedules = async () => {
-        const response = await fetch(`http://localhost:5000/schedules?user_id=1&get_items=true`);
+        const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/schedules?user_id=1&get_items=true`);
         let schedule_results = await response.json();
         setSchedules(schedule_results);
     }
 
     const confirmDeleteModalHandler = async (confirm) => {
         if (confirm && scheduleToDelete != null) {
-            const response = await fetch(`http://localhost:5000/schedules?schedule_id=${scheduleToDelete.schedule_id}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/schedules?schedule_id=${scheduleToDelete.schedule_id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
