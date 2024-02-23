@@ -12,7 +12,7 @@ const Navigation = () => {
             <div className={styles.contents}>
                 <div><a href="/recommend">Recommendations</a></div>
                 <div><a href="/schedules">Schedules</a></div>
-                <div><span onClick={ctx.logOut}>Log Out</span></div>
+                {ctx.user_id != null && <div className={styles.logOut}><span onClick={ctx.logOut}>Log Out</span></div>}
             </div>
         </div>
     );
