@@ -1,18 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import styles from './Modal.module.css'
 
 const Modal = ({ onHide, hidden, size, className, children }) => {
     const [transitionClass, setTransitionClass] = useState(false);
     const overlayRef = useRef(null);
-    const firstRender = useRef(true)
+    const initialHiddenValue = useRef(hidden)
 
-    const hideHandler = (e) => {
+    const hideHandler = useCallback((e) => {
         if (!e || overlayRef.current.contains(e.target)) {
             setTransitionClass(false);
             setTimeout(onHide, 300);
         }
-    };
+    }, [onHide]);
 
     useEffect(() => {
         document.body.style["overflow-y"] = "hidden";
@@ -23,9 +23,8 @@ const Modal = ({ onHide, hidden, size, className, children }) => {
     }, []);
 
     useEffect(() => {
-        if (!firstRender.current) hideHandler();
-        firstRender.current = false;
-    }, [hidden]);
+        if (hidden !== initialHiddenValue.current) hideHandler();
+    }, [hidden, initialHiddenValue, hideHandler]);
 
     return ReactDOM.createPortal(
         <div className={`${styles.container} ${transitionClass ? styles['container-show'] : styles['container-hide']}`}

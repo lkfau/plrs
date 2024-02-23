@@ -1,23 +1,30 @@
+<<<<<<< HEAD
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from "../../context/auth-context";
 import ScheduleItem from './ScheduleItem';
 import Modal from '../UI/Modal/Modal';
+=======
+import { useEffect, useState } from 'react';
+import ScheduleItem from './ScheduleItem';
+import Modal from '../UI/Modal/Modal';
+import Button from '../UI/Button/Button';
+>>>>>>> main
 import styles from './EditSchedule.module.css'
 
 const AddEditScheduleModal = ({ schedule, onHide }) => {
-    const [scheduleName, setScheduleName] = useState(schedule.name || "");
-    const [scheduleItems, setScheduleItems] = useState(schedule.items);
+    const [scheduleName, setScheduleName] = useState(schedule?.name || "");
+    const [scheduleItems, setScheduleItems] = useState(schedule?.items || []);
     const [buildings, setBuildings] = useState(null);
     const [saveResult, setSaveResult] = useState(null);
     const ctx = useContext(AuthContext);
 
     const saveSchedule = async () => {       
-        const response = await fetch('http://localhost:5000/schedules', {
-            method: schedule.schedule_id ? 'PUT' : 'POST',
+        const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/schedules`, {
+            method: schedule?.schedule_id ? 'PUT' : 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(schedule.schedule_id ? {
+            body: JSON.stringify(schedule?.schedule_id ? {
                 schedule_id: schedule.schedule_id,
                 name: scheduleName,
                 items: scheduleItems
@@ -66,13 +73,12 @@ const AddEditScheduleModal = ({ schedule, onHide }) => {
 
     useEffect(() => { 
         getBuildings();
-        if (schedule.schedule_id === undefined) {
+        if (schedule?.schedule_id === undefined) {
             addItem();
         }
-     }, [schedule.schedule_id])
-
+     }, [schedule?.schedule_id])
     return <Modal onHide={onHide} hidden={saveResult} size='large' className={styles.main}>
-        <h2>{schedule.schedule_id ? 'Edit' : 'Add'} Schedule</h2>
+        <h2>{schedule?.schedule_id ? 'Edit' : 'Add'} Schedule</h2>
         <hr />
         <h3>General</h3>
         <div className={styles.container}>
@@ -93,8 +99,8 @@ const AddEditScheduleModal = ({ schedule, onHide }) => {
             
         </div>
         <div className={`${styles.container} ${styles.options}`}>
-            <button className={styles.button} onClick={addItem}>+ Add Item</button>
-            <button onClick={saveSchedule}>Save</button>
+            <Button onClick={addItem}>+ Add Item</Button>
+            <Button onClick={saveSchedule}>Save</Button>
         </div>
 
     </Modal>

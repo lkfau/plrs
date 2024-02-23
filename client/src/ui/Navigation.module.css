@@ -4,13 +4,15 @@
   position: fixed;
   top: 0; 
   width: 100%;  
-  padding: 0.2rem 10rem;
+  padding: 0.2rem 10vw;
   overflow: hidden;
+  box-sizing: border-box;
   background-color: var(--primary);
   z-index: 10;
 }
 
 .contents {
+    flex-grow: 1;
     display: flex;
     gap: 1rem;
     align-items: center;
@@ -24,18 +26,20 @@
     height: 100%;
 }
 
-.container a {
+.contents a, .contents span {
     color: white;
     text-decoration: none;
+    display: block;
+    cursor: pointer;
 }
 
-.container a:hover {
+.contents a:hover, .contents span:hover {
     transition: all 0.1s linear;
     color: var(--secondary);
 }
 
 
-.container a + a {
+.contents div + div {
     margin-left: 1rem;
 }
 

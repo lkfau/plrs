@@ -1,8 +1,10 @@
 import Modal from '../UI/Modal/Modal';
+import Button from '../UI/Button/Button';
 import styles from './FeedbackModal.module.css'
+
 const FeedbackModal = ({ lot, onHide }) => {
     const submitFeedback = async(lotIsFull) => {
-        await fetch('http://localhost:5000/feedback', {
+        await fetch(`${process.env.REACT_APP_SERVER_IP}/feedback`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -19,9 +21,9 @@ const FeedbackModal = ({ lot, onHide }) => {
         <h3>Parking Feedback</h3>
         <p>When you parked, approximately how full was {lot.lot_name}?</p>
         <div className={styles.choice}>
-            <button onClick={() => submitFeedback(0)}><span>Not full</span></button>
-            <button onClick={() => submitFeedback(1)}><span>Nearly full</span></button>
-            <button onClick={() => submitFeedback(1)}><span>Completely full</span></button>
+            <Button onClick={() => submitFeedback(0)} color='success'><span>Not full</span></Button>
+            <Button onClick={() => submitFeedback(1)} color='warning'><span>Nearly full</span></Button>
+            <Button onClick={() => submitFeedback(1)} color='danger'><span>Completely full</span></Button>
         </div> 
     </Modal>
 }

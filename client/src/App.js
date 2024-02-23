@@ -8,17 +8,21 @@ import Schedules from './pages/Schedules';
 import AuthContext from "./context/auth-context";
 
 function App() {
+
     const ctx = useContext(AuthContext);
+
     return (
         <BrowserRouter>
             <Navigation />
-            <div className={styles.container}>
-                <Routes>
-                    <Route path='/' element={<Login />} />
-                    {ctx.user_id != null && <Route path='/recommend' element={<Recommend />} />}
-                    {ctx.user_id != null && <Route path='/schedules' element={<Schedules />} />}
-                    <Route path='*' element={<Navigate to="/" />} />
-                </Routes>
+            <div className={styles.flex}>
+                <div className={styles.container}>
+                    <Routes>
+                        <Route path='/' element={<Login />} />
+                        {ctx.user_id != null && <Route path='/recommend' element={<Recommend />} />}
+                        {ctx.user_id != null && <Route path='/schedules' element={<Schedules />} />}
+                        <Route path='*' element={<Navigate to="/" />} />
+                    </Routes>
+                </div>
             </div>
         </BrowserRouter>
     );

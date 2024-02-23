@@ -17,6 +17,7 @@
     color: var(--muted);
     height: fit-content;
     padding: 0;
+    cursor: pointer;
 }
 
 .closeButton:hover {
@@ -31,16 +32,3 @@
     justify-content: flex-end;
     gap: 1rem;
 }
-
-.footer > button {
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    border: none;
-    background-color: var(--secondary);
-}
-
-.footer > button:hover {
-    filter: brightness(1.1);
-    transition: all 0.1s linear;
-}
-

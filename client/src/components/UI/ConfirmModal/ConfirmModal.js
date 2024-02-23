@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Modal from '../Modal/Modal';
+import Button from '../Button/Button'
 import styles from './ConfirmModal.module.css';
+
 const ConfirmModal = ({ title, content, onConfirm, confirmText, cancelText }) => {
     const [userResponse, setUserResponse] = useState(null);
     const hideModalHandler = () => onConfirm(userResponse ?? false);
@@ -10,12 +12,11 @@ const ConfirmModal = ({ title, content, onConfirm, confirmText, cancelText }) =>
             <h2>{title}</h2>
             <button className={styles.closeButton} onClick={() => setUserResponse(false)}>X</button>
         </div>
-        <div>
-            <p>{content}</p>
-        </div>
+        <hr style={{width: '100%', boxSizing: 'border-box'}}/>
+        <div><p>{content}</p></div>
         <div className={styles.footer}>
-            <button onClick={() => setUserResponse(false)}>{cancelText ?? "Cancel"}</button>
-            <button onClick={() => setUserResponse(true)}>{confirmText ?? "Ok"}</button>
+            <Button onClick={() => setUserResponse(false)}>{cancelText ?? "Cancel"}</Button>
+            <Button onClick={() => setUserResponse(true)}>{confirmText ?? "Ok"}</Button>
         </div>
     </Modal>
 }

@@ -112,7 +112,11 @@ def recommend():
         # iteratively deserialize lots into LotRecommendation object array
     for lot in lots:
            lot.feet_to_destination = get_best_distance(destination.latitude, destination.longitude, destination.latitude, destination.longitude, lot.lot_rect[0], lot.lot_rect[1], lot.lot_rect[2], lot.lot_rect[3])
+           
+           lot.latitude= (lot.lot_rect[0] + lot.lot_rect[2]) / 2
+           lot.longitude= (lot.lot_rect[1] + lot.lot_rect[3]) / 2
            del lot.lot_rect
+
            lot.fullness = calc_lot_fullness_float(lot.lot_id, curtime, user_responses)
 
     # sort lots and call the function with user not preferring vacancy just to test

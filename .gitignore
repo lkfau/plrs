@@ -1,5 +1,5 @@
+# server db creds
 database.ini
-__pycache__/
 
 # dependencies
 /client/node_modules
@@ -12,7 +12,12 @@ __pycache__/
 # production
 /client/build
 
+#dev web env
+/client/.env
+
 # misc
+__pycache__/
+
 .DS_Store
 .env.local
 .env.development.local
@@ -22,8 +27,3 @@ __pycache__/
 /client/npm-debug.log*
 /client/yarn-debug.log*
 /client/yarn-error.log*
-
-# elastic beanstalk
-/server/.elasticbeanstalk/*
-!/server/.elasticbeanstalk/*.cfg.yml
-!/server/.elasticbeanstalk/*.global.yml
