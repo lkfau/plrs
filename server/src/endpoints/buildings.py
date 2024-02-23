@@ -16,13 +16,19 @@ def get_buildings():
         buildings = list(map(lambda building : Building(query_result=building), query_result))
         return buildings
 
-def get_destination(building_id):
-        query_result = query('get_destination.sql', [building_id], "one")
-        buildings = Building(query_result=query_result)
-        return buildings
-
-
-
+def get_destination(building_id = None, schedule_id = None, first_or_last_location = None, weekday = None):
+        if schedule_id != None:
+            query_result = query('get_destination_from_schedule.sql', [
+                first_or_last_location == 'last',
+                schedule_id,
+                int(pow(2, weekday))
+            ], "one")
+        else:
+            query_result = query('get_destination_from_building.sql', [building_id], "one")
+        building = Building(query_result=query_result)
+        print(building.building_name)
+        return building
+        
 # create endpoint
 app_buildings = Blueprint('app_buildings', __name__)
 @app_buildings.route('/buildings', methods=['GET'])

@@ -21,9 +21,9 @@ const FeedbackModal = ({ lot, onHide }) => {
         <h3>Parking Feedback</h3>
         <p>When you parked, approximately how full was {lot.lot_name}?</p>
         <div className={styles.choice}>
-            <Button onClick={() => submitFeedback(0)} color='success'><span>Not full</span></Button>
-            <Button onClick={() => submitFeedback(1)} color='warning'><span>Nearly full</span></Button>
-            <Button onClick={() => submitFeedback(1)} color='danger'><span>Completely full</span></Button>
+            <Button onClick={() => submitFeedback(false)} color='success'><span>Not full</span></Button>
+            <Button onClick={() => submitFeedback(true)} color='warning'><span>Nearly full</span></Button>
+            <Button onClick={() => submitFeedback(true)} color='danger'><span>Completely full</span></Button>
         </div> 
     </Modal>
 }

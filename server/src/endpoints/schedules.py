@@ -9,7 +9,6 @@ class Schedule:
         if query_result != None:
             self.schedule_id = query_result[0]
             self.name = query_result[1]
-            self.items = []
 
         # case 2: create instance from front-end request (save)
         else:
