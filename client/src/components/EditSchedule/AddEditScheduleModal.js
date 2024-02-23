@@ -1,14 +1,8 @@
-<<<<<<< HEAD
 import { useContext, useEffect, useState } from 'react';
-import AuthContext from "../../context/auth-context";
-import ScheduleItem from './ScheduleItem';
-import Modal from '../UI/Modal/Modal';
-=======
-import { useEffect, useState } from 'react';
+import AuthContext from '../../context/auth-context';
 import ScheduleItem from './ScheduleItem';
 import Modal from '../UI/Modal/Modal';
 import Button from '../UI/Button/Button';
->>>>>>> main
 import styles from './EditSchedule.module.css'
 
 const AddEditScheduleModal = ({ schedule, onHide }) => {
@@ -48,9 +42,9 @@ const AddEditScheduleModal = ({ schedule, onHide }) => {
         setScheduleItems((currentItems) => [
             ...currentItems,
             {
-                building_id: null,
+                building_id: 1,
                 arrival_time: "08:00:00",
-                arrival_weekdays: []
+                arrival_weekdays: [1]
             }
         ]);
     }
