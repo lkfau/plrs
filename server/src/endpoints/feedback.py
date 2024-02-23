@@ -35,7 +35,6 @@ def save_user_feedback(feedback):
         feedback.lot_is_full,
         datetime.now()
     ])
-    print('result', user_feedback_result)
     return user_feedback_result
 
 
@@ -49,7 +48,6 @@ def feedback():
     feedback = UserFeedback(request_data=request_data)
 
     # save feedback
-    print('test')
     query_result = save_user_feedback(feedback)
 
     # return result

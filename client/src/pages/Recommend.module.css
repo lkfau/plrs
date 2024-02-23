@@ -1,3 +1,10 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 50%;
+}
+
 .recommendationButton {
   background-color: var(--primary);
   border: none;

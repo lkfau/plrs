@@ -51,6 +51,9 @@ def get_best_distance(dest_x1, dest_y1, dest_x2, dest_y2, lot_x1, lot_y1, lot_x2
     # coefficient converts decimal latitude degrees to feet
     return round(min(distances) * 364500)
 
+# strToDate(): converts string to date
+def strToDate(dateString): 
+    return datetime.strptime(dateString, "%Y-%m-%d %H:%M:%S").date()
 
 def sort_lots(lots, user_prefers_vacancy):
     lots.sort(key = lambda lot : lot.feet_to_destination)
@@ -85,31 +88,25 @@ app_recommend = Blueprint('app_recommend', __name__)
 
 def recommend():
     # get parameters
-    schedule = request.args.get('schedule', default=False, type=bool)
-    if schedule:
-        user_preference = request.args.get('user_preference', default=-1, type=int)
-        schedule_data = request.get_json()
-
-        if user_preference == 0:
-            building_id = schedule_data[0]['items'][0]['building_id']
-        elif user_preference == 1:
-            building_id = schedule_data[-1]['items'][-1]['building_id']
-        else: 
-            print("Error invalid user preference.")
-            return 'Error invalid user preference.', 500 
-    else:
-        building_id = request.args.get('building_id', default=0, type=int)
-
+    schedule_id = request.args.get('schedule_id', default=0, type=int)
+    building_id = request.args.get('building_id', default=0, type=int)
     permit_type_id = request.args.get('permit_type_id', default=0, type=int)
-    user_responses = get_user_feedback(30) #get all user responses from last 30 mins
-    curtime = request.args.get('test_date', default=datetime.now(), type=str)
-
-        # get necessary data
+    curtime = request.args.get('test_date', default=datetime.now(), type=strToDate)
+    # get necessary data
     lots = get_parking_lots(permit_type_id)
-    destination = get_destination(building_id)
+    feedback = get_user_feedback(30)
+    destination = None
 
-
-        # iteratively deserialize lots into LotRecommendation object array
+    if schedule_id:
+        first_or_last_location = request.args.get('first_or_last_location', default='first', type=str)
+        destination = get_destination(schedule_id=schedule_id, first_or_last_location=first_or_last_location, weekday=curtime.weekday() + 1 % 7)
+    elif building_id:
+        building_id = request.args.get('building_id', default=0, type=int)
+        destination = get_destination(building_id=building_id)
+    else:
+        return 'schedule_id or building_id is required', 400
+    
+    # iteratively deserialize lots into LotRecommendation object array
     for lot in lots:
            lot.feet_to_destination = get_best_distance(destination.latitude, destination.longitude, destination.latitude, destination.longitude, lot.lot_rect[0], lot.lot_rect[1], lot.lot_rect[2], lot.lot_rect[3])
            
@@ -117,7 +114,7 @@ def recommend():
            lot.longitude= (lot.lot_rect[1] + lot.lot_rect[3]) / 2
            del lot.lot_rect
 
-           lot.fullness = calc_lot_fullness_float(lot.lot_id, curtime, user_responses)
+           lot.fullness = calc_lot_fullness_float(lot.lot_id, curtime, feedback)
 
     # sort lots and call the function with user not preferring vacancy just to test
     lots = sort_lots(lots, 0)

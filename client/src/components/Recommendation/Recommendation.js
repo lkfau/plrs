@@ -6,7 +6,7 @@ import styles from './Recommendation.module.css';
 
 const libraries = ['places']
 
-function Recommendation({ number, lot, onDecline }) {
+function Recommendation({ number, lot, buildingName, onDecline }) {
     const [feedbackOpen, setFeedbackOpen] = useState(false);
     const center = useMemo(() => ({
         lat: parseFloat(lot.latitude),
@@ -25,7 +25,7 @@ function Recommendation({ number, lot, onDecline }) {
             <div className={styles.container}>
                 <div className={styles.header}>
                     <h1>{number}. <span className={styles.title}>{lot.lot_name}</span></h1>
-                    <p><em>{lot.feet_to_destination} feet from your destination</em></p>
+                    <p><em>{lot.feet_to_destination} feet from {buildingName}</em></p>
                 </div>
                 <div className={styles.mapContainer}>
                     { (isLoaded && !loadError) && <GoogleMap

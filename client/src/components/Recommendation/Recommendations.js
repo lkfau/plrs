@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Recommendation from './Recommendation';
 import NoRecommendation from './NoRecommendation';
 
-function Recommendations({ data }) {
+function Recommendations({ data, buildingName }) {
     const [currentLot, setCurrentLot] = useState(0);
 
     const declineRecommendationHandler = () => {
@@ -11,7 +11,7 @@ function Recommendations({ data }) {
     }
     
     if (currentLot < data.length) {
-        return <Recommendation number={currentLot + 1} lot={data[currentLot]} onDecline={declineRecommendationHandler} />
+        return <Recommendation number={currentLot + 1} lot={data[currentLot]} buildingName={buildingName} onDecline={declineRecommendationHandler} />
     } else {
         return <NoRecommendation onRestart={() => setCurrentLot(0)}></NoRecommendation>
     }
