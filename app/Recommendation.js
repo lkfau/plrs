@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Button, Linking } from 'react-native';
-import MapView, { Marker } from 'react-native-maps'; // Import MapView and Marker
+import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 
 const Recommendation = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [destination, setDestination] = useState(null);
   const initialRegion = {
     latitude: 37.78825,
     longitude: -122.4324,
@@ -33,26 +34,30 @@ const Recommendation = () => {
     setCurrentPage(1);
   };
 
+  const handleGetDirections = () => {
+    // Open Apple Maps with directions from current location to the destination
+    const destinationURL = `http://maps.apple.com/?daddr=${destination.latitude},${destination.longitude}`;
+    Linking.openURL(destinationURL);
+  };
+
+  const getRandomLocation = () => {
+    // Function to generate random latitude and longitude for destination
+    const randomLatitude = 37.78825 + Math.random() * (0.1);
+    const randomLongitude = -122.4324 + Math.random() * (0.1);
+    return { latitude: randomLatitude, longitude: randomLongitude };
+  };
+
   const renderRecommendationContent = () => {
     if (currentPage <= 3) {
       return (
         <View style={styles.recommendationContent}>
           <Text style={styles.lotText}>Lot {currentPage}</Text>
-          {/* Large square for map feature */}
           <View style={styles.mapContainer}>
-          <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
-  {/* Use MapView */}
-  <Marker
-    coordinate={{ latitude: initialRegion.latitude, longitude: initialRegion.longitude }}
-    title={'Marker Title'}
-    description={'Marker Description'}
-  >
-    <View style={styles.marker}>
-      <Text>Marker Title</Text>
-      <Text>Marker Description</Text>
-    </View>
-  </Marker>
-</MapView>
+            <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
+              {destination && (
+                <Marker coordinate={destination} title="Destination" />
+              )}
+            </MapView>
           </View>
           <Text style={styles.statusText}>Most Likely Full</Text>
           <TouchableOpacity style={styles.button} onPress={handleNextPage}>
@@ -61,6 +66,11 @@ const Recommendation = () => {
           <TouchableOpacity style={styles.button} onPress={handleParkedButton}>
             <Text style={styles.iparkedButton}>I Parked</Text>
           </TouchableOpacity>
+          {destination && (
+            <TouchableOpacity style={styles.button} onPress={handleGetDirections}>
+              <Text style={styles.buttonText}>Get Directions from Me</Text>
+            </TouchableOpacity>
+          )}
         </View>
       );
     } else {
@@ -76,6 +86,10 @@ const Recommendation = () => {
         </View>
       );
     }
+  };
+
+  const handleSetDestination = () => {
+    setDestination(getRandomLocation());
   };
 
   return (

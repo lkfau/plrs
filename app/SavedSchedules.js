@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
-import ModalDropdown from 'react-native-modal-dropdown'; // Import the dropdown component
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal} from 'react-native';
+import ModalDropdown from 'react-native-modal-dropdown';
+import {Picker} from '@react-native-picker/picker';
+import { CheckBox } from '@react-native-community/checkbox';
 
 const Schedules = () => {
-  const navigation = useNavigation();
-
   const [locations, setLocations] = useState([]);
   const [locations2, setLocations2] = useState([]);
   const [schedules, setSchedules] = useState([]);
@@ -13,17 +12,25 @@ const Schedules = () => {
   const [editedTitle, setEditedTitle] = useState('');
   const [editedLocation, setEditedLocation] = useState(locations[0]);
   const [editedLocation2, setEditedLocation2] = useState(locations2[0]);
+  const [timeFirstLocationHour, setTimeFirstLocationHour] = useState('12');
+  const [timeFirstLocationMinute, setTimeFirstLocationMinute] = useState('00');
+  const [timeFirstLocationAmPm, setTimeFirstLocationAmPm] = useState('AM');
+  const [timeSecondLocationHour, setTimeSecondLocationHour] = useState('12');
+  const [timeSecondLocationMinute, setTimeSecondLocationMinute] = useState('00');
+  const [timeSecondLocationAmPm, setTimeSecondLocationAmPm] = useState('AM');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [showFirstTimePicker, setShowFirstTimePicker] = useState(true);
+  const [showSecondTimePicker, setShowSecondTimePicker] = useState(true);
+  const [selectedFirstTime, setSelectedFirstTime] = useState('12:00 AM');
+  const [selectedSecondTime, setSelectedSecondTime] = useState('12:00 AM');
 
   useEffect(() => {
-    // Add initial schedule when component mounts
-    setSchedules([{ id: 1, title: 'Schedule 1', location: locations[0], location2: locations2[0], info: '' }]);
     fetchData();
   }, []);
 
   async function fetchData() {
     try {
         const response = await fetch('http://54.210.243.185/buildings');
-        console.log(response)
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -31,48 +38,80 @@ const Schedules = () => {
         const data = await response.json();
 
         const buildingNames = data.map(building => building.building_name);
-        // Update the state with fetched building names
         setLocations(buildingNames);
-        setLocations2(buildingNames); // Assuming locations2 is also fetched similarly
+        setLocations2(buildingNames);
 
-        // Set default values for editedLocation and editedLocation2 once data is fetched
         if (buildingNames.length > 0) {
           setEditedLocation(buildingNames[0]);
           setEditedLocation2(buildingNames[0]);
         }
 
-        console.log(data); // Print the result to the console
-        return data; // Return the result if you need to further manipulate it    
+        setSchedules([{ id: 1, title: 'Schedule 1', location: buildingNames[0], location2: buildingNames[0], info: '', timeFirstLocation: '', timeSecondLocation: '' }]);
+
+        return data;
     } catch (error) {
         console.error('Error fetching data:', error);
-        throw error; // Rethrow the error if needed
+        throw error;
     }
 }
-
 
   const handleSchedulePress = (schedule) => {
     setSelectedSchedule(schedule);
     setEditedTitle(schedule.title);
     setEditedLocation(schedule.location);
     setEditedLocation2(schedule.location2);
+    const timeFirst = schedule.timeFirstLocation.split(':');
+    setTimeFirstLocationHour(timeFirst[0]);
+    setTimeFirstLocationMinute(timeFirst[1]);
+    setTimeFirstLocationAmPm(timeFirst[2]);
+    const timeSecond = schedule.timeSecondLocation.split(':');
+    setTimeSecondLocationHour(timeSecond[0]);
+    setTimeSecondLocationMinute(timeSecond[1]);
+    setTimeSecondLocationAmPm(timeSecond[2]);
+    setTimeValues(schedule.timeFirstLocation, setTimeFirstLocationHour, setTimeFirstLocationMinute, setTimeFirstLocationAmPm);
+    setTimeValues(schedule.timeSecondLocation, setTimeSecondLocationHour, setTimeSecondLocationMinute, setTimeSecondLocationAmPm);
+    setModalVisible(true);
+  };
+
+  const setTimeValues = (timeString, setHour, setMinute, setAmPm) => {
+    if (timeString) {
+      const [hour, minute, amPm] = timeString.split(':');
+      setHour(hour);
+      setMinute(minute);
+      setAmPm(amPm);
+    } else {
+      // If timeString is empty, set default values to 1:00 AM
+      setHour('1');
+      setMinute('00');
+      setAmPm('AM');
+    }
   };
 
   const saveChanges = () => {
+    const timeFirst = `${timeFirstLocationHour}:${timeFirstLocationMinute}:${timeFirstLocationAmPm}`;
+    const timeSecond = `${timeSecondLocationHour}:${timeSecondLocationMinute}:${timeSecondLocationAmPm}`;
     setSchedules(schedules.map(schedule =>
       schedule.id === selectedSchedule.id
-        ? { ...schedule, title: editedTitle, location: editedLocation, location2: editedLocation2 }
+        ? { ...schedule, title: editedTitle, location: editedLocation, location2: editedLocation2, timeFirstLocation: timeFirst, timeSecondLocation: timeSecond }
         : schedule
     ));
     setSelectedSchedule(null);
+    setModalVisible(false);
+    setShowFirstTimePicker(false);
+    setShowSecondTimePicker(false);
+    setSelectedFirstTime(`${timeFirstLocationHour}:${timeFirstLocationMinute} ${timeFirstLocationAmPm}`);
+    setSelectedSecondTime(`${timeSecondLocationHour}:${timeSecondLocationMinute} ${timeSecondLocationAmPm}`);
   };
 
   const createSchedule = () => {
     const newSchedule = {
       id: schedules.length + 1,
       title: `Schedule ${schedules.length + 1}`,
-      location: locations[0], // Default location
+      location: locations[0],
       location2: locations2[0],
       info: '',
+      timeFirstLocation: '12:00 AM',
+      timeSecondLocation: '12:00 AM',
     };
     setSchedules([...schedules, newSchedule]);
   };
@@ -108,10 +147,15 @@ const Schedules = () => {
       alignItems: 'center',
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    modalContent: {
+     modalContent: {
       backgroundColor: '#fff',
       padding: 20,
       borderRadius: 8,
+      width: 350, // Adjust the width of the modal
+      height: 'auto', // Adjust the height of the modal
+      marginTop: '10%', // Adjust the marginTop to move the modal down
+      marginLeft: '5%',
+      marginRight: '50%',
     },
     modalTextInput: {
       borderWidth: 1,
@@ -119,6 +163,41 @@ const Schedules = () => {
       borderRadius: 8,
       padding: 8,
       marginBottom: 8,
+    },
+    timePickerContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    timePicker: {
+      flex: 1,
+      textAlign: 'center',
+    },
+    dropdown: {
+      backgroundColor: '#e8e8e8',
+      borderRadius: 8,
+      padding: 8,
+      marginBottom: 8,
+    },
+    dropdownMenu: {
+      borderRadius: 8,
+    },
+    dropdownText: {
+      fontSize: 16,
+    },
+    dropdownOptionText: {
+      fontSize: 16,
+    },
+    setButton: {
+      backgroundColor: 'green',
+      borderRadius: 8,
+      padding: 10,
+      marginBottom: 8,
+      alignItems: 'center',
+    },
+    setButtonText: {
+      color: '#fff',
+      fontWeight: 'bold',
     },
   });
 
@@ -132,41 +211,176 @@ const Schedules = () => {
             style={styles.schedule}
             onPress={() => handleSchedulePress(schedule)}
           >
-            {selectedSchedule && selectedSchedule.id === schedule.id ? (
-              <View>
-                <TextInput
-                  style={styles.modalTextInput}
-                  placeholder="Enter title"
-                  value={editedTitle}
-                  onChangeText={setEditedTitle}
-                />
-                <ModalDropdown
-                  options={locations}
-                  defaultValue={editedLocation}
-                  onSelect={(index, value) => setEditedLocation(value)}
-                />
-                <ModalDropdown
-                  options={locations2}
-                  defaultValue={editedLocation2}
-                  onSelect={(index, value) => setEditedLocation2(value)}
-                />
-                <TouchableOpacity onPress={saveChanges}>
-                  <Text>Save</Text>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View>
-                <Text style={styles.title}>{schedule.title}</Text>
-                <Text>{schedule.location}</Text>
-                <Text>{schedule.location2}</Text>
-              </View>
-            )}
+            <Text style={styles.title}>{schedule.title}</Text>
+            <Text>{schedule.location}</Text>
+            <Text>{schedule.location2}</Text>
           </TouchableOpacity>
         ))}
         <TouchableOpacity style={styles.addButton} onPress={createSchedule}>
           <Text style={styles.addButtonText}>Create Schedule</Text>
         </TouchableOpacity>
       </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <ScrollView>
+            <View style={styles.modalContent}>
+              <TextInput
+                style={styles.modalTextInput}
+                placeholder="Enter title"
+                value={editedTitle}
+                onChangeText={setEditedTitle}
+              />
+
+              <View style={{ marginBottom: 8 }}>
+              <Text style={{marginLeft: 8, marginBottom: 5}}>What is your first building? </Text>
+                <ModalDropdown
+                  options={locations}
+                  defaultValue={editedLocation}
+                  onSelect={(value) => setEditedLocation(value)}
+                  style={styles.dropdown}
+                  dropdownStyle={styles.dropdownMenu}
+                  textStyle={styles.dropdownText}
+                  dropdownTextStyle={styles.dropdownOptionText}
+                />
+              </View>
+              {showFirstTimePicker && (
+                <View>
+                  <View style={styles.timePickerContainer}>
+                    <Picker
+                      style={styles.timePicker}
+                      selectedValue={timeFirstLocationHour}
+                      onValueChange={(itemValue) => setTimeFirstLocationHour(itemValue)}
+                    >
+                      {Array.from(Array(12).keys()).map((hour) => (
+                        <Picker.Item key={hour} label={`${hour + 1}`} value={`${hour + 1}`} />
+                      ))}
+                    </Picker>
+                    <Picker
+                      style={styles.timePicker}
+                      selectedValue={timeFirstLocationMinute}
+                      onValueChange={(itemValue) => setTimeFirstLocationMinute(itemValue)}
+                    >
+                      {Array.from(Array(60).keys()).map((minute) => (
+                        <Picker.Item key={minute} label={`${minute < 10 ? '0' + minute : minute}`} value={`${minute < 10 ? '0' + minute : minute}`} />
+                      ))}
+                    </Picker>
+                    <Picker
+                      style={styles.timePicker}
+                      selectedValue={timeFirstLocationAmPm}
+                      onValueChange={(itemValue) => setTimeFirstLocationAmPm(itemValue)}
+                    >
+                      <Picker.Item label="AM" value="AM" />
+                      <Picker.Item label="PM" value="PM" />
+                    </Picker>
+                  </View>
+                  <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <TouchableOpacity
+                      style={[styles.setButton, { padding: 8, width: 60, marginBottom: 8 }]}
+                      onPress={() => {
+                        setShowFirstTimePicker(false);
+                        setSelectedFirstTime(`${timeFirstLocationHour}:${timeFirstLocationMinute} ${timeFirstLocationAmPm}`);
+                      }}
+                    >
+                      <Text style={styles.setButtonText}>Set</Text>
+                    </TouchableOpacity>
+                  </View>              
+                </View>
+              )}
+              {selectedFirstTime !== '' && (
+                <Text style={{marginLeft: 8}}>Class Start Time: {selectedFirstTime}</Text>
+              )}
+              {!showFirstTimePicker && (
+                <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                  <TouchableOpacity
+                    style={[styles.setButton, { padding: 8, width: 70, marginBottom: 10 }]}
+                    onPress={() => setShowFirstTimePicker(true)}
+                  >
+                    <Text style={styles.setButtonText}>Change</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              <View style={{ marginBottom: 8 }}>
+              <Text style={{marginLeft: 8, marginBottom: 5}}>What is your last building? </Text>
+                <ModalDropdown
+                  options={locations2}
+                  defaultValue={editedLocation2}
+                  onSelect={(value) => setEditedLocation2(value)}
+                  style={styles.dropdown}
+                  dropdownStyle={styles.dropdownMenu}
+                  textStyle={styles.dropdownText}
+                  dropdownTextStyle={styles.dropdownOptionText}
+                />
+              </View>
+              {showSecondTimePicker && (
+                <View>
+                  <View style={styles.timePickerContainer}>
+                    <Picker
+                      style={styles.timePicker}
+                      selectedValue={timeSecondLocationHour}
+                      onValueChange={(itemValue) => setTimeSecondLocationHour(itemValue)}
+                    >
+                      {Array.from(Array(12).keys()).map((hour) => (
+                        <Picker.Item key={hour} label={`${hour + 1}`} value={`${hour + 1}`} />
+                      ))}
+                    </Picker>
+                    <Picker
+                      style={styles.timePicker}
+                      selectedValue={timeSecondLocationMinute}
+                      onValueChange={(itemValue) => setTimeSecondLocationMinute(itemValue)}
+                    >
+                      {Array.from(Array(60).keys()).map((minute) => (
+                        <Picker.Item key={minute} label={`${minute < 10 ? '0' + minute : minute}`} value={`${minute < 10 ? '0' + minute : minute}`} />
+                      ))}
+                    </Picker>
+                    <Picker
+                      style={styles.timePicker}
+                      selectedValue={timeSecondLocationAmPm}
+                      onValueChange={(itemValue) => setTimeSecondLocationAmPm(itemValue)}
+                    >
+                      <Picker.Item label="AM" value="AM" />
+                      <Picker.Item label="PM" value="PM" />
+                    </Picker>
+                  </View>
+                  <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <TouchableOpacity
+                      style={[styles.setButton, { padding: 8, width: 60, marginBottom: 8 }]}
+                      onPress={() => {
+                        setShowSecondTimePicker(false);
+                        setSelectedSecondTime(`${timeSecondLocationHour}:${timeSecondLocationMinute} ${timeSecondLocationAmPm}`);
+                      }}
+                    >
+                      <Text style={styles.setButtonText}>Set</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+              {selectedSecondTime !== '' && (
+                <Text style={{marginLeft: 8}}>Class End Time: {selectedSecondTime}</Text>
+              )}
+              {!showSecondTimePicker && (
+                <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                  <TouchableOpacity
+                    style={[styles.setButton, { padding: 8, width: 70, marginBottom: 10 }]}
+                    onPress={() => setShowSecondTimePicker(true)}
+                  >
+                    <Text style={styles.setButtonText}>Change</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              <TouchableOpacity style={styles.setButton} onPress={saveChanges}>
+                <Text style={styles.setButtonText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </View>
+      </Modal>
     </View>
   );
 }
