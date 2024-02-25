@@ -5,13 +5,20 @@ body {
   --primary: #1B1464;
   --secondary: #90CEFF;
   --muted: #aaa;
+  --danger: rgb(255, 139, 135);
+  --warning: rgb(253, 255, 131);
+  --success: rgb(122, 245, 122);
   margin: 5rem 0 0 0;
   background-color: #fafafa;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body, input, textarea, button {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }
 
 code {

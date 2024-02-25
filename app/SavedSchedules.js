@@ -32,6 +32,7 @@ const Schedules = () => {
   async function fetchData() {
     try {
         const response = await fetch('http://54.210.243.185/buildings');
+
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -48,8 +49,7 @@ const Schedules = () => {
         }
 
         setSchedules([{ id: 1, title: 'Schedule 1', location: buildingNames[0], location2: buildingNames[0], info: '', timeFirstLocation: '', timeSecondLocation: '' }]);
-
-        return data;
+        return data; // Return the result if you need to further manipulate it 
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;

@@ -74,7 +74,7 @@ def get_schedules_with_items(user_id):
     user_schedules = get_schedules(user_id)
     schedule_items = get_schedule_items(user_id=user_id)
     for schedule in user_schedules:
-        schedule.items = filter(lambda item : item.schedule_id == schedule.schedule_id, schedule_items)
+        schedule.items = list(filter(lambda item : item.schedule_id == schedule.schedule_id, schedule_items))
     return user_schedules
 
 # load items for schedule
