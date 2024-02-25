@@ -7,8 +7,6 @@ import styles from './ScheduleDisplay.module.css';
 const ScheduleDisplay = ({ schedule }) => {
     const [scheduleInterval, setScheduleInterval] = useState([0, 235959]);
 
-    
-
     const itemPosition = (item) => {
         const time = parseInt(item.arrival_time.replaceAll(':', '')), minTime = scheduleInterval[0], maxTime = scheduleInterval[1];
         return ((time - minTime) / (maxTime - minTime) * 100).toString() + '%';
@@ -21,7 +19,7 @@ const ScheduleDisplay = ({ schedule }) => {
     const formatTime = (time) => {
         const [hours, minutes, seconds] = time.split(':');
         const am = hours <= 12;
-        return `${hours%12}:${minutes} ${am ? 'a.m.' : 'p.m.'}`
+        return `${hours%12}:${minutes}${seconds !== '00' ? (':' + seconds) : ''} ${am ? 'a.m.' : 'p.m.'}`
 
     }
     useEffect(() => {
@@ -32,8 +30,8 @@ const ScheduleDisplay = ({ schedule }) => {
                 minTime = Math.min(minTime, arrivalTimeInteger);
                 maxTime = Math.max(maxTime, arrivalTimeInteger);
             })
-            minTime -= (maxTime - minTime) / 8
-            maxTime += (maxTime - minTime) / 8
+            minTime -= Math.max((maxTime - minTime) / 8, 1)
+            maxTime += Math.max((maxTime - minTime) / 8, 1)
             if (maxTime > minTime) setScheduleInterval([minTime, maxTime]);
         }
     
@@ -50,7 +48,7 @@ const ScheduleDisplay = ({ schedule }) => {
 
     return <div>
         {weekdays.map((weekday, index) => <div key={weekday} className={styles.row}>
-            <div className={styles.initial}><h2>{weekday[0]}</h2></div>
+            <div className={styles.initial}><p>{weekday[0]}</p></div>
             <div className={styles.display}>
                 <div className={styles.line}></div>
                 {scheduleItemsOnLine(index).map(item => 

@@ -1,8 +1,9 @@
 import styles from './EditSchedule.module.css'
 import Dropdown from '../UI/Dropdown/Dropdown';
 import WeekdayInput from '../UI/WeekdayInput/WeekdayInput';
+import Button from '../UI/Button/Button';
 
-const ScheduleItem = ({ item, onChange, buildings }) => {
+const ScheduleItem = ({ item, onChange, onDelete, buildings }) => {
     const changeBuilding = (newBuilding) => {
         const newItem = { ...item, building_id: newBuilding }
         onChange(newItem);
@@ -23,14 +24,18 @@ const ScheduleItem = ({ item, onChange, buildings }) => {
             <p>Building:</p>
             <Dropdown data={buildings} defaultValue={item.building_id} onSelect={changeBuilding} />
         </div>}
-        <div className={`${styles.container}`}>
+        <div className={styles.container}>
+            <div className={styles.container}>
             <p>Time:</p>
             <input type="time" value={item.arrival_time} onChange={changeTime} ></input>
+            </div>
+            
             <div className={styles.weekdays}>
                 <p>Weekdays:</p>
                 <WeekdayInput value={item.arrival_weekdays} onChange={changeWeekdays}/>
+              
             </div>
-           
+            <Button color="danger" style={{maxWidth: 'fit-content'}} onClick={onDelete}>X</Button>
         </div>
     </div>
 }

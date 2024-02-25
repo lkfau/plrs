@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+}
+
+.option {
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.1s linear;
+}
+
+
+.option.selected {
+    background-color: var(--secondary);
+}

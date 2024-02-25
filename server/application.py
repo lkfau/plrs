@@ -21,5 +21,7 @@ app.register_blueprint(app_schedules)
 app.register_blueprint(app_settings)
 app.register_blueprint(app_test)
 
+
+
 if __name__ == "__main__":
     app.run()

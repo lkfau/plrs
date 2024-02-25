@@ -1,0 +1,34 @@
+.container {
+    display: flex;
+    flex-direction: column
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.closeButton {
+    font-size: 1.5em;
+    border: none;
+    background-color: transparent;
+    color: var(--muted);
+    height: fit-content;
+    padding: 0;
+    cursor: pointer;
+}
+
+.closeButton:hover {
+    filter: brightness(0.8);
+    transition: all 0.1s linear;
+}
+
+.footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
