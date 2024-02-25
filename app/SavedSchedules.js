@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal, FlatList} from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {Picker} from '@react-native-picker/picker';
-import { CheckBox } from '@react-native-community/checkbox';
+
 
 const Schedules = () => {
   const [locations, setLocations] = useState([]);
@@ -23,6 +23,7 @@ const Schedules = () => {
   const [showSecondTimePicker, setShowSecondTimePicker] = useState(true);
   const [selectedFirstTime, setSelectedFirstTime] = useState('12:00 AM');
   const [selectedSecondTime, setSelectedSecondTime] = useState('12:00 AM');
+  const [selectedDays, setSelectedDays] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -71,6 +72,8 @@ const Schedules = () => {
     setTimeValues(schedule.timeFirstLocation, setTimeFirstLocationHour, setTimeFirstLocationMinute, setTimeFirstLocationAmPm);
     setTimeValues(schedule.timeSecondLocation, setTimeSecondLocationHour, setTimeSecondLocationMinute, setTimeSecondLocationAmPm);
     setModalVisible(true);
+    setShowSecondTimePicker(false);
+    setShowFirstTimePicker(false);
   };
 
   const setTimeValues = (timeString, setHour, setMinute, setAmPm) => {
@@ -102,6 +105,60 @@ const Schedules = () => {
     setSelectedFirstTime(`${timeFirstLocationHour}:${timeFirstLocationMinute} ${timeFirstLocationAmPm}`);
     setSelectedSecondTime(`${timeSecondLocationHour}:${timeSecondLocationMinute} ${timeSecondLocationAmPm}`);
   };
+  
+
+  const toggleDaySelection = (day) => {
+    if (selectedDays.includes(day)) {
+      setSelectedDays(selectedDays.filter((selectedDay) => selectedDay !== day));
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
+  };
+
+  const daysOfWeek = ['Sun', 'M', 'T', 'W', 'Th', 'F', 'Sat'];
+
+  const renderCheckbox = (day, isSelected, toggleDaySelection) => {
+    return (
+      <Checkbox
+        key={day}
+        label={day}
+        isChecked={isSelected}
+        onChange={() => toggleDaySelection(day)}
+      />
+    );
+  };
+
+  const renderItem = ({ item }) => {
+    return renderCheckbox(item, selectedDays.includes(item), toggleDaySelection);
+  };
+  
+  const DaysOfWeekCheckbox = () => {
+    return (
+      <View style={styles.container}>
+        {daysOfWeek.map((day) => (
+          <View key={day} style={styles.columnContainer}>
+            <Text style={styles.dayText}>{day}</Text>
+            <Checkbox
+              isChecked={selectedDays.includes(day)}
+              onChange={() => toggleDaySelection(day)}
+            />
+          </View>
+        ))}
+      </View>
+    );
+  };
+  
+  
+
+  const Checkbox = ({ label, isChecked, onChange }) => {
+    return (
+      <TouchableOpacity onPress={onChange} style={styles.checkboxContainer}>
+        <Text style={styles.checkboxText}>{label}</Text>
+        <View style={[styles.checkbox, isChecked && styles.checked]} />
+      </TouchableOpacity>
+    );
+  };
+  
 
   const createSchedule = () => {
     const newSchedule = {
@@ -151,11 +208,10 @@ const Schedules = () => {
       backgroundColor: '#fff',
       padding: 20,
       borderRadius: 8,
-      width: 350, // Adjust the width of the modal
-      height: 'auto', // Adjust the height of the modal
-      marginTop: '10%', // Adjust the marginTop to move the modal down
-      marginLeft: '5%',
+      width: 350, // Adjust the width of the modalmarginTop: '10%', // Adjust the marginTop to move the modal down
+      marginLeft: '50%',
       marginRight: '50%',
+      marginTop: 50,
     },
     modalTextInput: {
       borderWidth: 1,
@@ -199,6 +255,35 @@ const Schedules = () => {
       color: '#fff',
       fontWeight: 'bold',
     },
+    container: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 20,
+    },
+    checkboxContainer: {
+      alignItems: 'center',
+      marginRight: 10,
+    },
+    checkboxText: {
+      marginBottom: 5,
+    },
+    checkbox: {
+      width: 20,
+      height: 20,
+      borderWidth: 1,
+      borderColor: 'black',
+    },
+    checked: {
+      backgroundColor: 'green', // Change to your preferred checked color
+    },
+    columnContainer: {
+      alignItems: 'center',
+      marginHorizontal: 10,
+    },
+    dayText: {
+      marginBottom: 5,
+    },
   });
 
   return (
@@ -219,7 +304,6 @@ const Schedules = () => {
         <TouchableOpacity style={styles.addButton} onPress={createSchedule}>
           <Text style={styles.addButtonText}>Create Schedule</Text>
         </TouchableOpacity>
-      </ScrollView>
       <Modal
         animationType="slide"
         transparent={true}
@@ -229,21 +313,28 @@ const Schedules = () => {
         }}
       >
         <View style={styles.modalContainer}>
-          <ScrollView>
             <View style={styles.modalContent}>
+            <ScrollView keyboardShouldPersistTaps="handled">
               <TextInput
                 style={styles.modalTextInput}
                 placeholder="Enter title"
                 value={editedTitle}
                 onChangeText={setEditedTitle}
               />
+              <View style={{ marginBottom: 8 }}>
 
+              <View>
+                <View style={styles.container}>
+                  {daysOfWeek.map((day) => renderCheckbox(day, selectedDays.includes(day), toggleDaySelection))}
+                </View>
+              </View>
+              </View>
               <View style={{ marginBottom: 8 }}>
               <Text style={{marginLeft: 8, marginBottom: 5}}>What is your first building? </Text>
                 <ModalDropdown
                   options={locations}
                   defaultValue={editedLocation}
-                  onSelect={(value) => setEditedLocation(value)}
+                  onSelect={(value, buildingName) => setEditedLocation(buildingName)}
                   style={styles.dropdown}
                   dropdownStyle={styles.dropdownMenu}
                   textStyle={styles.dropdownText}
@@ -311,7 +402,7 @@ const Schedules = () => {
                 <ModalDropdown
                   options={locations2}
                   defaultValue={editedLocation2}
-                  onSelect={(value) => setEditedLocation2(value)}
+                  onSelect={(value, buildingName) => setEditedLocation2(buildingName)}
                   style={styles.dropdown}
                   dropdownStyle={styles.dropdownMenu}
                   textStyle={styles.dropdownText}
@@ -377,10 +468,13 @@ const Schedules = () => {
               <TouchableOpacity style={styles.setButton} onPress={saveChanges}>
                 <Text style={styles.setButtonText}>Save</Text>
               </TouchableOpacity>
-            </View>
-          </ScrollView>
+              </ScrollView>
+            </View>  
+            
         </View>
-      </Modal>
+        
+      </Modal> 
+      </ScrollView>
     </View>
   );
 }
