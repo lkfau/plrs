@@ -49,23 +49,24 @@ const Recommend = () => {
     if (recommendations?.length) {
         return <Recommendations data={recommendations} buildingName={buildings.find(building => building.key === selectedBuilding).value} />
     } else {
-        return <>
+        return <div className={styles.container}>
             <p>Choose your building.</p>
-            {buildings && <div className={styles.container}>
+            {buildings && <div className={styles.method}>
                 <Dropdown data={buildings} onSelect={setSelectedBuilding} />
                 <button className={styles.recommendationButton} onClick={() => getRecommendations('building')}>Get Recommendation</button>
                 
             </div>}
 
-            <p>OR choose your schedule.</p>
-            {schedules && <div className={styles.container}>
+            <h2>OR</h2>
+            <p>Choose your schedule.</p>
+            {schedules && <div className={styles.method}>
                 <Dropdown data={schedules} onSelect={setSelectedSchedule} />
                 <p>Would you like to park closest to your arriving or departing building?</p>
                 <PillCheckbox options={firstOrLastOptions} onSelect={setFirstOrLastLocation} selectedOption={firstOrLastOptions[firstOrLastLocation]} />
                 <button className={styles.recommendationButton} onClick={() => getRecommendations('schedule')}>Get Recommendation</button>
                 
             </div>}
-        </>
+        </div>
     }
 }
 
