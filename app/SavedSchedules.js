@@ -30,7 +30,7 @@ const Schedules = () => {
 
   async function fetchData() {
     try {
-        const response = await fetch('http://54.210.243.185/buildings');
+        const response = await fetch(`http://${process.env.EXPO_PUBLIC_SERVER_IP}/buildlings/`);
 
         if (!response.ok) {
             throw new Error('Network response was not ok');

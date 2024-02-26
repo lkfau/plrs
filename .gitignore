@@ -14,6 +14,7 @@ database.ini
 
 #dev web env
 /client/.env
+/app/.env
 
 # misc
 __pycache__/
