@@ -7,7 +7,6 @@ import {Picker} from '@react-native-picker/picker';
 const Schedules = () => {
   const [locations, setLocations] = useState([]);
   const [locations2, setLocations2] = useState([]);
-  const [schedules, setSchedules] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');
   const [editedLocation, setEditedLocation] = useState(locations[0]);
@@ -24,6 +23,30 @@ const Schedules = () => {
   const [selectedFirstTime, setSelectedFirstTime] = useState('12:00 AM');
   const [selectedSecondTime, setSelectedSecondTime] = useState('12:00 AM');
   const [selectedDays, setSelectedDays] = useState([]);
+  const [schedules, setSchedules] = useState([
+    {
+      id: 1,
+      title: 'Schedule 1',
+      location: locations[0],
+      location2: locations2[0],
+      info: '',
+      time: {
+        first: {
+          hour: '12',
+          minute: '00',
+          amPm: 'AM',
+        },
+        second: {
+          hour: '12',
+          minute: '00',
+          amPm: 'AM',
+        },
+      },
+      selectedFirstTime: '12:00 AM',
+      selectedSecondTime: '12:00 AM',
+      selectedDays: [],
+    },
+  ]);
 
   useEffect(() => {
     fetchData();
@@ -32,7 +55,6 @@ const Schedules = () => {
   async function fetchData() {
     try {
         const response = await fetch('http://54.210.243.185/buildings');
-
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -48,108 +70,179 @@ const Schedules = () => {
           setEditedLocation2(buildingNames[0]);
         }
 
-        setSchedules([{ id: 1, title: 'Schedule 1', location: buildingNames[0], location2: buildingNames[0], info: '', timeFirstLocation: '', timeSecondLocation: '' }]);
-        return data; // Return the result if you need to further manipulate it 
+        setSchedules([{ 
+          id: 1, 
+          title: 'Schedule 1', 
+          location: buildingNames[0], 
+          location2: buildingNames[0], 
+          info: '', 
+          timeFirstLocationHour: '12',
+          timeFirstLocationMinute: '00',
+          timeFirstLocationAmPm: 'AM',
+          timeSecondLocationHour: '12',
+          timeSecondLocationMinute: '00',
+          timeSecondLocationAmPm: 'AM',
+        }]);
+        return data;
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;
     }
 }
 
-  const handleSchedulePress = (schedule) => {
-    setSelectedSchedule(schedule);
-    setEditedTitle(schedule.title);
-    setEditedLocation(schedule.location);
-    setEditedLocation2(schedule.location2);
-    const timeFirst = schedule.timeFirstLocation.split(':');
-    setTimeFirstLocationHour(timeFirst[0]);
-    setTimeFirstLocationMinute(timeFirst[1]);
-    setTimeFirstLocationAmPm(timeFirst[2]);
-    const timeSecond = schedule.timeSecondLocation.split(':');
-    setTimeSecondLocationHour(timeSecond[0]);
-    setTimeSecondLocationMinute(timeSecond[1]);
-    setTimeSecondLocationAmPm(timeSecond[2]);
-    setTimeValues(schedule.timeFirstLocation, setTimeFirstLocationHour, setTimeFirstLocationMinute, setTimeFirstLocationAmPm);
-    setTimeValues(schedule.timeSecondLocation, setTimeSecondLocationHour, setTimeSecondLocationMinute, setTimeSecondLocationAmPm);
-    setModalVisible(true);
-    setShowSecondTimePicker(false);
-    setShowFirstTimePicker(false);
-  };
+const handleSchedulePress = (schedule) => {
+  setSelectedSchedule(schedule);
+  setEditedTitle(schedule.title);
+  setEditedLocation(schedule.location);
+  setEditedLocation2(schedule.location2);
+  setSelectedDays(schedule.setSelectedDays);
+  if (schedule.time && schedule.time.first) {
+    setSelectedFirstTime(`${schedule.time.first.hour}:${schedule.time.first.minute} ${schedule.time.first.amPm}`);
+    setTimeFirstLocationHour(schedule.time.first.hour);
+    setTimeFirstLocationMinute(schedule.time.first.minute);
+    setTimeFirstLocationAmPm(schedule.time.first.amPm);    
+  }
+  if (schedule.time && schedule.time.second) {    
+    setSelectedSecondTime(`${schedule.time.second.hour}:${schedule.time.second.minute} ${schedule.time.second.amPm}`);
+    setTimeSecondLocationHour(schedule.time.second.hour);
+    setTimeSecondLocationMinute(schedule.time.second.minute);
+    setTimeSecondLocationAmPm(schedule.time.second.amPm);
+  }
 
-  const setTimeValues = (timeString, setHour, setMinute, setAmPm) => {
-    if (timeString) {
-      const [hour, minute, amPm] = timeString.split(':');
-      setHour(hour);
-      setMinute(minute);
-      setAmPm(amPm);
-    } else {
-      // If timeString is empty, set default values to 1:00 AM
-      setHour('1');
-      setMinute('00');
-      setAmPm('AM');
+  setSelectedDays(schedule.selectedDays || []);
+  setModalVisible(true);
+};
+
+const saveScheduleToBackend = async (schedule) => {
+  try {
+    const response = await fetch('http://54.210.243.185/schedules', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(schedule),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to save schedule');
     }
+    const responseData = await response.text(); // Get the response as text
+    console.log('Response from server:', responseData); // Log the response
+    const data = JSON.parse(responseData); // Parse the response as JSON
+    console.log('Schedule saved successfully:', data);
+  } catch (error) {
+    console.error('Error saving schedule:', error);
+  }
+};
+
+const saveChanges = async () => {
+
+  const militaryTimeFirstLocation = convertToMilitaryTime(timeFirstLocationHour, timeFirstLocationMinute, timeFirstLocationAmPm);
+  // Convert second location time to military time
+  const militaryTimeSecondLocation = convertToMilitaryTime(timeSecondLocationHour, timeSecondLocationMinute, timeSecondLocationAmPm);
+
+  const weekdaysMapping = {
+    Sun: 0,
+    M: 1,
+    T: 2,
+    W: 3,
+    Th: 4,
+    F: 5,
+    Sat: 6,
   };
 
-  const saveChanges = () => {
-    const timeFirst = `${timeFirstLocationHour}:${timeFirstLocationMinute}:${timeFirstLocationAmPm}`;
-    const timeSecond = `${timeSecondLocationHour}:${timeSecondLocationMinute}:${timeSecondLocationAmPm}`;
-    setSchedules(schedules.map(schedule =>
-      schedule.id === selectedSchedule.id
-        ? { ...schedule, title: editedTitle, location: editedLocation, location2: editedLocation2, timeFirstLocation: timeFirst, timeSecondLocation: timeSecond }
-        : schedule
-    ));
-    setSelectedSchedule(null);
+  const selectedWeekdays = selectedDays.map((day) => weekdaysMapping[day]);
+
+  const scheduleData = {
+    user_id: 1,
+    name: editedTitle,
+    items: [
+      {
+        building_id: editedLocation,
+        arrival_weekdays: selectedWeekdays,
+        arrival_time: militaryTimeFirstLocation
+      }
+    ]
+  };
+
+  try {
+    // Save the schedule to the backend
+    await saveScheduleToBackend(scheduleData);
+
+    // Update the schedules state after the backend call succeeds
+    const newSchedules = [
+      ...schedules,
+      {
+        id: schedules.length + 1,
+        title: editedTitle,
+        location: editedLocation,
+        location2: editedLocation2,
+        time: {
+          first: {
+            hour: timeFirstLocationHour,
+            minute: timeFirstLocationMinute,
+            amPm: timeFirstLocationAmPm
+          },
+          second: {
+            hour: timeSecondLocationHour,
+            minute: timeSecondLocationMinute,
+            amPm: timeSecondLocationAmPm
+          }
+        },
+        selectedFirstTime: `${timeFirstLocationHour}:${timeFirstLocationMinute} ${timeFirstLocationAmPm}`,
+        selectedSecondTime: `${timeSecondLocationHour}:${timeSecondLocationMinute} ${timeSecondLocationAmPm}`,
+        selectedDays: selectedDays
+      }
+    ];
+
+    setSchedules(newSchedules);
     setModalVisible(false);
-    setShowFirstTimePicker(false);
-    setShowSecondTimePicker(false);
-    setSelectedFirstTime(`${timeFirstLocationHour}:${timeFirstLocationMinute} ${timeFirstLocationAmPm}`);
-    setSelectedSecondTime(`${timeSecondLocationHour}:${timeSecondLocationMinute} ${timeSecondLocationAmPm}`);
+  } catch (error) {
+    console.error('Error saving schedule:', error);
+  }
+};
+
+const convertToMilitaryTime = (hour, minute, amPm) => {
+  let militaryHour = parseInt(hour, 10);
+  if (amPm === 'PM' && militaryHour !== 12) {
+    militaryHour += 12;
+  } else if (amPm === 'AM' && militaryHour === 12) {
+    militaryHour = 0;
+  }
+  const militaryTime = `${militaryHour.toString().padStart(2, '0')}:${minute}:00`;
+  return militaryTime;
+};
+
+  const toggleDaySelection = (day, scheduleId) => {
+    setSchedules((prevSchedules) => {
+      return prevSchedules.map((schedule) => {
+        if (schedule.id === scheduleId) {
+          const updatedSelectedDays = (schedule.selectedDays?.includes(day) ? 
+                                        schedule.selectedDays.filter((selectedDay) => selectedDay !== day) :
+                                        [...(schedule.selectedDays || []), day]);
+          // Update selectedDays directly
+          setSelectedDays(updatedSelectedDays);
+          return { ...schedule, selectedDays: updatedSelectedDays };
+        }
+        return schedule;
+      });
+    });
   };
   
 
-  const toggleDaySelection = (day) => {
-    if (selectedDays.includes(day)) {
-      setSelectedDays(selectedDays.filter((selectedDay) => selectedDay !== day));
-    } else {
-      setSelectedDays([...selectedDays, day]);
-    }
-  };
-
   const daysOfWeek = ['Sun', 'M', 'T', 'W', 'Th', 'F', 'Sat'];
 
-  const renderCheckbox = (day, isSelected, toggleDaySelection) => {
+  const renderCheckbox = (day) => {
     return (
       <Checkbox
         key={day}
         label={day}
-        isChecked={isSelected}
-        onChange={() => toggleDaySelection(day)}
+        isChecked={selectedDays && selectedDays.includes(day)}
+        onChange={() => toggleDaySelection(day, selectedSchedule.id)}
       />
     );
   };
-
-  const renderItem = ({ item }) => {
-    return renderCheckbox(item, selectedDays.includes(item), toggleDaySelection);
-  };
-  
-  const DaysOfWeekCheckbox = () => {
-    return (
-      <View style={styles.container}>
-        {daysOfWeek.map((day) => (
-          <View key={day} style={styles.columnContainer}>
-            <Text style={styles.dayText}>{day}</Text>
-            <Checkbox
-              isChecked={selectedDays.includes(day)}
-              onChange={() => toggleDaySelection(day)}
-            />
-          </View>
-        ))}
-      </View>
-    );
-  };
   
   
-
   const Checkbox = ({ label, isChecked, onChange }) => {
     return (
       <TouchableOpacity onPress={onChange} style={styles.checkboxContainer}>
@@ -157,7 +250,7 @@ const Schedules = () => {
         <View style={[styles.checkbox, isChecked && styles.checked]} />
       </TouchableOpacity>
     );
-  };
+  };  
   
 
   const createSchedule = () => {
@@ -167,8 +260,12 @@ const Schedules = () => {
       location: locations[0],
       location2: locations2[0],
       info: '',
-      timeFirstLocation: '12:00 AM',
-      timeSecondLocation: '12:00 AM',
+      timeFirstLocationHour: '12',
+      timeFirstLocationMinute: '00',
+      timeFirstLocationAmPm: 'AM',
+      timeSecondLocationHour: '12',
+      timeSecondLocationMinute: '00',
+      timeSecondLocationAmPm: 'AM',
     };
     setSchedules([...schedules, newSchedule]);
   };
@@ -275,11 +372,11 @@ const Schedules = () => {
       borderColor: 'black',
     },
     checked: {
-      backgroundColor: 'green', // Change to your preferred checked color
+      backgroundColor: 'green',
     },
     columnContainer: {
       alignItems: 'center',
-      marginHorizontal: 10,
+      marginHorizontal: 5,
     },
     dayText: {
       marginBottom: 5,
@@ -325,7 +422,11 @@ const Schedules = () => {
 
               <View>
                 <View style={styles.container}>
-                  {daysOfWeek.map((day) => renderCheckbox(day, selectedDays.includes(day), toggleDaySelection))}
+                  {daysOfWeek.map((day) => (
+                    <View key={day} style={styles.columnContainer}>
+                      {renderCheckbox(day)}
+                    </View>
+                  ))}
                 </View>
               </View>
               </View>
@@ -445,6 +546,7 @@ const Schedules = () => {
                       onPress={() => {
                         setShowSecondTimePicker(false);
                         setSelectedSecondTime(`${timeSecondLocationHour}:${timeSecondLocationMinute} ${timeSecondLocationAmPm}`);
+                      
                       }}
                     >
                       <Text style={styles.setButtonText}>Set</Text>
@@ -464,12 +566,12 @@ const Schedules = () => {
                     <Text style={styles.setButtonText}>Change</Text>
                   </TouchableOpacity>
                 </View>
-              )}
+              )}              
               <TouchableOpacity style={styles.setButton} onPress={saveChanges}>
                 <Text style={styles.setButtonText}>Save</Text>
               </TouchableOpacity>
               </ScrollView>
-            </View>  
+            </View>           
             
         </View>
         
