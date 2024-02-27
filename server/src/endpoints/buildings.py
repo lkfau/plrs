@@ -26,7 +26,6 @@ def get_destination(building_id = None, schedule_id = None, first_or_last_locati
         else:
             query_result = query('get_destination_from_building.sql', [building_id], "one")
         building = Building(query_result=query_result)
-        print(building.building_name)
         return building
         
 # create endpoint

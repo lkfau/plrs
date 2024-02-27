@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Button } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, Button, Linking } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 
 const Recommendation = () => {
   const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [destination, setDestination] = useState(null);
+  const initialRegion = {
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  }; // Set initial region to a random location
 
   const handleParkedButton = () => {
     setShowModal(true);
@@ -13,29 +22,84 @@ const Recommendation = () => {
     setShowModal(false);
   };
 
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handleReenter = () => {
+    // Handle navigation to the schedules page
+  };
+
+  const handleGoToRecommendation1 = () => {
+    setCurrentPage(1);
+  };
+
+  const handleGetDirections = () => {
+    // Open Apple Maps with directions from current location to the destination
+    const destinationURL = `http://maps.apple.com/?daddr=${destination.latitude},${destination.longitude}`;
+    Linking.openURL(destinationURL);
+  };
+
+  const getRandomLocation = () => {
+    // Function to generate random latitude and longitude for destination
+    const randomLatitude = 37.78825 + Math.random() * (0.1);
+    const randomLongitude = -122.4324 + Math.random() * (0.1);
+    return { latitude: randomLatitude, longitude: randomLongitude };
+  };
+
+  const renderRecommendationContent = () => {
+    if (currentPage <= 3) {
+      return (
+        <View style={styles.recommendationContent}>
+          <Text style={styles.lotText}>Lot {currentPage}</Text>
+          <View style={styles.mapContainer}>
+            <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
+              {destination && (
+                <Marker coordinate={destination} title="Destination" />
+              )}
+            </MapView>
+          </View>
+          <Text style={styles.statusText}>Most Likely Full</Text>
+          <TouchableOpacity style={styles.button} onPress={handleNextPage}>
+            <Text style={styles.buttonText}>Get New Recommendation</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleParkedButton}>
+            <Text style={styles.iparkedButton}>I Parked</Text>
+          </TouchableOpacity>
+          {destination && (
+            <TouchableOpacity style={styles.button} onPress={handleGetDirections}>
+              <Text style={styles.buttonText}>Get Directions from Me</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.recommendationContent}>
+          <Text style={styles.lotText}>Sorry, we are out of recommendations.</Text>
+          <TouchableOpacity style={styles.button} onPress={handleGoToRecommendation1}>
+            <Text style={styles.buttonText}>Go back to recommendation 1</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleReenter}>
+            <Text style={styles.buttonText}>Reenter</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+  };
+
+  const handleSetDestination = () => {
+    setDestination(getRandomLocation());
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.lotText}>Lot 1</Text>
-      
-      {/* Large square for map feature (Replace with your map component) */}
-      <View style={styles.mapContainer}>
-        {/* Your map component goes here */}
-      </View>
-      
-      <Text style={styles.statusText}>Most Likely Full</Text>
-      
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Get Directions</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Get New Recommendation</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity style={styles.button} onPress={handleParkedButton}>
-        <Text style={styles.iparkedButton}>I Parked</Text>
-      </TouchableOpacity>
-      
+      {renderRecommendationContent()}
+      {currentPage <= 3 && (
+        <TouchableOpacity style={styles.arrowButton} onPress={handleNextPage}>
+          <Text style={styles.arrowText}>➜</Text>
+        </TouchableOpacity>
+      )}
       {/* Modal for "I Parked" button */}
       <Modal visible={showModal} transparent animationType="slide">
         <View style={styles.modalBackground}>
@@ -63,28 +127,31 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#fff', // Set background color here
   },
   lotText: {
     fontSize: 24,
     marginBottom: 20,
+    textAlign: 'center',
   },
   mapContainer: {
     width: 300,
     height: 300, // Adjust according to your map component
-    backgroundColor: '#ccc', // Placeholder color
     marginBottom: 20,
   },
   statusText: {
     fontSize: 18,
     marginBottom: 10,
     color: 'red',
+    textAlign: 'center',
   },
   button: {
-    //backgroundColor: '#007bff',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 10,
-    marginBottom: 10,    
+    marginBottom: 10,
+    backgroundColor: 'transparent', // Remove background color
+    alignSelf: 'center',
   },
   iparkedButton: {
     backgroundColor: 'black',
@@ -106,9 +173,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   recommendationContent: {
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adjust opacity as needed
     paddingHorizontal: 20,
     paddingBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent', // Remove background color
   },
   popupContainer: {
     backgroundColor: '#fff',
@@ -138,6 +207,15 @@ const styles = StyleSheet.create({
   },
   redButton: {
     backgroundColor: 'red',
+  },
+  arrowButton: {
+    position: 'absolute',
+    right: 20,
+    top: '50%',
+    transform: [{ translateY: -12 }],
+  },
+  arrowText: {
+    fontSize: 30,
   },
 });
 
