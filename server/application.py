@@ -6,6 +6,8 @@ from src.endpoints.recommend import app_recommend
 from src.endpoints.schedules import app_schedules
 from src.endpoints.settings import app_settings
 from src.endpoints.test import app_test
+from src.endpoints.login import app_login
+from src.endpoints.create_user import app_create_user
 
 
 # create flask app 
@@ -19,6 +21,8 @@ app.register_blueprint(app_feedback)
 app.register_blueprint(app_recommend)
 app.register_blueprint(app_schedules)
 app.register_blueprint(app_settings)
+app.register_blueprint(app_login)
+app.register_blueprint(app_create_user)
 app.register_blueprint(app_test)
 
 
