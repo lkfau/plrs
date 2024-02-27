@@ -20,7 +20,7 @@ const Account = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MySchedules')}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Schedules')}>
         <Text style={styles.buttonText}>My Schedules</Text>
       </TouchableOpacity>
 
@@ -69,9 +69,6 @@ const Account = () => {
         <Text style={styles.buttonText}>Change Password</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Questionnaire')}>
-        <Text style={styles.buttonText}>Questionnaire</Text>
-      </TouchableOpacity>
     </View>
   );
 };
