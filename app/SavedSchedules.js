@@ -6,6 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 const Schedules = () => {
   const [locations, setLocations] = useState([]);
   const [locations2, setLocations2] = useState([]);
+  const [locationsnames, setLocationsNames] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');
   const [editedLocation, setEditedLocation] = useState('');
@@ -18,6 +19,7 @@ const Schedules = () => {
   const [selectedFirstTime, setSelectedFirstTime] = useState('12:00 AM');
   const [selectedDays, setSelectedDays] = useState([]);
   const [schedules, setSchedules] = useState([]);
+  const [buildingOptions, setBuildingOptions] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -32,7 +34,9 @@ const Schedules = () => {
       }
   
       const buildingData = await buildingResponse.json();
+      const buildingIds = buildingData.map(building => building.building_id);
       const buildingNames = buildingData.map(building => building.building_name);
+      const buildingOptions = buildingData.map(building => ({ id: building.building_id, name: building.building_name }));
   
       // Fetch schedules data from backend
       const schedulesResponse = await fetch('http://54.210.243.185/schedules?user_id=1&get_items=true');
@@ -56,8 +60,10 @@ const Schedules = () => {
   
       // Update state with fetched data
       setSchedules(transformedSchedules);
-      setLocations(buildingNames);
-      setLocations2(buildingNames);
+      setLocations(buildingIds);
+      setLocations2(buildingIds);
+      setLocationsNames(buildingNames);
+      setBuildingOptions(buildingOptions);
   
       if (buildingNames.length > 0) {
         // Set initial location values to the first building
@@ -76,16 +82,8 @@ const Schedules = () => {
   
     // Check if schedule.items is defined before accessing its properties
     if (schedule.items && schedule.items.length > 0) {
-      const firstItem = schedule.items[0];
-      const lastItem = schedule.items[schedule.items.length - 1];
-  
-      // Find the corresponding building names for the first and last items
-      const firstLocation = locations.find(location => location.building_id === firstItem.building_id);
-      const lastLocation = locations.find(location => location.building_id === lastItem.building_id);
-  
-      // Set the edited locations if found
-      setEditedLocation(firstLocation ? firstLocation.building_name : '');
-      setEditedLocation2(lastLocation ? lastLocation.building_name : '');
+      setEditedLocation(schedule.items[0].building_id)
+      setEditedLocation2(schedule.items[0].building_id)
     }
   
     // Check if schedule.time is defined before accessing its properties
@@ -170,12 +168,12 @@ const Schedules = () => {
       "name": editedTitle,
       "items": [
         {
-          "building_id": 2,
+          "building_id": editedLocation,
           "arrival_weekdays": selectedWeekdays,
           "arrival_time": militaryTimeFirstLocation
         },
         {
-          "building_id": 4,
+          "building_id": editedLocation2,
           "arrival_weekdays": selectedWeekdays,
           "arrival_time": militaryTimeFirstLocation
         }
@@ -190,19 +188,20 @@ const Schedules = () => {
       const newSchedules = [
         ...schedules,
         {
-          id: schedules.length + 1,
-          title: editedTitle,
-          location: editedLocation,
-          location2: editedLocation2,
-          time: {
-            first: {
-              hour: timeFirstLocationHour,
-              minute: timeFirstLocationMinute,
-              amPm: timeFirstLocationAmPm
+          "id": schedules.length + 1,
+          "name": editedTitle,
+          "items": [
+            {
+              "building_id": editedLocation,
+              "arrival_weekdays": selectedWeekdays,
+              "arrival_time": militaryTimeFirstLocation
+            },
+            {
+              "building_id": editedLocation2,
+              "arrival_weekdays": selectedWeekdays,
+              "arrival_time": militaryTimeFirstLocation
             }
-          },
-          selectedFirstTime: `${timeFirstLocationHour}:${timeFirstLocationMinute} ${timeFirstLocationAmPm}`,
-          selectedDays: selectedDays
+          ]
         }
       ];
   
@@ -338,15 +337,16 @@ const toggleDaySelection = (day, scheduleId) => {
               </View>
               <View style={{ marginBottom: 8 }}>
               <Text style={{marginLeft: 8, marginBottom: 5}}>What is your first building? </Text>
+              
                 <ModalDropdown
-                  options={locations}
-                  defaultValue={editedLocation}
-                  onSelect={(value, buildingName) => setEditedLocation(buildingName)}
+                  options={locationsnames}
+                  defaultValue={buildingOptions.find(option => option.id === editedLocation)?.name || 'Select Building'}
+                  onSelect={(index) => setEditedLocation(buildingOptions[index].id)}
                   style={styles.dropdown}
                   dropdownStyle={styles.dropdownMenu}
                   textStyle={styles.dropdownText}
                   dropdownTextStyle={styles.dropdownOptionText}
-                />
+                />              
               </View>
               {showFirstTimePicker && (
                 <View>
@@ -407,9 +407,9 @@ const toggleDaySelection = (day, scheduleId) => {
               <View style={{ marginBottom: 8 }}>
               <Text style={{marginLeft: 8, marginBottom: 5}}>What is your last building? </Text>
                 <ModalDropdown
-                  options={locations2}
-                  defaultValue={editedLocation2}
-                  onSelect={(value, buildingName) => setEditedLocation2(buildingName)}
+                  options={locationsnames}
+                  defaultValue={buildingOptions.find(option => option.id === editedLocation)?.name || 'Select Building'}
+                  onSelect={(index) => setEditedLocation2(buildingOptions[index].id)}
                   style={styles.dropdown}
                   dropdownStyle={styles.dropdownMenu}
                   textStyle={styles.dropdownText}
