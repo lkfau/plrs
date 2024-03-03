@@ -47,19 +47,12 @@ const Schedules = () => {
         title: schedule.name,
         items: schedule.items ? schedule.items.map(item => ({
           item_id: item.item_id,
-          building_id: item.building_id,
-          arrival_time: item.arrival_time
+          arrival_time: item.arrival_time,
+          building_id: item.building_id
         })) : []
-      }));
+      }));      
   
       console.log('Transformed Schedules:', transformedSchedules);
-  
-      // Log arrival time for each item in the transformed schedules
-      // transformedSchedules.forEach(schedule => {
-      //   schedule.items.forEach(item => {
-      //     console.log('Arrival Time:', item.arrival_time);
-      //   });
-      // });
   
       // Update state with fetched data
       setSchedules(transformedSchedules);
@@ -76,20 +69,23 @@ const Schedules = () => {
       throw error;
     }
   }
-  
 
   const handleSchedulePress = (schedule) => {
     setSelectedSchedule(schedule);
     setEditedTitle(schedule.title);
-    
+  
     // Check if schedule.items is defined before accessing its properties
-    const firstItem = schedule.items && schedule.items.length > 0 ? schedule.items[0] : null;
-    const lastItem = schedule.items && schedule.items.length > 0 ? schedule.items[schedule.items.length - 1] : null;
-    
-    // Check if firstItem and lastItem are defined before accessing their properties
-    if (firstItem && lastItem) {
-      setEditedLocation(firstItem.building_name); 
-      setEditedLocation2(lastItem.building_name);
+    if (schedule.items && schedule.items.length > 0) {
+      const firstItem = schedule.items[0];
+      const lastItem = schedule.items[schedule.items.length - 1];
+  
+      // Find the corresponding building names for the first and last items
+      const firstLocation = locations.find(location => location.building_id === firstItem.building_id);
+      const lastLocation = locations.find(location => location.building_id === lastItem.building_id);
+  
+      // Set the edited locations if found
+      setEditedLocation(firstLocation ? firstLocation.building_name : '');
+      setEditedLocation2(lastLocation ? lastLocation.building_name : '');
     }
   
     // Check if schedule.time is defined before accessing its properties
@@ -97,13 +93,14 @@ const Schedules = () => {
       setSelectedFirstTime(`${schedule.time.first.hour}:${schedule.time.first.minute} ${schedule.time.first.amPm}`);
       setTimeFirstLocationHour(schedule.time.first.hour);
       setTimeFirstLocationMinute(schedule.time.first.minute);
-      setTimeFirstLocationAmPm(schedule.time.first.amPm);    
+      setTimeFirstLocationAmPm(schedule.time.first.amPm);
     }
   
     // Check if schedule.selectedDays is defined before accessing its properties
     setSelectedDays(schedule.selectedDays || []);
     setModalVisible(true);
   };
+  
   
 
   const saveScheduleToBackend = async (schedule) => {
@@ -152,70 +149,70 @@ const Schedules = () => {
     }
   };
 
-const saveChanges = async () => {
-
-  const militaryTimeFirstLocation = convertToMilitaryTime(timeFirstLocationHour, timeFirstLocationMinute, timeFirstLocationAmPm);
-
-  const weekdaysMapping = {
-    Sun: 0,
-    M: 1,
-    T: 2,
-    W: 3,
-    Th: 4,
-    F: 5,
-    Sat: 6,
-  };
-
-  const selectedWeekdays = selectedDays.map((day) => weekdaysMapping[day]);
-
-  const scheduleData = 
-  {
-    "user_id": 1,
-    "name": editedTitle,
-    "items": [
-      {
-        "building_id": 2,
-        "arrival_weekdays": selectedWeekdays,
-        "arrival_time": militaryTimeFirstLocation
-      },
-      {
-        "building_id": 4,
-        "arrival_weekdays": selectedWeekdays,
-        "arrival_time": militaryTimeFirstLocation
-      }
-    ],
-  };
-
-  try {
-    // Save the schedule to the backend
-    await saveScheduleToBackend(scheduleData);
-
-    // Update the schedules state after the backend call succeeds
-    const newSchedules = [
-      ...schedules,
-      {
-        id: schedules.length + 1,
-        title: editedTitle,
-        location: editedLocation,
-        location2: editedLocation2,
-        time: {
-          first: {
-            hour: timeFirstLocationHour,
-            minute: timeFirstLocationMinute,
-            amPm: timeFirstLocationAmPm
-          }
+  const saveChanges = async () => {
+    const militaryTimeFirstLocation = convertToMilitaryTime(timeFirstLocationHour, timeFirstLocationMinute, timeFirstLocationAmPm);
+  
+    const weekdaysMapping = {
+      Sun: 0,
+      M: 1,
+      T: 2,
+      W: 3,
+      Th: 4,
+      F: 5,
+      Sat: 6,
+    };
+  
+    const selectedWeekdays = selectedDays.map((day) => weekdaysMapping[day]);
+  
+    const scheduleData = 
+    {
+      "user_id": 1,
+      "name": editedTitle,
+      "items": [
+        {
+          "building_id": 2,
+          "arrival_weekdays": selectedWeekdays,
+          "arrival_time": militaryTimeFirstLocation
         },
-        selectedFirstTime: `${timeFirstLocationHour}:${timeFirstLocationMinute} ${timeFirstLocationAmPm}`,
-        selectedDays: selectedDays
-      }
-    ];
-
-    setSchedules(newSchedules);
-    setModalVisible(false);
-  } catch (error) {
-    console.error('Error saving schedule:', error);
-  }
-};
+        {
+          "building_id": 4,
+          "arrival_weekdays": selectedWeekdays,
+          "arrival_time": militaryTimeFirstLocation
+        }
+      ],
+    };
+  
+    try {
+      // Save the schedule to the backend
+      await saveScheduleToBackend(scheduleData);
+  
+      // Update the schedules state after the backend call succeeds
+      const newSchedules = [
+        ...schedules,
+        {
+          id: schedules.length + 1,
+          title: editedTitle,
+          location: editedLocation,
+          location2: editedLocation2,
+          time: {
+            first: {
+              hour: timeFirstLocationHour,
+              minute: timeFirstLocationMinute,
+              amPm: timeFirstLocationAmPm
+            }
+          },
+          selectedFirstTime: `${timeFirstLocationHour}:${timeFirstLocationMinute} ${timeFirstLocationAmPm}`,
+          selectedDays: selectedDays
+        }
+      ];
+  
+      setSchedules(newSchedules);
+      setModalVisible(false);
+    } catch (error) {
+      console.error('Error saving schedule:', error);
+    }
+  };
+  
 
 const convertToMilitaryTime = (hour, minute, amPm) => {
   let militaryHour = parseInt(hour, 10);
@@ -286,14 +283,19 @@ const toggleDaySelection = (day, scheduleId) => {
       <Text style={{ textAlign: 'center', marginTop: 50, marginBottom:25, fontSize: 20, fontWeight: 'bold' }}>Schedules</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       {schedules.map((schedule) => (
-        <View key={schedule.id}>
-          <TouchableOpacity
-            style={styles.schedule}
-            onPress={() => handleSchedulePress(schedule)}
-          >
-            <Text style={styles.title}>{schedule.title}</Text>
-            <Text>{schedule.selectedFirstTime}</Text>
-            <Text>{schedule.location2}</Text>
+      <View key={schedule.id}>
+        <TouchableOpacity
+          style={styles.schedule}
+          onPress={() => handleSchedulePress(schedule)}
+        >
+          <Text style={styles.title}>{schedule.title}</Text>
+          {/* Render each schedule's items */}
+          {schedule.items?.map((item, index) => (
+            <View key={index}>
+              <Text>Arrival Time: {item.arrival_time}</Text>
+              <Text>Building ID: {item.building_id}</Text>
+            </View>
+          ))}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => deleteSchedule(schedule.id)}>
             <Text>Delete</Text>
