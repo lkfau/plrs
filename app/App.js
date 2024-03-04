@@ -2,6 +2,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { DataContextProvider } from './context/data-context';
 import CreateAccountPage from './CreateAccountPage';
 import LoginPage from './LoginPage';
 import MenuButton from './MenuButton';
@@ -32,72 +33,74 @@ const headerTitle = ({ navigation }) => (
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-      <Stack.Screen 
-          name="Home" 
-          component={HomePage} 
-          options={({ navigation }) => ({
-            title: 'Home',
-            headerTitle: () => <CustomHeader navigation={navigation} />,
-            headerRight: () => <MenuButton options={options} />,
-          })}
-        />
+    <DataContextProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
         <Stack.Screen 
-          name="CreateAccount" 
-          component={CreateAccountPage} 
-          options={({ navigation }) => ({
-            title: 'Create Account',
-            headerTitle: () => <CustomHeader navigation={navigation} />,
-            headerRight: () => <MenuButton options={options} />,
-          })}
-        />
-        <Stack.Screen 
-          name="Login" 
-          component={LoginPage} 
-          options={({ navigation }) => ({
-            title: 'Log In',
-            headerTitle: () => <CustomHeader navigation={navigation} />,
-            headerRight: () => <MenuButton options={options} />,
-          })}
-        />
-        <Stack.Screen 
-          name="Account" 
-          component={Account} 
-          options={({ navigation }) => ({
-            title: 'Account',
-            headerTitle: () => <CustomHeader navigation={navigation} />,
-            headerRight: () => <MenuButton options={options} />,
-          })}
-        />
-        <Stack.Screen 
-          name="Schedules" 
-          component={Schedules} 
-          options={({ navigation }) => ({
-            title: 'Schedules',
-            headerTitle: () => <CustomHeader navigation={navigation} />,
-            headerRight: () => <MenuButton options={options} />,
-          })}
-        />
-        <Stack.Screen 
-          name="Recommendation" 
-          component={Recommendation} 
-          options={({ navigation }) => ({
-            title: 'Recommendation',
-            headerTitle: () => <CustomHeader navigation={navigation} />,
-            headerRight: () => <MenuButton options={options} />,
-          })}
-        />
-        <Stack.Screen 
-          name="About" 
-          component={About} 
-          options={({ navigation }) => ({
-            title: 'About',
-            headerTitle: () => <CustomHeader navigation={navigation} />,
-            headerRight: () => <MenuButton options={options} />,
-          })}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+            name="Home" 
+            component={HomePage} 
+            options={({ navigation }) => ({
+              title: 'Home',
+              headerTitle: () => <CustomHeader navigation={navigation} />,
+              headerRight: () => <MenuButton options={options} />,
+            })}
+          />
+          <Stack.Screen 
+            name="CreateAccount" 
+            component={CreateAccountPage} 
+            options={({ navigation }) => ({
+              title: 'Create Account',
+              headerTitle: () => <CustomHeader navigation={navigation} />,
+              headerRight: () => <MenuButton options={options} />,
+            })}
+          />
+          <Stack.Screen 
+            name="Login" 
+            component={LoginPage} 
+            options={({ navigation }) => ({
+              title: 'Log In',
+              headerTitle: () => <CustomHeader navigation={navigation} />,
+              headerRight: () => <MenuButton options={options} />,
+            })}
+          />
+          <Stack.Screen 
+            name="Account" 
+            component={Account} 
+            options={({ navigation }) => ({
+              title: 'Account',
+              headerTitle: () => <CustomHeader navigation={navigation} />,
+              headerRight: () => <MenuButton options={options} />,
+            })}
+          />
+          <Stack.Screen 
+            name="Schedules" 
+            component={Schedules} 
+            options={({ navigation }) => ({
+              title: 'Schedules',
+              headerTitle: () => <CustomHeader navigation={navigation} />,
+              headerRight: () => <MenuButton options={options} />,
+            })}
+          />
+          <Stack.Screen 
+            name="Recommendation" 
+            component={Recommendation} 
+            options={({ navigation }) => ({
+              title: 'Recommendation',
+              headerTitle: () => <CustomHeader navigation={navigation} />,
+              headerRight: () => <MenuButton options={options} />,
+            })}
+          />
+          <Stack.Screen 
+            name="About" 
+            component={About} 
+            options={({ navigation }) => ({
+              title: 'About',
+              headerTitle: () => <CustomHeader navigation={navigation} />,
+              headerRight: () => <MenuButton options={options} />,
+            })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </DataContextProvider>
   );
 }
