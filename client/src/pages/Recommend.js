@@ -4,6 +4,7 @@ import Recommendations from '../components/Recommendation/Recommendations';
 import Dropdown from "../components/UI/Dropdown/Dropdown";
 import PillCheckbox from '../components/UI/PillCheckbox/PillCheckbox';
 
+
 const firstOrLastOptions = ['Arriving', 'Departing'];
 
 const Recommend = () => {

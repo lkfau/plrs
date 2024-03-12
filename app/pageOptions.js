@@ -7,11 +7,60 @@ import Recommendation from './Recommendation';
 import About from './About';
 
 export default pageOptions = [
-  { title: 'Home', icon: 'home', component: HomePage, showLoggedIn: 1, showNotLoggedIn: 1 },
-  { title: 'Create Account', icon: 'create', component: CreateAccountPage, showLoggedIn: 0, showLoggedOut: 1 },
-  { title: 'Log In', icon: 'arrow-forward-circle-outline', component: LoginPage, showLoggedIn: 0, showLoggedOut: 1 },
-  { title: 'Account', icon: 'person-circle', component: Account, showLoggedIn: 1, showLoggedOut: 0 },
-  { title: 'Schedules', icon: 'list', component: Schedules, showLoggedIn: 1, showLoggedOut: 0 },
-  { title: 'Recommendation', icon: 'sparkles', component: Recommendation, showLoggedIn: 1, showLoggedOut: 1 },
-  { title: 'About', icon: 'information-circle', component: About, showLoggedIn: 1, showLoggedOut: 1 },
+  {
+    title: 'Home',
+    icon: 'home',
+    component: HomePage,
+    showTitle: true,
+    showLoggedIn: true,
+    showNotLoggedIn: true
+  },
+  {
+    title: 'Create Account',
+    icon: 'create',
+    component: CreateAccountPage,
+    showTitle: true,
+    showLoggedIn: false,
+    showLoggedOut: true
+  },
+  {
+    title: 'Log In',
+    icon: 'arrow-forward-circle-outline',
+    component: LoginPage,
+    showTitle: true,
+    showLoggedIn: false,
+    showLoggedOut: true
+  },
+  {
+    title: 'Account',
+    icon: 'person-circle',
+    component: Account,
+    showTitle: true,
+    showLoggedIn: true,
+    showLoggedOut: false
+  },
+  {
+    title: 'Schedules',
+    icon: 'list',
+    component: Schedules,
+    showTitle: false,
+    showLoggedIn: true,
+    showLoggedOut: false
+  },
+  {
+    title: 'Recommend',
+    icon: 'sparkles',
+    component: Recommendation,
+    showTitle: true,
+    showLoggedIn: true,
+    showLoggedOut: true
+  },
+  {
+    title: 'About',
+    icon: 'information-circle',
+    component: About,
+    showTitle: true,
+    showLoggedIn: true,
+    showLoggedOut: true
+  },
 ];

@@ -1,12 +1,36 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, ScrollView, Modal } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
 import DataContext from './context/data-context.js';
 import ScheduleView from './ScheduleView.js';
-import ScheduleModal from './ScheduleModal.js';
+import ScheduleEditor from './ScheduleEditor.js';
 
-
-const Schedules = () => {
+const SchedulesContainer = () => {
   const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const Stack = createStackNavigator();
+
+  const nameChangeHandler = (newName) => {
+    setSelectedSchedule(prevSchedule => ({...prevSchedule, name: newName}));
+  }
+  return <Stack.Navigator>
+     <Stack.Screen
+      name="SchedulesList" 
+      options={() => ({
+        title: 'Schedules',
+      })}
+      >
+        {props => <Schedules navigation={props.navigation} setSchedule={setSelectedSchedule} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="EditSchedule" 
+        options={() => ({title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule'})}
+      >
+        {() => <ScheduleEditor schedule={selectedSchedule} onNameChange={nameChangeHandler}  />}
+      </Stack.Screen>
+  </Stack.Navigator>
+}
+
+const Schedules = ({ navigation, setSchedule }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [schedules, setSchedules] = useState([]);
 
@@ -19,10 +43,10 @@ const Schedules = () => {
 
   async function getBuildingData() {
     const buildingResponse = await fetch('http://10.0.2.2:5000/buildings');
-    if (buildingResponse.ok)
+    if (buildingResponse.ok && ctx.setBuildings)
       ctx.setBuildings(await buildingResponse.json());
     else
-      throw new Error('Network response was not ok');
+      throw new Error('Building network response was not ok');
   }
 
   async function getScheduleData() {
@@ -30,11 +54,12 @@ const Schedules = () => {
     if (scheduleResponse.ok)
       setSchedules(await scheduleResponse.json());
     else
-      throw new Error('Network response was not ok');
+      throw new Error('Schedule network response was not ok');
   }
 
   const toggleScheduleModal = (schedule) => {
-    setSelectedSchedule(schedule);
+    setSchedule(schedule);
+    navigation.navigate('EditSchedule');
     setModalVisible(schedule !== null);
   };
 
@@ -101,7 +126,6 @@ const Schedules = () => {
 
   return (
     <View>
-      <Text style={{ textAlign: 'center', marginTop: 50, marginBottom:25, fontSize: 20, fontWeight: 'bold' }}>Schedules</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {schedules.length > 0 && schedules.map((schedule) => (
           <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleModal} />
@@ -109,11 +133,6 @@ const Schedules = () => {
         <TouchableOpacity style={styles.addButton} onPress={createSchedule}>
           <Text style={styles.addButtonText}>Create Schedule</Text>
         </TouchableOpacity>
-        <ScheduleModal 
-          visible={modalVisible} 
-          schedule={selectedSchedule} 
-          onClose={() => toggleScheduleModal(null)} 
-        />
       </ScrollView>
     </View>   
   );
@@ -134,4 +153,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Schedules;
+export default SchedulesContainer;
