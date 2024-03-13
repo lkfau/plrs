@@ -1,95 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, StyleSheet, SafeAreaView, View, Dimensions, StatusBar } from 'react-native';
+import { StyleSheet, SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Autocomplete from 'react-native-autocomplete-input';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import RecommendScheduleSelector from './RecommendScheduleSelector';
+import RecommendBuildingSelector from './RecommendBuildingSelector';
 
 const GetRecommendation = () => {
 
+  const [schedules, setSchedules] = useState(null);
+  const [buildings, setBuildings] = useState(null);
+  // const [selectedTab, setSelectedTab] = useState('schedule');
+
   const navigation = useNavigation();
-  const [schedules, setSchedules] = useState([]);
-  const [selectedSchedule, setSelectedSchedule] = useState('');
-  const [query, setQuery] = useState('');
-  const [locations, setLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState('');
+  const Tab = createMaterialTopTabNavigator();
 
-
-  /*useEffect(() => {
-    fetchData();
-  }, []);*/
-  
   //Fetching schedule/user data
   async function fetchData() {
     try {
-      const response = await fetch(`http://${process.env.EXPO_PUBLIC_SERVER_IP}/schedules?user_id=1`);
-      const responseB = await fetch(`http://${process.env.EXPO_PUBLIC_SERVER_IP}/buildlings`);
-    
+      const scheduleResponse = await fetch(`http://${process.env.EXPO_PUBLIC_SERVER_IP}/schedules?user_id=1`);
+      const buildingResponse = await fetch(`http://${process.env.EXPO_PUBLIC_SERVER_IP}/buildings`);
 
-      if (!response.ok) {
+      if (!scheduleResponse.ok || !buildingResponse.ok)
         throw new Error('Network response was not ok');
-      }
-      if (!responseB.ok) {
-        throw new Error('Network response was not ok');
-      }
 
-      const data = await response.json();
-      const dataB = await responseB.json();
-  
+      const scheduleData = await scheduleResponse.json();
+      const buildingData = await buildingResponse.json();
+      
+      setSchedules(scheduleData);
+      setBuildings(buildingData);
 
-
-      const scheduleNames = data.map(schedule => schedule.name);
-      setSchedules(scheduleNames);
-      setSelectedSchedule(scheduleNames[0]);
-
-      const buildingNames = data.map(building => building.building_name);
-      setLocations(buildingNames);
-      setSelectedLocation(buildingNames[0]);
-    
-      return data, dataB;
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;
     }
-  }
+  };
 
-  const findSchedule = (query) => {
-    if (query === '') {
-      return [];
-    }
-    const regex = new RegExp(`${query.trim()}`, 'i');
-    return schedules.filter(schedule => schedule.search(regex) >= 0);
-  }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const findBuilding = (query) => {
-    if (query === '') {
-      return [];
-    }
-    const regex = new RegExp(`${query.trim()}`, 'i');
-    return locations.filter(building => building.search(regex) >= 0);
-  }
-  
-  function ScheduleScreen() {
-    return (
-      <SafeAreaView>
-      <Text style={{ textAlign: 'center', padding: 25 }}>Select saved schedule</Text>
-      <Autocomplete style={{ textAlign: 'center' }}
-        placeholder='Choose Schedule'
-        data={findSchedule(query)}
-        //defaultValue={selectedSchedule}
-        onChangeText={text => setQuery(text)}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => {
-            setQuery(item);
-            setSelectedSchedule(item);
-          }}>
-          <Text style={styles.dropdownOptionText}>{item}</Text>
-          </TouchableOpacity>
-        )}
-        inputContainerStyle={styles.dropdown}
-        listStyle={styles.dropdownMenu}
-        textStyle={styles.dropdownText}
-      />
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{height: "25%"}}>
+        {schedules && buildings && 
+        <Tab.Navigator>
+          <Tab.Screen
+            name="Use Schedule"
+            children={() => <RecommendScheduleSelector schedules={schedules} />}>
+          </Tab.Screen> 
+          <Tab.Screen 
+            name="Use Building"
+            children={() => <RecommendBuildingSelector buildings={buildings} />}>
+          </Tab.Screen> 
+        </Tab.Navigator>}
+      </View>
+     
       <Text style={{ textAlign: 'center', padding: 25 }}> Prioritize walking distance or lot vacancy in generating your parking lot recommendation?</Text>
       <View style={styles.container}>
         <TouchableOpacity style={styles.button}>
@@ -102,89 +67,22 @@ const GetRecommendation = () => {
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Get Recommendation</Text>
       </TouchableOpacity>
-      </SafeAreaView>
-    );
-  }
-  
-  function BuildingScreen() {
-    return (
-      <SafeAreaView>
-      <Text style={{ textAlign: 'center', padding: 25 }}>Select Buildings</Text>
-      <Autocomplete style={{ textAlign: 'center' }}
-        placeholder='Choose Building'
-        data={findBuilding(query)}
-        //defaultValue={selectedSchedule}
-        onChangeText={text => setQuery(text)}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => {
-            setQuery(item);
-            setSelectedLocation(item);
-          }}>
-            <Text style={styles.dropdownOptionText}>{item}</Text>
-          </TouchableOpacity>
-        )}
-        inputContainerStyle={styles.dropdown}
-        listStyle={styles.dropdownMenu}
-        textStyle={styles.dropdownText}
-      />
-      <Text style={{ textAlign: 'center', padding: 25 }}> Prioritize walking distance or lot vacancy in generating your parking lot recommendation?</Text>
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Walking Distance</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Lot vacancy</Text>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Get Recommendation</Text>
-      </TouchableOpacity>
-      </SafeAreaView>
-    );
-  }
 
-  const Tab = createMaterialTopTabNavigator();
-  
-  function MyTabs() {
-    return (
-      <Tab.Navigator>
-        <Tab.Screen name="Schedule" component={ScheduleScreen} />
-        <Tab.Screen name="Building" component={BuildingScreen} />
-      </Tab.Navigator>
-    );
-  }
-
-
-return (
-  <SafeAreaView style={{ flex: 1 }}>
-    <MyTabs/>
-  </SafeAreaView>
+      
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  dropdown: {
-    backgroundColor: '#e8e8e8',
-    borderRadius: 8,
-    padding: 8,
-    marginBottom: 8,
-  },
-  dropdownMenu: {
-    borderRadius: 8,
-  },
-  dropdownText: {
-    fontSize: 16,
-  },
-  dropdownOptionText: {
-    fontSize: 16,
-    padding: 8,
-  },
   button: {
     backgroundColor: '#007bff',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 10,
     marginTop: 20,
+  },
+  selectedButton: {
+    backgroundColor: '#00f'
   },
   buttonText: {
     color: '#fff',
