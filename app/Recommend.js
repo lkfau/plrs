@@ -5,36 +5,46 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import RecommendScheduleSelector from './RecommendScheduleSelector';
 import RecommendBuildingSelector from './RecommendBuildingSelector';
 
-const GetRecommendation = () => {
+const Recommend = () => {
 
-  const [schedules, setSchedules] = useState(null);
-  const [buildings, setBuildings] = useState(null);
-  // const [selectedTab, setSelectedTab] = useState('schedule');
+  // React hooks for managing state
+  const [schedules, setSchedules] = useState(null);// State to store schedules data
+  const [buildings, setBuildings] = useState(null);// State to store buildings data
+  //const [selectedTab, setSelectedTab] = useState('schedule');
 
-  const navigation = useNavigation();
-  const Tab = createMaterialTopTabNavigator();
+  const navigation = useNavigation();// Navigation hook for accessing navigation functions
+  const Tab = createMaterialTopTabNavigator();// Material Top Tab Navigator for tabbed navigation
+
+  const handleNavigateToRecommendation = () => {
+    navigation.navigate('Recommendation'); // Navigate to the 'Recommendation' page
+  };
 
   //Fetching schedule/user data
   async function fetchData() {
     try {
-      const scheduleResponse = await fetch(`http://${process.env.EXPO_PUBLIC_SERVER_IP}/schedules?user_id=1`);
-      const buildingResponse = await fetch(`http://${process.env.EXPO_PUBLIC_SERVER_IP}/buildings`);
+      const scheduleResponse = await fetch(`http://${process.env.EXPO_PUBLIC_SERVER_IP}/schedules?user_id=1`);// Fetch schedules data
+      const buildingResponse = await fetch(`http://${process.env.EXPO_PUBLIC_SERVER_IP}/buildings`);// Fetch buildings data
 
+      // Check if both responses are successful
       if (!scheduleResponse.ok || !buildingResponse.ok)
         throw new Error('Network response was not ok');
 
+      // Parse response data into JSON format
       const scheduleData = await scheduleResponse.json();
       const buildingData = await buildingResponse.json();
       
+      // Update state with fetched data
       setSchedules(scheduleData);
       setBuildings(buildingData);
 
     } catch (error) {
+      // Log and throw error if fetching fails
       console.error('Error fetching data:', error);
       throw error;
     }
   };
 
+  // useEffect hook to fetch data when the component mounts
   useEffect(() => {
     fetchData();
   }, []);
@@ -64,11 +74,12 @@ const GetRecommendation = () => {
           <Text style={styles.buttonText}>Lot vacancy</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Get Recommendation</Text>
-      </TouchableOpacity>
-
-      
+      <View style={[styles.container, { justifyContent: 'center' }]}>
+        <TouchableOpacity style={styles.button}
+        onPress={handleNavigateToRecommendation}>
+          <Text style={styles.buttonText}>Get Recommendation</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -96,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GetRecommendation;
+export default Recommend;

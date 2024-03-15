@@ -10,7 +10,7 @@ import CustomHeader from './CustomHeader';
 import Account from './MyAccount';
 import Schedules from './SavedSchedules';
 import Recommendation from './Recommendation';
-import GetRecommendation from './GetRecommendation';
+import Recommend from './Recommend';
 import About from './About';
 
 const Stack = createStackNavigator();
@@ -23,7 +23,7 @@ const options = [
   { title: 'Schedules', screenName: 'Schedules'},
   { title: 'Recommendation', screenName: 'Recommendation'},
   { title: 'About', screenName: 'About'},
-  { title: 'GetRecommendation', screenName: 'GetRecommendation'},
+  { title: 'Recommend', screenName: 'Recommend'},
 ];
 
 const headerTitle = ({ navigation }) => (
@@ -89,7 +89,7 @@ export default function App() {
             headerTitle: () => <CustomHeader navigation={navigation} />,
             headerRight: () => <MenuButton options={options} />,
           })}
-        />
+        /> 
         <Stack.Screen 
           name="About" 
           component={About} 
@@ -100,8 +100,8 @@ export default function App() {
           })}
         />
           <Stack.Screen 
-          name="GetRecommendation" 
-          component={GetRecommendation} 
+          name="Recommend" 
+          component={Recommend} 
           options={({ navigation }) => ({
             title: 'About',
             headerTitle: () => <CustomHeader navigation={navigation} />,
