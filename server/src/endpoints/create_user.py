@@ -9,10 +9,11 @@ app_create_user = Blueprint('app_create_user', __name__)
 @app_create_user.route('/create_user', methods=['POST'])
 @cross_origin()
 def create_user():
-    email = request.args.get('email', default='', type=str)
-    pwd = request.args.get('pwd', default='', type=str)
+    request_data = request.get_json()
+    email = request_data['email']
+    pwd = request_data['pwd']
     if email == '' or pwd == '':
-        return 'Error; New user must have an email and password', 200
+        return 'Error; New user must have an email and password', 404
     pwd = custom_hash(pwd)
     email_verified = False
     max_walking_distance = 10
