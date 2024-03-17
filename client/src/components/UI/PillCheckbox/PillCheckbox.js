@@ -6,7 +6,7 @@ const PillCheckbox = ({ options, onSelect, selectedOption }) => {
             <div
                 key={index}
                 onClick={() => onSelect(index)}
-                className={`${styles.option} ${option == selectedOption ? styles.selected : ''}`}
+                className={`${styles.option} ${option === selectedOption ? styles.selected : ''}`}
             >
                 {option}
             </div>

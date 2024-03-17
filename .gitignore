@@ -1,6 +1,9 @@
 # server db creds
 database.ini
 
+# server hash seed file
+seed.ini
+
 # dependencies
 /client/node_modules
 /client/.pnp
@@ -14,6 +17,7 @@ database.ini
 
 #dev web env
 /client/.env
+/app/.env
 
 # misc
 __pycache__/
