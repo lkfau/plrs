@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const ScheduleView = ({ schedule, onPress }) => {
+const ScheduleView = ({ schedule, onPress, onDelete }) => {
   return (
     <View key={schedule.id}>
     <TouchableOpacity
@@ -15,7 +15,7 @@ const ScheduleView = ({ schedule, onPress }) => {
         </View>
       ))}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => deleteSchedule(schedule.id)}>
+      <TouchableOpacity onPress={() => onDelete(schedule.schedule_id)}>
         <Text>Delete</Text>
       </TouchableOpacity>
     </View>

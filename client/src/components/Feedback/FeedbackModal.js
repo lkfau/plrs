@@ -4,7 +4,7 @@ import styles from './FeedbackModal.module.css'
 
 const FeedbackModal = ({ lot, onHide }) => {
     const submitFeedback = async(lotIsFull) => {
-        await fetch(`${process.env.REACT_APP_SERVER_IP}/feedback`, {
+        await fetch(`${process.env.REACT_APP_SERVER_URL}/feedback`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

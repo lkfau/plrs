@@ -1,48 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DataContext from './context/data-context.js';
 import ScheduleView from './ScheduleView.js';
 import ScheduleEditor from './ScheduleEditor.js';
+import { useNavigation } from '@react-navigation/native';
 
-const SchedulesContainer = () => {
-  const [selectedSchedule, setSelectedSchedule] = useState(null);
-  const Stack = createStackNavigator();
-
-  const nameChangeHandler = (newName) => {
-    setSelectedSchedule(prevSchedule => ({...prevSchedule, name: newName}));
-  }
-  return <Stack.Navigator>
-     <Stack.Screen
-      name="SchedulesList" 
-      options={() => ({
-        title: 'Schedules',
-      })}
-      >
-        {props => <Schedules navigation={props.navigation} setSchedule={setSelectedSchedule} />}
-      </Stack.Screen>
-      <Stack.Screen
-        name="EditSchedule" 
-        options={() => ({title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule'})}
-      >
-        {() => <ScheduleEditor schedule={selectedSchedule} onNameChange={nameChangeHandler}  />}
-      </Stack.Screen>
-  </Stack.Navigator>
-}
-
-const Schedules = ({ navigation, setSchedule }) => {
-  const [modalVisible, setModalVisible] = useState(false);
+const Schedules = () => {
+  //Initialize states
   const [schedules, setSchedules] = useState([]);
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [loading, setLoading] = useState(false);
 
+  //Iniitalize hooks
   const ctx = useContext(DataContext);
+  const Stack = createStackNavigator();
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    getBuildingData();
-    getScheduleData();
-  }, []);
-
+  //GET functions
   async function getBuildingData() {
-    const buildingResponse = await fetch('http://10.0.2.2:5000/buildings');
+    const buildingResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/buildings`);
     if (buildingResponse.ok && ctx.setBuildings)
       ctx.setBuildings(await buildingResponse.json());
     else
@@ -50,91 +27,146 @@ const Schedules = ({ navigation, setSchedule }) => {
   }
 
   async function getScheduleData() {
+    setLoading(true);
     const scheduleResponse = await fetch('http://10.0.2.2:5000/schedules?get_items=true&user_id=1');
-    if (scheduleResponse.ok)
+    if (scheduleResponse.ok) {
       setSchedules(await scheduleResponse.json());
-    else
+      setLoading(false);
+    } else {
       throw new Error('Schedule network response was not ok');
+    }    
   }
 
-  const toggleScheduleModal = (schedule) => {
-    setSchedule(schedule);
-    navigation.navigate('EditSchedule');
-    setModalVisible(schedule !== null);
-  };
-
-  const saveScheduleToBackend = async (schedule) => {
+  //POST, PUT, DELETE functions
+  const saveSchedule = async () => {
     try {
-      const response = await fetch('http://54.210.243.185/schedules', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(schedule),
+      const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules`, {
+        method: selectedSchedule.schedule_id ? 'PUT' : 'POST',
+        headers: {'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: 1,
+          ...selectedSchedule
+        }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to save schedule');
+
+      if (!response.ok) throw new Error('Failed to save schedule');
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+        if (selectedSchedule.schedule_id) {
+          setSchedules(prevSchedules => {
+            const scheduleIndex = prevSchedules.findIndex(schedule => schedule.schedule_id === selectedSchedule.schedule_id);
+            let newSchedules = [...prevSchedules];
+            newSchedules[scheduleIndex] = selectedSchedule;
+            return newSchedules;
+          });
+        } else {
+          selectedSchedule.schedule_id = data.schedule_id;
+          setSchedules(prevSchedules => [...prevSchedules, selectedSchedule]);
+        }
+
+        navigation.navigate('SchedulesList');
       }
-      const responseData = await response.text(); // Get the response as text
-      console.log('Response from server:', responseData); // Log the response
-      const data = JSON.parse(responseData); // Parse the response as JSON
-      console.log('Schedule saved successfully:', data);
     } catch (error) {
       console.error('Error saving schedule:', error);
     }
   };
-  
 
-  const deleteScheduleFromBackend = async (scheduleId) => {
+  const deleteSchedule = async (schedule_id) => {
     try {
-      const response = await fetch(`http://54.210.243.185/schedules?schedule_id=${scheduleId}`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules?schedule_id=${schedule_id}`, {
         method: 'DELETE',
       });
-      if (!response.ok) {
-        throw new Error('Failed to delete schedule: ', scheduleId);
-      }
-      console.log('Schedule deleted successfully. Deleting: ', scheduleId);
+
+      if (!response.ok) throw new Error('Failed to delete schedule with schedule_id', schedule_id);
+      
+      setSchedules(prevSchedules => {
+        const scheduleIndex = prevSchedules.findIndex(schedule => schedule.schedule_id === selectedSchedule.schedule_id);
+        let newSchedules = [...prevSchedules];
+        newSchedules.splice(scheduleIndex, 1);
+        return newSchedules;
+      });
     } catch (error) {
       console.error('Error deleting schedule:', error);
     }
   };
   
+  //
 
-  const deleteSchedule = async (scheduleId) => {
-    try {
-      await deleteScheduleFromBackend(scheduleId);
-      setSchedules(schedules.filter(schedule => schedule.id !== scheduleId));
-    } catch (error) {
-      console.error('Error deleting schedule:', error);
+  const toggleScheduleEditor = (schedule) => {
+    if (schedule !== null) {
+      setSelectedSchedule(schedule);
+      navigation.navigate('EditSchedule');
+    } else {
+      setSelectedSchedule(null);
+      navigation.navigate('SchedulesList');
     }
   };
 
   const createSchedule = () => {
     const newSchedule = {
-      id: schedules.length + 1,
-      title: `Schedule ${schedules.length + 1}`,
-      location: locations[0],
-      location2: locations2[0],
-      info: '',
-      timeFirstLocationHour: '12',
-      timeFirstLocationMinute: '00',
-      timeFirstLocationAmPm: 'AM',
+      name: 'New Schedule',
+      items: [{
+        building_id: 1,
+        arrival_time: '7:00:00',
+        arrival_weekdays: [1, 3]
+      }]
     };
-    setSchedules([...schedules, newSchedule]);
+    toggleScheduleEditor(newSchedule);
   };
 
+  // get buildings and schedules on page load
+  useEffect(() => {
+      getBuildingData();
+      getScheduleData();
+  }, []);
 
+  return <Stack.Navigator>
+    <Stack.Screen
+      name="SchedulesList"
+      options={() => ({ title: 'Schedules' })}
+    >
+      {() => (
+        <SchedulesList
+          schedules={schedules}
+          loading={loading}
+          refreshSchedules={getScheduleData}
+          toggleScheduleEditor={toggleScheduleEditor}
+          createSchedule={createSchedule}
+          deleteSchedule={deleteSchedule}
+        />
+      )}
+    </Stack.Screen>
+    <Stack.Screen
+      name="EditSchedule"
+      options={() => ({
+        title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule',
+        headerRight: () => <TouchableOpacity onPress={saveSchedule}><Text>Save</Text></TouchableOpacity>
+      })}
+    >
+      {() => <ScheduleEditor schedule={selectedSchedule} setSchedule={setSelectedSchedule} />}
+    </Stack.Screen>
+  </Stack.Navigator>
+}
+
+const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEditor, createSchedule, deleteSchedule }) => {
+  
   return (
     <View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView 
+        horizontal 
+        showsHorizontalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules} />}
+        >
         {schedules.length > 0 && schedules.map((schedule) => (
-          <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleModal} />
+          <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleEditor} onDelete={deleteSchedule}/>
         ))}
         <TouchableOpacity style={styles.addButton} onPress={createSchedule}>
           <Text style={styles.addButtonText}>Create Schedule</Text>
         </TouchableOpacity>
       </ScrollView>
-    </View>   
+    </View>
   );
 }
 
@@ -153,4 +185,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SchedulesContainer;
+export default Schedules;

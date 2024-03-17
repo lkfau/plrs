@@ -1,49 +1,48 @@
-import { useEffect, useMemo, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import ScheduleItem from './ScheduleItem';
 
-const ScheduleEditor = ({ schedule, onNameChange }) => {
-  const [scheduleName, setScheduleName] = useState(schedule?.name || "");
-  const [scheduleItems, setScheduleItems] = useState(schedule?.items || []);
-  
-  const newItem = useMemo(() => ({
-    building_id: 1,
-    arrival_weekdays: [1],
-    arrival_time: "07:00:00"
-  }), []);
+const ScheduleEditor = ({ schedule, setSchedule }) => {
 
   const changeNameHandler = (newName) => {
-    setScheduleName(newName);
-    onNameChange(newName);
+    setSchedule(prevSchedule => ({
+      ...prevSchedule,
+      name: newName
+    }));
   }
 
   const changeItemHandler = (itemFunction, index) => {
-    setScheduleItems(prevItems => {
-      let newItems = [...prevItems];
+    setSchedule(prevSchedule => {
+      let newItems = [...prevSchedule.items];
       newItems[index] = itemFunction(newItems[index]);
-      return newItems;
-    });
+
+      return {
+        ...prevSchedule,
+        items: newItems
+      }
+    })
   }
 
   const addItemHandler = () => {
-    setScheduleItems(prevItems => [
-      ...prevItems,
-      { ...newItem }
-    ])
+    setSchedule(prevSchedule => ({
+      ...prevSchedule,
+      items: [...prevSchedule.items, {
+        building_id: 1,
+        arrival_weekdays: [1],
+        arrival_time: "07:00:00"
+      }]
+    }))
   }
 
   const deleteItemHandler = (index) => {
-    setScheduleItems(prevItems => {
-      let newItems = [...prevItems]
+    setSchedule(prevSchedule => {
+      let newItems = [...prevSchedule.items];
       newItems.splice(index, 1);
-      return newItems;
+      return {
+        ...prevSchedule,
+        items: newItems
+      }
     });
   }
-
-  useEffect(() => {
-    setScheduleName(schedule?.name || "");
-    setScheduleItems(schedule?.items || []);
-  }, [schedule]);
 
   if (schedule) {
     return (
@@ -52,11 +51,11 @@ const ScheduleEditor = ({ schedule, onNameChange }) => {
           <TextInput
             style={styles.titleInput}
             placeholder="Enter title"
-            value={scheduleName}
+            value={schedule.name}
             onChangeText={changeNameHandler}
           />
           <Text style={styles.label}>Places</Text>
-          {scheduleItems.map((item, index) => (
+          {schedule.items.map((item, index) => (
             <ScheduleItem key={index} item={item} onChange={itemFunction => changeItemHandler(itemFunction, index)} onDelete={() => deleteItemHandler(index)} />
           ))}         
           <TouchableOpacity
