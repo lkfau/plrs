@@ -4,6 +4,7 @@ import Recommendations from '../components/Recommendation/Recommendations';
 import Dropdown from "../components/UI/Dropdown/Dropdown";
 import PillCheckbox from '../components/UI/PillCheckbox/PillCheckbox';
 
+
 const firstOrLastOptions = ['Arriving', 'Departing'];
 
 const Recommend = () => {
@@ -15,7 +16,7 @@ const Recommend = () => {
     const [recommendations, setRecommendations] = useState(null);
 
     const getBuildings = async () => {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/buildings`);
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/buildings`);
         let building_results = await response.json();
         building_results = building_results.map(building => ({ key: building.building_id, value: building.building_name }))
         setSelectedBuilding(building_results[0].key)
@@ -23,7 +24,7 @@ const Recommend = () => {
     }
 
     const getSchedules = async () => {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/schedules?user_id=1`);
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/schedules?user_id=1`);
         let schedule_results = await response.json();
         schedule_results = schedule_results.map(schedule => ({ key: schedule.schedule_id, value: schedule.name }))
         setSelectedSchedule(schedule_results[0].key)
@@ -33,9 +34,9 @@ const Recommend = () => {
     const getRecommendations = async (searchType) => {
         let response;
         if (searchType === 'building') {
-            response = await fetch(`${process.env.REACT_APP_SERVER_IP}/recommend?building_id=${selectedBuilding}`);
+            response = await fetch(`${process.env.REACT_APP_SERVER_URL}/recommend?building_id=${selectedBuilding}`);
         } else {
-            response = await fetch(`${process.env.REACT_APP_SERVER_IP}/recommend?schedule_id=${selectedSchedule}&first_or_last_location=${firstOrLastLocation ? 'last' : 'first'}`);
+            response = await fetch(`${process.env.REACT_APP_SERVER_URL}/recommend?schedule_id=${selectedSchedule}&first_or_last_location=${firstOrLastLocation ? 'last' : 'first'}`);
         }
         let recommendation_results = await response.json();
         setRecommendations(recommendation_results);
