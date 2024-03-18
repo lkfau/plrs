@@ -4,7 +4,7 @@ import styles from './FeedbackModal.module.css'
 
 const FeedbackModal = ({ lot, onHide }) => {
     const submitFeedback = async(lotIsFull) => {
-        await fetch(`${process.env.REACT_APP_SERVER_IP}/feedback`, {
+        await fetch(`${process.env.REACT_APP_SERVER_URL}/feedback`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -22,8 +22,7 @@ const FeedbackModal = ({ lot, onHide }) => {
         <p>When you parked, approximately how full was {lot.lot_name}?</p>
         <div className={styles.choice}>
             <Button onClick={() => submitFeedback(false)} color='success'><span>Not full</span></Button>
-            <Button onClick={() => submitFeedback(true)} color='warning'><span>Nearly full</span></Button>
-            <Button onClick={() => submitFeedback(true)} color='danger'><span>Completely full</span></Button>
+            <Button onClick={() => submitFeedback(true)} color='danger'><span>Nearly/completely full</span></Button>
         </div> 
     </Modal>
 }

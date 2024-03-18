@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const pageOptions = ['Account', 'Schedules', 'About','Recommend']
+const pageOptions = ['Account', 'Schedules', 'Recommend', 'About']
 
 const HomePage = ({ navigation }) => {
   return (
