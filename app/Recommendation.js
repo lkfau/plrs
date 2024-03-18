@@ -14,6 +14,8 @@ const Recommendation = () => {
     longitudeDelta: 0.0421,
   }; // Set initial region to a random location
 
+  const navigation = useNavigation();
+
   const handleParkedButton = () => {
     setShowModal(true);
   };
@@ -26,8 +28,8 @@ const Recommendation = () => {
     setCurrentPage(currentPage + 1);
   };
 
-  const handleReenter = () => {
-    // Handle navigation to the schedules page
+  const getNewRecommendationHandler = () => {
+    navigation.navigate('GetRecommendation')
   };
 
   const handleGoToRecommendation1 = () => {
@@ -80,8 +82,8 @@ const Recommendation = () => {
           <TouchableOpacity style={styles.button} onPress={handleGoToRecommendation1}>
             <Text style={styles.buttonText}>Go back to recommendation 1</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleReenter}>
-            <Text style={styles.buttonText}>Reenter</Text>
+          <TouchableOpacity style={styles.button} onPress={getNewRecommendationHandler}>
+            <Text style={styles.buttonText}>Get new recommendations</Text>
           </TouchableOpacity>
         </View>
       );

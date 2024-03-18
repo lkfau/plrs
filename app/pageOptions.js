@@ -3,7 +3,7 @@ import LoginPage from './LoginPage';
 import HomePage from './HomePage';
 import Account from './MyAccount';
 import Schedules from './SavedSchedules';
-import Recommendation from './Recommendation';
+import Recommend from './Recommend';
 import About from './About';
 
 export default pageOptions = [
@@ -50,8 +50,8 @@ export default pageOptions = [
   {
     title: 'Recommend',
     icon: 'sparkles',
-    component: Recommendation,
-    showTitle: true,
+    component: Recommend,
+    showTitle: false,
     showLoggedIn: true,
     showLoggedOut: true
   },
