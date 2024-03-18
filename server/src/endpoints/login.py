@@ -19,16 +19,16 @@ def login_no_session(email, pwd):
     else:
         return 'Password or email incorrect', 400
 
-def login_with_session(session_id):
+def check_session(session_id):
 
     user_session = session_ids(session_id_value=session_id)
 
     if user_session.too_old():
         return 'Session ID too old', 401
     elif user_session.session_id_value == 0:
-        return 'Error; Invalid Session ID', 400
+        return False, 400
     else:
-        return 'Session ID is good', 200
+        return True, 200
 
 app_login = Blueprint('app_login', __name__)
 @app_login.route('/login', methods=['POST'])
@@ -38,7 +38,7 @@ def login():
     
     request_data = request.get_json()
     if 'session_id' in request_data:
-        return login_with_session(request_data['session_id'])
+        return check_session(request_data['session_id'])
     else:
         return login_no_session(request_data['email'], request_data['pwd'])
 
