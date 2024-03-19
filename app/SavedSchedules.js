@@ -28,7 +28,7 @@ const Schedules = () => {
 
   async function getScheduleData() {
     setLoading(true);
-    const scheduleResponse = await fetch('http://10.0.2.2:5000/schedules?get_items=true&user_id=1');
+    const scheduleResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules?get_items=true&user_id=1`);
     if (scheduleResponse.ok) {
       setSchedules(await scheduleResponse.json());
       setLoading(false);
