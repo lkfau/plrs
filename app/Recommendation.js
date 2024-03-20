@@ -3,7 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet, Modal, Button, Linking } from
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 
-const Recommendation = () => {
+const Recommendation = ({ schedule_id, building_id }) => {
+  console.log('schedule', schedule_id, 'building', building_id)
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [destination, setDestination] = useState(null);

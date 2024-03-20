@@ -8,7 +8,17 @@ import RecommendBuildingSelector from './RecommendBuildingSelector';
 import Recommendation from './Recommendation';
 
 const RecommendContainer = () => {
+  const [recoSchedule, setRecoSchedule] = useState(null);
+  const [recoBuilding, setRecoBuilding] = useState(null);
+
   const Stack = createStackNavigator();
+  const navigation = useNavigation();
+
+  const getRecommendationHandler = (schedule_id, building_id) => {
+    setRecoSchedule(schedule_id);
+    setRecoBuilding(building_id);
+    navigation.navigate('RecommendationList');
+  }
 
   return <Stack.Navigator>
     <Stack.Screen
@@ -17,7 +27,7 @@ const RecommendContainer = () => {
     >
       {() => (
         <Recommend
-
+          onRecommend={getRecommendationHandler}
         />
       )}
     </Stack.Screen>
@@ -28,25 +38,22 @@ const RecommendContainer = () => {
         // title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule',
       })}
     >
-      {() => <Recommendation />}
+      {() => <Recommendation schedule_id={recoSchedule} building_id={recoBuilding}  />}
     </Stack.Screen>
   </Stack.Navigator>
 }
 
-const Recommend = () => {
+const Recommend = ({ onRecommend }) => {
 
   // React hooks for managing state
   const [schedules, setSchedules] = useState(null);// State to store schedules data
   const [buildings, setBuildings] = useState(null);// State to store buildings data
+  const [currentTab, setCurrentTab] = useState('Use Building');
 
+  const [selectedSchedule, setSelectedSchedule] = useState(1);
+  const [selectedBuilding, setSelectedBuilding] = useState(1);
 
-
-  const navigation = useNavigation(); // Navigation hook for accessing navigation functions
   const Tab = createMaterialTopTabNavigator(); // Material Top Tab Navigator for tabbed navigation
-
-  const getRecommendationHandler = () => {
-    navigation.navigate('RecommendationList'); // Navigate to the 'Recommendation' page
-  };
 
   //Fetching schedule/user data
   async function fetchData() {
@@ -73,6 +80,13 @@ const Recommend = () => {
     }
   };
 
+  const recommendHandler = () => {
+    if (currentTab === 'Use Building')
+      onRecommend(null, selectedBuilding);
+    else
+      onRecommend(selectedSchedule, null);
+  }
+
   // useEffect hook to fetch data when the component mounts
   useEffect(() => {
     fetchData();
@@ -82,19 +96,36 @@ const Recommend = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ height: "25%" }}>
         {schedules && buildings &&
-          <Tab.Navigator>
+          <Tab.Navigator
+          
+            screenListeners={({ navigation }) => ({
+              state: (e) => {
+                setCurrentTab(e.data.state.routeNames[e.data.state.index]);
+              }
+            })}
+          >
             <Tab.Screen
               name="Use Schedule"
-              children={() => <RecommendScheduleSelector schedules={schedules} />}>
+              children={(props) => <RecommendScheduleSelector schedules={schedules} onSelect={setSelectedSchedule} />}>
             </Tab.Screen>
             <Tab.Screen
               name="Use Building"
-              children={() => <RecommendBuildingSelector buildings={buildings} />}>
+              children={() => <RecommendBuildingSelector buildings={buildings} onSelect={setSelectedBuilding} />}>
             </Tab.Screen>
           </Tab.Navigator>}
       </View>
 
-      <Text style={{ textAlign: 'center', padding: 25 }}> Prioritize walking distance or lot vacancy in generating your parking lot recommendation?</Text>
+      <Text style={{ textAlign: 'center', padding: 25 }}>Would you like to park closest to your first or last location?</Text>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>First Location</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Last Location</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* <Text style={{ textAlign: 'center', padding: 25 }}> Prioritize walking distance or lot vacancy in generating your parking lot recommendation?</Text>
       <View style={styles.container}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Walking Distance</Text>
@@ -102,10 +133,10 @@ const Recommend = () => {
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Lot vacancy</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <View style={[styles.container, { justifyContent: 'center' }]}>
         <TouchableOpacity style={styles.button}
-          onPress={getRecommendationHandler}>
+          onPress={recommendHandler}>
           <Text style={styles.buttonText}>Get Recommendation</Text>
         </TouchableOpacity>
       </View>

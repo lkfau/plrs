@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
-const RecommendBuildingSelector = ({ buildings }) => {
+const RecommendBuildingSelector = ({ buildings, onSelect }) => {
   const [selectedBuilding, setSelectedBuilding] = useState(null);
+
+  const selectBuildingHandler = (building_id) => {
+    setSelectedBuilding(building_id);
+    onSelect(building_id);
+  }
 
   return (
     <View>
@@ -21,7 +26,7 @@ const RecommendBuildingSelector = ({ buildings }) => {
         placeholder="Select item"
         searchPlaceholder="Search..."
         value={selectedBuilding}
-        onChange={item => setSelectedBuilding(item.building_id)}
+        onChange={item => selectBuildingHandler(item.building_id)}
       />
     </View>
   );
