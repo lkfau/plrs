@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Button, Linking } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
+import { stylesRecommendation } from './Styles';
 
 const Recommendation = ({ schedule_id, building_id }) => {
   console.log('schedule', schedule_id, 'building', building_id)
@@ -49,42 +50,42 @@ const Recommendation = ({ schedule_id, building_id }) => {
     const randomLongitude = -122.4324 + Math.random() * (0.1);
     return { latitude: randomLatitude, longitude: randomLongitude };
   };
-
+  
   const renderRecommendationContent = () => {
     if (currentPage <= 3) {
       return (
-        <View style={styles.recommendationContent}>
-          <Text style={styles.lotText}>Lot {currentPage}</Text>
-          <View style={styles.mapContainer}>
+        <View style={stylesRecommendation.recommendationContent}>
+          <Text style={stylesRecommendation.lotText}>Lot {currentPage}</Text>
+          <View style={stylesRecommendation.mapContainer}>
             <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
               {destination && (
                 <Marker coordinate={destination} title="Destination" />
               )}
             </MapView>
           </View>
-          <Text style={styles.statusText}>Most Likely Full</Text>
-          <TouchableOpacity style={styles.button} onPress={handleNextPage}>
-            <Text style={styles.buttonText}>Get New Recommendation</Text>
+          <Text style={stylesRecommendation.statusText}>Most Likely Full</Text>
+          <TouchableOpacity style={stylesRecommendation.button} onPress={handleNextPage}>
+            <Text style={stylesRecommendation.buttonText}>Get New Recommendation</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleParkedButton}>
-            <Text style={styles.iparkedButton}>I Parked</Text>
+          <TouchableOpacity style={stylesRecommendation.button} onPress={handleParkedButton}>
+            <Text style={stylesRecommendation.iparkedButton}>I Parked</Text>
           </TouchableOpacity>
           {destination && (
-            <TouchableOpacity style={styles.button} onPress={handleGetDirections}>
-              <Text style={styles.buttonText}>Get Directions from Me</Text>
+            <TouchableOpacity style={stylesRecommendation.button} onPress={handleGetDirections}>
+              <Text style={stylesRecommendation.buttonText}>Get Directions from Me</Text>
             </TouchableOpacity>
           )}
         </View>
       );
     } else {
       return (
-        <View style={styles.recommendationContent}>
-          <Text style={styles.lotText}>Sorry, we are out of recommendations.</Text>
-          <TouchableOpacity style={styles.button} onPress={handleGoToRecommendation1}>
-            <Text style={styles.buttonText}>Go back to recommendation 1</Text>
+        <View style={stylesRecommendation.recommendationContent}>
+          <Text style={stylesRecommendation.lotText}>Sorry, we are out of recommendations.</Text>
+          <TouchableOpacity style={stylesRecommendation.button} onPress={handleGoToRecommendation1}>
+            <Text style={stylesRecommendation.buttonText}>Go back to recommendation 1</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={getNewRecommendationHandler}>
-            <Text style={styles.buttonText}>Get new recommendations</Text>
+          <TouchableOpacity style={stylesRecommendation.button} onPress={getNewRecommendationHandler}>
+            <Text style={stylesRecommendation.buttonText}>Get new recommendations</Text>
           </TouchableOpacity>
         </View>
       );
@@ -96,25 +97,25 @@ const Recommendation = ({ schedule_id, building_id }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={stylesRecommendation.container}>
       {renderRecommendationContent()}
       {currentPage <= 3 && (
-        <TouchableOpacity style={styles.arrowButton} onPress={handleNextPage}>
-          <Text style={styles.arrowText}>➜</Text>
+        <TouchableOpacity style={stylesRecommendation.arrowButton} onPress={handleNextPage}>
+          <Text style={stylesRecommendation.arrowText}>➜</Text>
         </TouchableOpacity>
       )}
       {/* Modal for "I Parked" button */}
       <Modal visible={showModal} transparent animationType="slide">
-        <View style={styles.modalBackground}>
+        <View style={stylesRecommendation.modalBackground}>
           {/* Pop-up screen for "I Parked" button */}
-          <View style={styles.popupContainer}>
-            <Text style={styles.popupText}>Is the parking lot fully occupied?</Text>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={[styles.modalButton, styles.greenButton]}>
-                <Text style={styles.buttonText}>Yes</Text>
+          <View style={stylesRecommendation.popupContainer}>
+            <Text style={stylesRecommendation.popupText}>Is the parking lot fully occupied?</Text>
+            <View style={stylesRecommendation.buttonContainer}>
+              <TouchableOpacity style={[stylesRecommendation.modalButton, stylesRecommendation.greenButton]}>
+                <Text style={stylesRecommendation.buttonText}>Yes</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.modalButton, styles.redButton]}>
-                <Text style={styles.buttonText}>No</Text>
+              <TouchableOpacity style={[stylesRecommendation.modalButton, stylesRecommendation.redButton]}>
+                <Text style={stylesRecommendation.buttonText}>No</Text>
               </TouchableOpacity>
             </View>
             <Button title="Close" onPress={handleCloseModal} />
@@ -123,103 +124,6 @@ const Recommendation = ({ schedule_id, building_id }) => {
       </Modal>
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff', // Set background color here
-  },
-  lotText: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  mapContainer: {
-    width: 300,
-    height: 300, // Adjust according to your map component
-    marginBottom: 20,
-  },
-  statusText: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: 'red',
-    textAlign: 'center',
-  },
-  button: {
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    marginBottom: 10,
-    backgroundColor: 'transparent', // Remove background color
-    alignSelf: 'center',
-  },
-  iparkedButton: {
-    backgroundColor: 'black',
-    color: 'white',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: 'black',
-    fontSize: 18,
-    textAlign: 'center',
-    textDecorationLine: 'underline',
-  },
-  modalBackground: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
-  recommendationContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent', // Remove background color
-  },
-  popupContainer: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingVertical: 100,
-    paddingHorizontal: 20,
-  },
-  popupText: {
-    fontSize: 18,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  modalButton: {
-    flex: 1,
-    paddingVertical: 70,
-    borderRadius: 10,
-    marginHorizontal: 20,
-    marginBottom: 30,
-  },
-  greenButton: {
-    backgroundColor: '#03AC13',
-  },
-  redButton: {
-    backgroundColor: 'red',
-  },
-  arrowButton: {
-    position: 'absolute',
-    right: 20,
-    top: '50%',
-    transform: [{ translateY: -12 }],
-  },
-  arrowText: {
-    fontSize: 30,
-  },
-});
+};
 
 export default Recommendation;

@@ -6,6 +6,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Checkbox from './UI/Checkbox';
 import weekdays from './data/weekdays.json';
+import { stylesScheduleitem } from './Styles';
 
 const ScheduleItem = ({ item, onChange, onDelete }) => {
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -54,16 +55,16 @@ const ScheduleItem = ({ item, onChange, onDelete }) => {
   }
 
   return (
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
-          <Text style={styles.deleteButtonText}><Ionicons name="close" size={16}/></Text>
+      <View style={stylesScheduleitem.container}>
+        <TouchableOpacity style={stylesScheduleitem.deleteButton} onPress={onDelete}>
+          <Text style={stylesScheduleitem.deleteButtonText}><Ionicons name="close" size={16}/></Text>
         </TouchableOpacity>
         <View>
           <Dropdown
-            style={[styles.select]}
-            placeholderStyle={styles.dropdownText}
-            selectedTextStyle={styles.dropdownText}
-            inputSearchStyle={styles.dropdownText}
+            style={[stylesScheduleitem.select]}
+            placeholderStyle={stylesScheduleitem.dropdownText}
+            selectedTextStyle={stylesScheduleitem.dropdownText}
+            inputSearchStyle={stylesScheduleitem.dropdownText}
             data={ctx.buildings}
             search
             maxHeight={300}
@@ -76,16 +77,16 @@ const ScheduleItem = ({ item, onChange, onDelete }) => {
           />
         </View>
         
-        <View style={styles.flexContainer}>
+        <View style={stylesScheduleitem.flexContainer}>
           <TouchableOpacity
-            style={[styles.select, styles.timeSelect]}
+            style={[stylesScheduleitem.select, stylesScheduleitem.timeSelect]}
             onPress={() => setShowTimePicker(true)}
           >
             <Text>{displayTime(item.arrival_time)}</Text>
           </TouchableOpacity>
-          <View style={styles.weekdayContainer}>
+          <View style={stylesScheduleitem.weekdayContainer}>
             {weekdays.map((day, index) => (
-              <View key={index} style={styles.weekdayOption}>
+              <View key={index} style={stylesScheduleitem.weekdayOption}>
                 <Checkbox
                   key={index} // Ensure each key is unique
                   label={day[0]}
@@ -103,70 +104,6 @@ const ScheduleItem = ({ item, onChange, onDelete }) => {
         />}
       </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 16,
-    backgroundColor: 'white',
-    marginBottom: 12,
-    padding: 12,
-    borderRadius: 8,
-  },
-  weekdayContainer: {
-    flexGrow: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  weekdayOption: {
-    alignItems: 'center',
-    marginHorizontal: 1
-  },
-  flexContainer: {
-    flexDirection: "row",
-    gap: 20,
-  },
-  deleteButton: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    transform: [
-      { translateX: 10 },
-      { translateY: -10 }
-    ],
-    zIndex: 1,
-    width: 25,
-    height: 25,
-    borderRadius: 13,
-    backgroundColor: '#f44',
-  },
-  deleteButtonText: {
-    color: 'white'
-  },
-  select: {
-    borderColor: 'gray',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 8,
-    padding: 8,
-  },
-  timeSelect: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dropdownText: {
-    fontSize: 16,
-  },
-  iconStyle: {
-    width: 20,
-    height: 20,
-  },
-})
+};
 
 export default ScheduleItem;

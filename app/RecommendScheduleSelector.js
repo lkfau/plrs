@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import { stylesScheduleselector } from './Styles';
 
 const RecommendScheduleSelector = ({ schedules, onSelect }) => {
   const [selectedSchedule, setSelectedSchedule] = useState(null);
@@ -14,10 +15,10 @@ const RecommendScheduleSelector = ({ schedules, onSelect }) => {
     <View>
       <Text style={{ textAlign: 'center', padding: 25 }}>Select saved schedule</Text>
       <Dropdown
-        style={styles.select}
-        placeholderStyle={styles.dropdownText}
-        selectedTextStyle={styles.dropdownText}
-        inputSearchStyle={styles.dropdownText}
+        style={stylesScheduleselector.select}
+        placeholderStyle={stylesScheduleselector.dropdownText}
+        selectedTextStyle={stylesScheduleselector.dropdownText}
+        inputSearchStyle={stylesScheduleselector.dropdownText}
         data={schedules}
         search
         maxHeight={300}
@@ -30,18 +31,6 @@ const RecommendScheduleSelector = ({ schedules, onSelect }) => {
       />
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  select: {
-    borderColor: 'gray',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 8,
-    padding: 8,
-  },
-  dropdownText: {
-    fontSize: 16,
-  }
-});
+};
   
 export default RecommendScheduleSelector

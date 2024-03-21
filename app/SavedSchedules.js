@@ -5,6 +5,7 @@ import DataContext from './context/data-context.js';
 import ScheduleView from './ScheduleView.js';
 import ScheduleEditor from './ScheduleEditor.js';
 import { useNavigation } from '@react-navigation/native';
+import { stylesSavedschedules } from './Styles.js';
 
 const Schedules = () => {
   //Initialize states
@@ -162,27 +163,12 @@ const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEdi
         {schedules.length > 0 && schedules.map((schedule) => (
           <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleEditor} onDelete={deleteSchedule}/>
         ))}
-        <TouchableOpacity style={styles.addButton} onPress={createSchedule}>
-          <Text style={styles.addButtonText}>Create Schedule</Text>
+        <TouchableOpacity style={stylesSavedschedules.addButton} onPress={createSchedule}>
+          <Text style={stylesSavedschedules.addButtonText}>Create Schedule</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  addButton: {
-    backgroundColor: 'blue',
-    borderRadius: 8,
-    padding: 16,
-    margin: 8,
-    width: 200,
-    alignItems: 'center',
-  },
-  addButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  }
-});
+};
 
 export default Schedules;

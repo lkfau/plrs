@@ -6,6 +6,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import RecommendScheduleSelector from './RecommendScheduleSelector';
 import RecommendBuildingSelector from './RecommendBuildingSelector';
 import Recommendation from './Recommendation';
+import { stylesRecommend } from './Styles';
 
 const RecommendContainer = () => {
   const [recoSchedule, setRecoSchedule] = useState(null);
@@ -116,55 +117,32 @@ const Recommend = ({ onRecommend }) => {
       </View>
 
       <Text style={{ textAlign: 'center', padding: 25 }}>Would you like to park closest to your first or last location?</Text>
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>First Location</Text>
+      <View style={stylesRecommend.container}>
+        <TouchableOpacity style={stylesRecommend.button}>
+          <Text style={stylesRecommend.buttonText}>First Location</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Last Location</Text>
+        <TouchableOpacity style={stylesRecommend.button}>
+          <Text style={stylesRecommend.buttonText}>Last Location</Text>
         </TouchableOpacity>
       </View>
 
       {/* <Text style={{ textAlign: 'center', padding: 25 }}> Prioritize walking distance or lot vacancy in generating your parking lot recommendation?</Text>
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Walking Distance</Text>
+      <View style={stylesRecommend.container}>
+        <TouchableOpacity style={stylesRecommend.button}>
+          <Text style={stylesRecommend.buttonText}>Walking Distance</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Lot vacancy</Text>
+        <TouchableOpacity style={stylesRecommend.button}>
+          <Text style={stylesRecommend.buttonText}>Lot vacancy</Text>
         </TouchableOpacity>
       </View> */}
-      <View style={[styles.container, { justifyContent: 'center' }]}>
-        <TouchableOpacity style={styles.button}
+      <View style={[stylesRecommend.container, { justifyContent: 'center' }]}>
+        <TouchableOpacity style={stylesRecommend.button}
           onPress={recommendHandler}>
-          <Text style={styles.buttonText}>Get Recommendation</Text>
+          <Text style={stylesRecommend.buttonText}>Get Recommendation</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
-}
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    marginTop: 20,
-  },
-  selectedButton: {
-    backgroundColor: '#00f'
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    textAlign: 'center',
-  },
-  container: {
-    flexDirection: 'row', // to arrange elements horizontally
-    justifyContent: 'space-between', // to space the elements evenly
-    paddingHorizontal: 20, // optional: adds padding to the sides
-  },
-});
+};
 
 export default RecommendContainer;
