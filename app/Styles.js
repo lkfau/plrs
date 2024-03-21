@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
 
 export const stylesAbout = StyleSheet.create({
     //About
@@ -14,6 +13,7 @@ export const stylesAbout = StyleSheet.create({
       paddingTop: 25,
       paddingBottom: 25,
       fontSize: 25,
+      fontWeight: 'bold',
     },
     m_paragraph: {
       textAlign: 'left',
@@ -52,7 +52,7 @@ export const stylesAbout = StyleSheet.create({
 
 export const stylesHome = StyleSheet.create({
     //Home
-    container: {
+      container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
@@ -68,11 +68,12 @@ export const stylesHome = StyleSheet.create({
         color: '#ffffff',
         fontWeight: 'bold',
         textAlign: 'center',
+        paddingTop: 50,
         marginTop: -100,
         marginBottom: 50,
       },
       button: {
-        backgroundColor: '#007bff',
+        backgroundColor: '#0073ef',
         paddingVertical: 20,
         paddingHorizontal: 30,
         width: 350,
@@ -183,7 +184,7 @@ export const stylesMyaccount = StyleSheet.create({
         marginBottom: 20,
       },
       button: {
-        backgroundColor: '#007bff',
+        backgroundColor: '#0073ef',
         paddingVertical: 20,
         paddingHorizontal: 30,
         width: 350,
@@ -346,20 +347,28 @@ export const stylesMenubutton = StyleSheet.create({
 });
 
 export const stylesRecommend = StyleSheet.create({
+    txt: {
+      textAlign: 'center', 
+      padding: 25,
+      color: '#ffffff',
+      fontWeight: 'bold',
+    },
     button: {
-      backgroundColor: '#007bff',
+      backgroundColor: '#0073ef',
       paddingVertical: 15,
       paddingHorizontal: 30,
-      borderRadius: 10,
       marginTop: 20,
+      borderWidth: 1,
+      borderColor: "#ffffff",
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 18,
+        textAlign: 'center',
+        fontWeight: 'bold',
     },
     selectedButton: {
       backgroundColor: '#00f'
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 18,
-      textAlign: 'center',
     },
     container: {
       flexDirection: 'row', // to arrange elements horizontally
@@ -466,6 +475,12 @@ export const stylesRecommendation = StyleSheet.create({
 });
 
 export const stylesRecommendbuildingselector = StyleSheet.create({
+    txt: {
+      textAlign: 'center', 
+      padding: 25, 
+      color: '#ffffff',
+      fontWeight: 'bold',
+    },
     select: {
       borderColor: 'gray',
       borderWidth: StyleSheet.hairlineWidth,
@@ -478,6 +493,12 @@ export const stylesRecommendbuildingselector = StyleSheet.create({
 });
 
 export const stylesScheduleselector = StyleSheet.create({
+    txt: {
+    textAlign: 'center', 
+    padding: 25, 
+    color: '#ffffff',
+    fontWeight: 'bold',
+    },
     select: {
       borderColor: 'gray',
       borderWidth: StyleSheet.hairlineWidth,
@@ -501,7 +522,32 @@ export const stylesSavedschedules = StyleSheet.create({
     addButtonText: {
       color: '#fff',
       fontWeight: 'bold',
-    }
+    },
+    button: {
+      backgroundColor: '#0073ef',
+      paddingVertical: 20,
+      paddingHorizontal: 30,
+      width: 350,
+      borderWidth: 1,
+      borderColor: '#ffffff',
+      marginTop: 20,
+      alignItems: 'center',
+      flex: 1,
+      justifyContent: 'center',
+      
+    },
+    buttonText: {
+      color: '#fff',
+      fontSize: 18,
+      textAlign: 'center',
+      fontWeight: 'bold',
+    },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: 15,
+    },
 });
 
 export const stylesScheduleeditor = StyleSheet.create({
@@ -602,16 +648,22 @@ export const stylesScheduleitem = StyleSheet.create({
 export const stylesScheduleview = StyleSheet.create({
     schedule: {
       backgroundColor: '#fff',
-      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: '#284b85',
       padding: 16,
-      margin: 8,
-      width: 200,
+      marginTop: 8,
+      marginBottom: 8,
+      width: 350,
     },
     title: {
+      textAlign: 'center',
       fontSize: 18,
       fontWeight: 'bold',
       marginBottom: 8,
       color: 'black'
+    },
+    body: {
+      alignItems: 'center',
     },
 });
   

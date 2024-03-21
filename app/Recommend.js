@@ -7,6 +7,7 @@ import RecommendScheduleSelector from './RecommendScheduleSelector';
 import RecommendBuildingSelector from './RecommendBuildingSelector';
 import Recommendation from './Recommendation';
 import { stylesRecommend } from './Styles';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const RecommendContainer = () => {
   const [recoSchedule, setRecoSchedule] = useState(null);
@@ -95,6 +96,12 @@ const Recommend = ({ onRecommend }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <LinearGradient
+            colors={['#ae3b54', '#284b85']}
+            style={StyleSheet.absoluteFill}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          />
       <View style={{ height: "25%" }}>
         {schedules && buildings &&
           <Tab.Navigator
@@ -115,8 +122,7 @@ const Recommend = ({ onRecommend }) => {
             </Tab.Screen>
           </Tab.Navigator>}
       </View>
-
-      <Text style={{ textAlign: 'center', padding: 25 }}>Would you like to park closest to your first or last location?</Text>
+      <Text style={stylesRecommend.txt}>Would you like to park closest to your first or last location?</Text>
       <View style={stylesRecommend.container}>
         <TouchableOpacity style={stylesRecommend.button}>
           <Text style={stylesRecommend.buttonText}>First Location</Text>

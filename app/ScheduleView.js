@@ -10,14 +10,14 @@ const ScheduleView = ({ schedule, onPress, onDelete }) => {
     >
       <Text style={stylesScheduleview.title}>{schedule.name}</Text>
       {schedule.items.map((item, index) => (
-        <View key={index}>
+        <View key={index} style={stylesScheduleview.body}>
           <Text>Arrival Time: {item.arrival_time}</Text>
           <Text>Building ID: {item.building_id}</Text>
         </View>
       ))}
       </TouchableOpacity>
       <TouchableOpacity onPress={() => onDelete(schedule.schedule_id)}>
-        <Text>Delete</Text>
+        <Text style={{textAlign:'center',color:'#ffffff'}}>Delete</Text>
       </TouchableOpacity>
     </View>
   );

@@ -6,6 +6,8 @@ import ScheduleView from './ScheduleView.js';
 import ScheduleEditor from './ScheduleEditor.js';
 import { useNavigation } from '@react-navigation/native';
 import { stylesSavedschedules } from './Styles.js';
+import { LinearGradient } from 'expo-linear-gradient';
+ 
 
 const Schedules = () => {
   //Initialize states
@@ -154,17 +156,22 @@ const Schedules = () => {
 const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEditor, createSchedule, deleteSchedule }) => {
   
   return (
-    <View>
+    <View style={stylesSavedschedules.container}>
+    <LinearGradient
+        colors={['#ae3b54', '#284b85']}
+        style={StyleSheet.absoluteFill}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+      />
       <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules} />}
         >
         {schedules.length > 0 && schedules.map((schedule) => (
           <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleEditor} onDelete={deleteSchedule}/>
         ))}
-        <TouchableOpacity style={stylesSavedschedules.addButton} onPress={createSchedule}>
-          <Text style={stylesSavedschedules.addButtonText}>Create Schedule</Text>
+        <TouchableOpacity style={stylesSavedschedules.button} onPress={createSchedule}>
+          <Text style={stylesSavedschedules.buttonText}>Create Schedule</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
