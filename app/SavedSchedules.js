@@ -5,19 +5,16 @@ import DataContext from './context/data-context.js';
 import ScheduleView from './ScheduleView.js';
 import ScheduleEditor from './ScheduleEditor.js';
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Schedules = () => {
-  //Initialize states
   const [schedules, setSchedules] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  //Iniitalize hooks
   const ctx = useContext(DataContext);
   const Stack = createStackNavigator();
   const navigation = useNavigation();
 
-  //GET functions
   async function getBuildingData() {
     const buildingResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/buildings`);
     if (buildingResponse.ok && ctx.setBuildings)
@@ -37,7 +34,6 @@ const Schedules = () => {
     }    
   }
 
-  //POST, PUT, DELETE functions
   const saveSchedule = async () => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules`, {
@@ -92,8 +88,6 @@ const Schedules = () => {
     }
   };
   
-  //
-
   const toggleScheduleEditor = (schedule) => {
     if (schedule !== null) {
       setSelectedSchedule(schedule);
@@ -116,50 +110,56 @@ const Schedules = () => {
     toggleScheduleEditor(newSchedule);
   };
 
-  // get buildings and schedules on page load
   useEffect(() => {
       getBuildingData();
       getScheduleData();
   }, []);
 
-  return <Stack.Navigator>
-    <Stack.Screen
-      name="SchedulesList"
-      options={() => ({ title: 'Schedules' })}
-    >
-      {() => (
-        <SchedulesList
-          schedules={schedules}
-          loading={loading}
-          refreshSchedules={getScheduleData}
-          toggleScheduleEditor={toggleScheduleEditor}
-          createSchedule={createSchedule}
-          deleteSchedule={deleteSchedule}
-        />
-      )}
-    </Stack.Screen>
-    <Stack.Screen
-      name="EditSchedule"
-      options={() => ({
-        title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule',
-        headerRight: () => <TouchableOpacity onPress={saveSchedule}><Text>Save</Text></TouchableOpacity>
-      })}
-    >
-      {() => <ScheduleEditor schedule={selectedSchedule} setSchedule={setSelectedSchedule} />}
-    </Stack.Screen>
-  </Stack.Navigator>
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="SchedulesList"
+        options={() => ({ title: 'Schedules' })}
+      >
+        {() => (
+          <SchedulesList
+            schedules={schedules}
+            loading={loading}
+            refreshSchedules={getScheduleData}
+            toggleScheduleEditor={toggleScheduleEditor}
+            createSchedule={createSchedule}
+            deleteSchedule={deleteSchedule}
+          />
+        )}
+      </Stack.Screen>
+      <Stack.Screen
+        name="EditSchedule"
+        options={() => ({
+          title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule',
+          headerRight: () => <TouchableOpacity onPress={saveSchedule}><Text>Save</Text></TouchableOpacity>
+        })}
+      >
+        {() => <ScheduleEditor schedule={selectedSchedule} setSchedule={setSelectedSchedule} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  );
 }
 
 const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEditor, createSchedule, deleteSchedule }) => {
   
   return (
-    <View>
+    <View style={styles.container}>
+      <LinearGradient
+        colors={['#ae3b54', '#284b85']}
+        style={StyleSheet.absoluteFill}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+      />
       <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scrollViewContent}
         refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules} />}
-        >
-        {schedules.length > 0 && schedules.map((schedule) => (
+      >
+        {schedules.map((schedule) => (
           <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleEditor} onDelete={deleteSchedule}/>
         ))}
         <TouchableOpacity style={styles.addButton} onPress={createSchedule}>
@@ -168,7 +168,7 @@ const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEdi
       </ScrollView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   addButton: {
@@ -182,7 +182,16 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-  }
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
 });
 
 export default Schedules;

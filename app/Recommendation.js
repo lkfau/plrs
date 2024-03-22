@@ -18,6 +18,8 @@ const fullnessOptions = [
 ];
 
 const Recommendation = ({ recommendation }) => {
+import { useNavigation } from '@react-navigation/native';
+import { stylesRecommendation } from './Styles';
 
   const [showModal, setShowModal] = useState(false);
 

@@ -4,6 +4,7 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Crypto from 'expo-crypto';
+import { stylesLogin } from './Styles';
 
 const LoginPage = () => {
   const navigation = useNavigation();
@@ -33,57 +34,26 @@ const LoginPage = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login Page</Text>
+    <View style={stylesLogin.container}>
+      <Text style={stylesLogin.title}>Login Page</Text>
       <TextInput 
-        style={styles.input} 
+        style={stylesLogin.input} 
         placeholder="Email" 
         value={email} 
         onChangeText={email => setEmail(email)} 
       />
       <TextInput 
-        style={styles.input}
+        style={stylesLogin.input}
         placeholder="Password" 
         secureTextEntry={true} 
         value={password} 
         onChangeText={pwd => setPassword(pwd)}  />
-      <TouchableOpacity style={styles.button} onPress={logIn}>
-        <Text style={styles.buttonText}>Log In</Text>
+      <TouchableOpacity style={stylesLogin.button} onPress={logIn}>
+        <Text style={stylesLogin.buttonText}>Log In</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginVertical: 10,
-    width: 200,
-    color: 'black'
-  },
-  button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-});
 
 export default LoginPage;

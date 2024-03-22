@@ -6,6 +6,8 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import RecommendScheduleSelector from './RecommendScheduleSelector';
 import RecommendBuildingSelector from './RecommendBuildingSelector';
 import RecommendationList from './RecommendationList';
+import { stylesRecommend } from './Styles';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const RecommendPage = () => {
   const [recoSchedule, setRecoSchedule] = useState(null);
@@ -99,6 +101,12 @@ const GetRecommendation = ({ onRecommend }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <LinearGradient
+            colors={['#ae3b54', '#284b85']}
+            style={StyleSheet.absoluteFill}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          />
       <View style={{ height: "25%" }}>
         {schedules && buildings &&
           <Tab.Navigator
@@ -119,30 +127,29 @@ const GetRecommendation = ({ onRecommend }) => {
             </Tab.Screen>
           </Tab.Navigator>}
       </View>
-
-      <Text style={{ textAlign: 'center', padding: 10 }}>Would you like to park near your first or last location?</Text>
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>First Location</Text>
+      <Text style={stylesRecommend.txt}>Would you like to park near your first or last location?</Text>
+      <View style={stylesRecommend.container}>
+        <TouchableOpacity style={stylesRecommend.button}>
+          <Text style={stylesRecommend.buttonText}>First Location</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Last Location</Text>
+        <TouchableOpacity style={stylesRecommend.button}>
+          <Text style={stylesRecommend.buttonText}>Last Location</Text>
         </TouchableOpacity>
       </View>
 
       {/* <Text style={{ textAlign: 'center', padding: 25 }}> Prioritize walking distance or lot vacancy in generating your parking lot recommendation?</Text>
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Walking Distance</Text>
+      <View style={stylesRecommend.container}>
+        <TouchableOpacity style={stylesRecommend.button}>
+          <Text style={stylesRecommend.buttonText}>Walking Distance</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Lot vacancy</Text>
+        <TouchableOpacity style={stylesRecommend.button}>
+          <Text style={stylesRecommend.buttonText}>Lot vacancy</Text>
         </TouchableOpacity>
       </View> */}
-      <View style={[styles.container, { justifyContent: 'center' }]}>
+      <View style={[stylesRecommend.container, { justifyContent: 'center' }]}>
         <TouchableOpacity 
           disabled={recommendDisabled} 
-          style={[styles.buttonRecommend, recommendDisabled ? styles.buttonDisabled :  {}]}
+          style={[stylesRecommend.buttonRecommend, recommendDisabled ? stylesRecommend.buttonDisabled :  {}]}
           onPress={recommendHandler}
         >
           <Text style={styles.buttonText}>Get Recommendation</Text>
