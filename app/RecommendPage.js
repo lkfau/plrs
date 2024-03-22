@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { StyleSheet, SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import RecommendScheduleSelector from './RecommendScheduleSelector';
 import RecommendBuildingSelector from './RecommendBuildingSelector';
-import Recommendation from './Recommendation';
+import RecommendationList from './RecommendationList';
 
-const RecommendContainer = () => {
+const RecommendPage = () => {
   const [recoSchedule, setRecoSchedule] = useState(null);
   const [recoBuilding, setRecoBuilding] = useState(null);
 
@@ -26,7 +26,7 @@ const RecommendContainer = () => {
       options={() => ({ title: 'Get Recommendation' })}
     >
       {() => (
-        <Recommend
+        <GetRecommendation
           onRecommend={getRecommendationHandler}
         />
       )}
@@ -38,22 +38,27 @@ const RecommendContainer = () => {
         // title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule',
       })}
     >
-      {() => <Recommendation schedule_id={recoSchedule} building_id={recoBuilding}  />}
+      {() => <RecommendationList schedule_id={recoSchedule} building_id={recoBuilding}  />}
     </Stack.Screen>
   </Stack.Navigator>
 }
 
-const Recommend = ({ onRecommend }) => {
+const GetRecommendation = ({ onRecommend }) => {
 
   // React hooks for managing state
   const [schedules, setSchedules] = useState(null);// State to store schedules data
   const [buildings, setBuildings] = useState(null);// State to store buildings data
   const [currentTab, setCurrentTab] = useState('Use Building');
 
-  const [selectedSchedule, setSelectedSchedule] = useState(1);
-  const [selectedBuilding, setSelectedBuilding] = useState(1);
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [selectedBuilding, setSelectedBuilding] = useState(null);
 
   const Tab = createMaterialTopTabNavigator(); // Material Top Tab Navigator for tabbed navigation
+
+  const recommendDisabled = useMemo(() => (
+       (currentTab === 'Use Schedule' && selectedSchedule === null) 
+    || (currentTab === 'Use Building' && selectedBuilding === null)
+  ), [currentTab, selectedSchedule, selectedBuilding]);
 
   //Fetching schedule/user data
   async function fetchData() {
@@ -115,7 +120,7 @@ const Recommend = ({ onRecommend }) => {
           </Tab.Navigator>}
       </View>
 
-      <Text style={{ textAlign: 'center', padding: 25 }}>Would you like to park closest to your first or last location?</Text>
+      <Text style={{ textAlign: 'center', padding: 10 }}>Would you like to park near your first or last location?</Text>
       <View style={styles.container}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>First Location</Text>
@@ -135,8 +140,11 @@ const Recommend = ({ onRecommend }) => {
         </TouchableOpacity>
       </View> */}
       <View style={[styles.container, { justifyContent: 'center' }]}>
-        <TouchableOpacity style={styles.button}
-          onPress={recommendHandler}>
+        <TouchableOpacity 
+          disabled={recommendDisabled} 
+          style={[styles.buttonRecommend, recommendDisabled ? styles.buttonDisabled :  {}]}
+          onPress={recommendHandler}
+        >
           <Text style={styles.buttonText}>Get Recommendation</Text>
         </TouchableOpacity>
       </View>
@@ -152,8 +160,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 20,
   },
-  selectedButton: {
-    backgroundColor: '#00f'
+  buttonRecommend: {
+    backgroundColor: '#007bff',
+    width: '100%',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    marginTop: 40
+  },
+  buttonDisabled: {
+    backgroundColor: '#55abff'
   },
   buttonText: {
     color: '#fff',
@@ -167,4 +183,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecommendContainer;
+export default RecommendPage;

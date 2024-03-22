@@ -1,16 +1,16 @@
 import CreateAccountPage from './CreateAccountPage';
-import LoginPage from './LoginPage';
-import HomePage from './HomePage';
+import Login from './LoginPage';
+import Home from './HomePage';
 import Account from './MyAccount';
 import Schedules from './SavedSchedules';
-import Recommend from './Recommend';
+import Recommend from './RecommendPage';
 import About from './About';
 
 export default pageOptions = [
   {
     title: 'Home',
     icon: 'home',
-    component: HomePage,
+    component: Home,
     showTitle: true,
     showLoggedIn: true,
     showNotLoggedIn: true
@@ -26,7 +26,7 @@ export default pageOptions = [
   {
     title: 'Log In',
     icon: 'arrow-forward-circle-outline',
-    component: LoginPage,
+    component: Login,
     showTitle: true,
     showLoggedIn: false,
     showLoggedOut: true

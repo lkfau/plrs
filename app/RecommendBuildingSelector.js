@@ -35,6 +35,8 @@ const RecommendBuildingSelector = ({ buildings, onSelect }) => {
 const styles = StyleSheet.create({
   select: {
     borderColor: 'gray',
+    backgroundColor: 'white',
+    marginHorizontal: 20,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 8,
     padding: 8,
