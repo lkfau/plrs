@@ -154,10 +154,11 @@ const Schedules = () => {
 const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEditor, createSchedule, deleteSchedule }) => {
   
   return (
-    <View>
+    <View style={styles.container}>
       <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scrollViewContent}
+        vertical 
+        showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules} />}
         >
         {schedules.length > 0 && schedules.map((schedule) => (
@@ -169,6 +170,30 @@ const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEdi
       </ScrollView>
     </View>
   );
-};
+}
+
+const styles = StyleSheet.create({
+  addButton: {
+    backgroundColor: 'blue',
+    borderRadius: 8,
+    padding: 16,
+    margin: 8,
+    width: 200,
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+});
 
 export default Schedules;
