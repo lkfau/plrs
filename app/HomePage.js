@@ -4,8 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import {stylesHome} from './Styles';
 
 const pageOptions = [
-  { title: 'Account', description: 'Manage your account, change password, change email' },
-  { title: 'Schedules', description: 'Create schedules' },
+  { title: 'Account', description: 'Manage your account, change password, change email, manage preferences' },
+  { title: 'Schedules', description: 'Manage schedules' },
   { title: 'Recommend', description: 'Get a parking lot recommendation' },
   { title: 'About', description: 'Mission statement, meet the team' }
 ];

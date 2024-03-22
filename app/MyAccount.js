@@ -27,11 +27,11 @@ const Account = () => {
           end={{ x: 1, y: 0 }}
         />
       <TouchableOpacity style={stylesMyaccount.button} onPress={() => navigation.navigate('Schedules')}>
-        <Text style={stylesMyaccount.buttonText}>My Schedules</Text>
+        <Text style={stylesMyaccount.buttonText}>Schedules</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={stylesMyaccount.button}>
-        <Text style={stylesMyaccount.buttonText}>My preferences</Text>
+        <Text style={stylesMyaccount.buttonText}>Preferences</Text>
       </TouchableOpacity>
 
       <View>
