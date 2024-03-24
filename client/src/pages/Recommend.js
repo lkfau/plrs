@@ -24,11 +24,12 @@ const Recommend = () => {
     }
 
     const getSchedules = async () => {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/schedules?user_id=1`);
-        let schedule_results = await response.json();
-        schedule_results = schedule_results.map(schedule => ({ key: schedule.schedule_id, value: schedule.name }))
-        setSelectedSchedule(schedule_results[0].key)
-        setSchedules(schedule_results);
+      console.log(`${process.env.REACT_APP_SERVER_URL}/schedules?user_id=1`);
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/schedules?user_id=1`);
+      let schedule_results = await response.json();
+      schedule_results = schedule_results.map(schedule => ({ key: schedule.schedule_id, value: schedule.name }))
+      setSelectedSchedule(schedule_results[0].key)
+      setSchedules(schedule_results);
     }
 
     const getRecommendations = async (searchType) => {

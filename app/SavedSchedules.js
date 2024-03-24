@@ -5,19 +5,17 @@ import DataContext from './context/data-context.js';
 import ScheduleView from './ScheduleView.js';
 import ScheduleEditor from './ScheduleEditor.js';
 import { useNavigation } from '@react-navigation/native';
+import PageContainer from './UI/PageContainer.js';
+import { button } from './Styles.js';
 
 const Schedules = () => {
-  //Initialize states
   const [schedules, setSchedules] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  //Iniitalize hooks
   const ctx = useContext(DataContext);
   const Stack = createStackNavigator();
   const navigation = useNavigation();
 
-  //GET functions
   async function getBuildingData() {
     const buildingResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/buildings`);
     if (buildingResponse.ok && ctx.setBuildings)
@@ -34,15 +32,14 @@ const Schedules = () => {
       setLoading(false);
     } else {
       throw new Error('Schedule network response was not ok');
-    }    
+    }
   }
 
-  //POST, PUT, DELETE functions
   const saveSchedule = async () => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules`, {
         method: selectedSchedule.schedule_id ? 'PUT' : 'POST',
-        headers: {'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           user_id: 1,
           ...selectedSchedule
@@ -80,7 +77,7 @@ const Schedules = () => {
       });
 
       if (!response.ok) throw new Error('Failed to delete schedule with schedule_id', schedule_id);
-      
+
       setSchedules(prevSchedules => {
         const scheduleIndex = prevSchedules.findIndex(schedule => schedule.schedule_id === selectedSchedule.schedule_id);
         let newSchedules = [...prevSchedules];
@@ -91,8 +88,6 @@ const Schedules = () => {
       console.error('Error deleting schedule:', error);
     }
   };
-  
-  //
 
   const toggleScheduleEditor = (schedule) => {
     if (schedule !== null) {
@@ -116,73 +111,72 @@ const Schedules = () => {
     toggleScheduleEditor(newSchedule);
   };
 
-  // get buildings and schedules on page load
   useEffect(() => {
-      getBuildingData();
-      getScheduleData();
+    getBuildingData();
+    getScheduleData();
   }, []);
 
-  return <Stack.Navigator>
-    <Stack.Screen
-      name="SchedulesList"
-      options={() => ({ title: 'Schedules' })}
-    >
-      {() => (
-        <SchedulesList
-          schedules={schedules}
-          loading={loading}
-          refreshSchedules={getScheduleData}
-          toggleScheduleEditor={toggleScheduleEditor}
-          createSchedule={createSchedule}
-          deleteSchedule={deleteSchedule}
-        />
-      )}
-    </Stack.Screen>
-    <Stack.Screen
-      name="EditSchedule"
-      options={() => ({
-        title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule',
-        headerRight: () => <TouchableOpacity onPress={saveSchedule}><Text>Save</Text></TouchableOpacity>
-      })}
-    >
-      {() => <ScheduleEditor schedule={selectedSchedule} setSchedule={setSelectedSchedule} />}
-    </Stack.Screen>
-  </Stack.Navigator>
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="SchedulesList"
+        options={{
+          title: 'Schedules',
+          headerTransparent: true,
+          headerBackground: () => (
+            <View style={{flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.4)'}} />
+          ),
+          headerTintColor: '#fff'
+        }}
+      >
+        {() => (
+          <SchedulesList
+            schedules={schedules}
+            loading={loading}
+            refreshSchedules={getScheduleData}
+            toggleScheduleEditor={toggleScheduleEditor}
+            createSchedule={createSchedule}
+            deleteSchedule={deleteSchedule}
+          />
+        )}
+      </Stack.Screen>
+      <Stack.Screen
+        name="EditSchedule"
+        options={() => ({
+          title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule',
+          headerRight: () => <TouchableOpacity onPress={saveSchedule}><Text>Save</Text></TouchableOpacity>
+        })}
+      >
+        {() => <ScheduleEditor schedule={selectedSchedule} setSchedule={setSelectedSchedule} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  );
 }
 
 const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEditor, createSchedule, deleteSchedule }) => {
-  
+
   return (
-    <View>
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules} />}
-        >
-        {schedules.length > 0 && schedules.map((schedule) => (
-          <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleEditor} onDelete={deleteSchedule}/>
+    <PageContainer gradient={true} style={{paddingTop: 108.5}}>
+      <ScrollView
+        contentContainerStyle={{ alignItems: 'center', paddingVertical: 20 }}
+        vertical
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules}/>}
+      >
+        {schedules.map((schedule) => (
+          <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleEditor} onDelete={deleteSchedule} />
         ))}
         <TouchableOpacity style={styles.addButton} onPress={createSchedule}>
           <Text style={styles.addButtonText}>Create Schedule</Text>
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </PageContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  addButton: {
-    backgroundColor: 'blue',
-    borderRadius: 8,
-    padding: 16,
-    margin: 8,
-    width: 200,
-    alignItems: 'center',
-  },
-  addButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  }
+  addButton: button.containerOutline,
+  addButtonText: button.title,
 });
 
 export default Schedules;
