@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Svg, Circle, Text as SvgText } from 'react-native-svg';
+import { Svg, Circle, Text as SvgText, Line } from 'react-native-svg';
 
 const daysOfWeek = ['S', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
 
@@ -31,7 +31,6 @@ const Graph = ({ scheduleItems }) => {
   let minTime = Infinity;
   let maxTime = -Infinity;
 
-  
   scheduleItems.forEach(scheduleItem => {
     scheduleItem.arrival_weekdays.forEach(day => {
       const timeParts = scheduleItem.arrival_time.split(':');
@@ -65,12 +64,12 @@ const Graph = ({ scheduleItems }) => {
 
   scheduleItems.forEach(scheduleItem => {
     scheduleItem.arrival_weekdays.forEach(day => {
-      const x = day - 0.14; // x-coordinate is the weekday
+      const x = day + 0.5; // x-coordinate is the weekday
       const timeParts = scheduleItem.arrival_time.split(':');
       const hours = parseInt(timeParts[0], 10);
       const minutes = parseInt(timeParts[1], 10);
       const time = hours * 60 + minutes;
-      const y = 1 - (time - adjustedMinTime) / (adjustedMaxTime - adjustedMinTime); // Invert y-coordinate
+      const y = 1 - (time - adjustedMinTime) / (adjustedMaxTime - adjustedMinTime + 5); // Invert y-coordinate
       points.push({ x, y });
     });
   });
@@ -88,33 +87,38 @@ const Graph = ({ scheduleItems }) => {
   }
 
   const sundayX = (7 * (svgWidth / 8)) - 15;
-  const xOffset = 0;
+  const xOffset = 30; // Adjusted x-coordinate for the x-axis labels
 
   return (
     <Svg height={svgHeight} width={svgWidth}>
+      {/* Draw y-axis labels (arrival times) */}
       {arrivalTimes.map((time, index) => {
-  // Calculate the y position using the same approach as for the points
-  const timeParts = time.split(':');
-  const hours = parseInt(timeParts[0], 10);
-  const minutes = parseInt(timeParts[1], 10);
-  const timeValue = hours * 60 + minutes;
-  const y = svgHeight - ((timeValue - adjustedMinTime) / (adjustedMaxTime - adjustedMinTime)) * (svgHeight - 10);
+        // Calculate y-coordinate for the y-axis labels
+        const y = svgHeight - ((index * (svgHeight - 20)) / (arrivalTimes.length - 1));
+        // Draw horizontal lines
+        return (
+          <React.Fragment key={index}>
+            <SvgText x={xOffset} y={y - 5} fontSize="10" fill="black" textAnchor="end">
+              {time}
+            </SvgText>
+            {index !== 0 && (
+              <Line x1={xOffset} y1={y - 10} x2={svgWidth} y2={y - 10} stroke="rgba(128,128,128,0.5)" strokeWidth="1" />
+            )}
+          </React.Fragment>
+        );
+      })}
 
-  return (
-    <SvgText key={index} x={xOffset} y={y} fontSize="10" fill="black">
-      {time}
-    </SvgText>
-  );
-})}
-
+      {/* Draw x-axis labels (days of the week) */}
       {daysOfWeek.map((day, index) => {
         const x = index === 6 ? sundayX : (index + 1) * (svgWidth / 8) - 10;
         return (
-          <SvgText key={index} x={x} y={svgHeight - 5} fontSize="10" fill="black">
-            {day}
-          </SvgText>
+                      <SvgText key={index} x={x + 20} y={svgHeight - 5} fontSize="10" fill="black">
+              {day}
+            </SvgText>
         );
       })}
+
+      {/* Draw circles for points */}
       {points.map((point, index) => (
         <Circle key={index} cx={(point.x + 1) * (svgWidth / 8)} cy={point.y * (svgHeight - 10)} r="3" fill="red" />
       ))}
