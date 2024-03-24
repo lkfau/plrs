@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import {stylesHome} from './Styles';
+import PageContainer from './UI/PageContainer';
+import { stylesHome, pageHeader, button } from './Styles';
 
 const pageOptions = [
   { title: 'Account', description: 'Manage your account, change password, change email, manage preferences' },
@@ -12,26 +12,25 @@ const pageOptions = [
 
 const HomePage = ({ navigation }) => {
   return (
-    <View style={stylesHome.container}>
-      <LinearGradient
-        colors={['#ae3b54', '#284b85']}
-        style={StyleSheet.absoluteFill}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-      />
-      <View style={stylesHome.innerContainer}>
+    <PageContainer gradient={true}>  
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <Text style={stylesHome.header}>Parking Lot Recommendation System</Text>
+          <Text style={styles.header}>Parking Lot Recommendation System</Text>
         </TouchableOpacity>
         {pageOptions.map(option => (
-          <TouchableOpacity key={option.title} style={stylesHome.button} onPress={() => navigation.navigate(option.title)}>
-            <Text style={stylesHome.buttonText}>{option.title}</Text>
-            <Text style={stylesHome.buttonDescription}>{option.description}</Text>
+          <TouchableOpacity key={option.title} style={styles.button} onPress={() => navigation.navigate(option.title)}>
+            <Text style={styles.buttonTitle}>{option.title}</Text>
+            <Text style={styles.buttonDescription}>{option.description}</Text>
           </TouchableOpacity>
         ))}
-      </View>
-    </View>
+    </PageContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  header: pageHeader,
+  button: button.containerOutline,
+  buttonTitle: button.title,
+  buttonDescription: button.description
+})
 
 export default HomePage;

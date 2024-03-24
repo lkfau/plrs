@@ -1,252 +1,134 @@
 import { StyleSheet } from "react-native";
 
-export const stylesAbout = StyleSheet.create({
-    //About
-    paragraph: {
-      paddingLeft: 10,
-      flex: 1,
-      fontSize: 16,
-    },
-    title: {
-      textAlign: 'center',
-      color: '#ffffff',
-      paddingTop: 25,
-      paddingBottom: 25,
-      fontSize: 25,
-      fontWeight: 'bold',
-    },
-    m_paragraph: {
-      textAlign: 'left',
-      color: '#ffffff',
-      paddingBottom: 50,
-      paddingLeft: 15,
-      paddingRight: 15,
-    },
-    b_paragraph: {
-      fontSize: 25,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      color: '#000000',
-      paddingTop: 15,
-      paddingBottom: 10,
-      paddingLeft: 15,
-      paddingRight: 15,
-    },
-    img: {
-      width: 100,
-      height: 100,
-      resizeMode: 'stretch',
-      borderWidth: 2,
-      borderColor: '#ae3b54',
-      borderRadius: 100,
-    },
-    teamMember: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 20,
-    },
-    reverse: {
-      flexDirection: 'row-reverse',
-    },
-});
+// Reusable styles
+export const paragraph = {
+  textAlign: 'left',
+  fontSize: 15.5
+}
 
-export const stylesHome = StyleSheet.create({
-    //Home
-      container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      innerContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 20,
-      },
-      header: {
-        fontSize: 24,
-        color: '#ffffff',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        paddingTop: 50,
-        marginTop: -100,
-        marginBottom: 50,
-      },
-      button: {
-        backgroundColor: '#0073ef',
-        paddingVertical: 20,
-        paddingHorizontal: 30,
-        width: 350,
-        borderWidth: 1,
-        borderColor: '#ffffff',
-        marginTop: 20,
-        alignItems: 'center',
-      },
-      buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        textAlign: 'center',
-        fontWeight: 'bold',
-      },
-      buttonDescription: {
-        color: '#fff',
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 5,
-      },
-      container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-      },
-      button: {
-        backgroundColor: '#007bff',
-        paddingVertical: 20,
-        paddingHorizontal: 30,
-        width: 350,
-        borderWidth: 1,
-        borderColor: '#ffffff',
-        marginTop: 20,
-        alignItems: 'center',
-      },
-      buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        textAlign: 'center',
-        fontWeight: 'bold',
-      },
-      section: {
-        marginBottom: 20,
-      },
-      subtitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-      },
-      input: {
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.5)', // Change border color to semi-transparent white
-        color: '#fff', // Set text color to white
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 10,
-      },
-      changeText: {
-        fontSize: 16,
-        color: 'blue',
-        textDecorationLine: 'underline',
-        textAlign: 'center',
-      },
-      modalOverlay: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay color
-      },
-      modalContainer: {
-        width: '80%',
-        backgroundColor: '#333', // Dark background color for modal
-        padding: 20,
-        borderRadius: 10,
-      },
-      modalTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#fff', // Text color for modal title
-        marginBottom: 20,
-      },
-      changeButton: {
-        backgroundColor: '#007bff',
-        paddingVertical: 15,
-        paddingHorizontal: 30,
-        borderRadius: 10,
-        marginTop: 20,
-      },
-});
 
-export const stylesMyaccount = StyleSheet.create({
-      //MyAccount
-      container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-      },
-      button: {
-        backgroundColor: '#0073ef',
-        paddingVertical: 20,
-        paddingHorizontal: 30,
-        width: 350,
-        borderWidth: 1,
-        borderColor: '#ffffff',
-        marginTop: 20,
-        alignItems: 'center',
-      },
-      buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        textAlign: 'center',
-        fontWeight: 'bold',
-      },
-      section: {
-        marginBottom: 20,
-      },
-      subtitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-      },
-      input: {
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.5)', // Change border color to semi-transparent white
-        color: '#fff', // Set text color to white
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 10,
-      },
-      changeText: {
-        fontSize: 16,
-        color: 'blue',
-        textDecorationLine: 'underline',
-        textAlign: 'center',
-      },
-      modalOverlay: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay color
-      },
-      modalContainer: {
-        width: '80%',
-        backgroundColor: '#333', // Dark background color for modal
-        padding: 20,
-        borderRadius: 10,
-      },
-      modalTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#fff', // Text color for modal title
-        marginBottom: 20,
-      },
-      changeButton: {
-        backgroundColor: '#007bff',
-        paddingVertical: 15,
-        paddingHorizontal: 30,
-        borderRadius: 10,
-        marginTop: 20,
-      },
-});
+
+export const pageContainer = {
+  flex: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingHorizontal: 20
+}
+
+export const pageHeader = {
+  fontSize: 24,
+  color: '#ffffff',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  marginBottom: 30
+}
+
+export const button = {
+  containerOutline: {
+    backgroundColor: '#0073ef',
+    width: '100%',
+    paddingVertical: 20,
+    paddingHorizontal: 30,
+    marginTop: 20,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#fff',
+    borderRadius: 10
+  },
+  container: {
+    backgroundColor: '#0073ef',
+    width: '100%',
+    paddingVertical: 20,
+    paddingHorizontal: 30,
+    marginTop: 20,
+    alignItems: 'center',
+    borderRadius: 10
+  },
+  title: {
+    color: '#fff',
+    fontSize: 18,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  description: {
+    color: '#fff',
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 5
+  }
+}
+
+export const buttonDelete =  {
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    zIndex: 1,
+    width: 25,
+    height: 25,
+    borderRadius: 13,
+    backgroundColor: '#f44',
+    color: '#fff'
+  },
+  icon: {
+    color: '#fff'
+  }
+}
+
+export const textInput = {
+  borderWidth: 1,
+  borderColor: 'rgba(0, 0, 0, 0.5)',
+  color: '#000',
+  borderRadius: 5,
+  padding: 10,
+  marginBottom: 10,
+}
+
+// Page-specific styles
+
+// About
+export const teamMember = {
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+    marginBottom: 20
+  },
+  portrait: {
+    width: 80,
+    height: 80,
+    resizeMode: 'stretch',
+    borderRadius: 100,
+  }
+}
+
+//My account (change email modal)
+
+export const changeEmail = {
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  container: {
+    width: '80%',
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 15,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 20,
+  }
+}
+
+//to be replaced
 
 export const stylesCreateaccount = StyleSheet.create({
     container: {
@@ -374,6 +256,17 @@ export const stylesRecommend = StyleSheet.create({
       flexDirection: 'row', // to arrange elements horizontally
       justifyContent: 'space-between', // to space the elements evenly
       paddingHorizontal: 20, // optional: adds padding to the sides
+    },
+    buttonRecommend: {
+      backgroundColor: '#007bff',
+      width: '100%',
+      paddingVertical: 15,
+      paddingHorizontal: 30,
+      borderRadius: 10,
+      marginTop: 40
+    },
+    buttonDisabled: {
+      backgroundColor: '#55abff'
     },
 });
 
@@ -508,46 +401,6 @@ export const stylesScheduleselector = StyleSheet.create({
     dropdownText: {
       fontSize: 16,
     }
-});
-
-export const stylesSavedschedules = StyleSheet.create({
-    addButton: {
-      backgroundColor: 'blue',
-      borderRadius: 8,
-      padding: 16,
-      margin: 8,
-      width: 200,
-      alignItems: 'center',
-    },
-    addButtonText: {
-      color: '#fff',
-      fontWeight: 'bold',
-    },
-    button: {
-      backgroundColor: '#0073ef',
-      paddingVertical: 20,
-      paddingHorizontal: 30,
-      width: 350,
-      borderWidth: 1,
-      borderColor: '#ffffff',
-      marginTop: 20,
-      alignItems: 'center',
-      flex: 1,
-      justifyContent: 'center',
-      
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 18,
-      textAlign: 'center',
-      fontWeight: 'bold',
-    },
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingTop: 15,
-    },
 });
 
 export const stylesScheduleeditor = StyleSheet.create({

@@ -137,15 +137,6 @@ const GetRecommendation = ({ onRecommend }) => {
         </TouchableOpacity>
       </View>
 
-      {/* <Text style={{ textAlign: 'center', padding: 25 }}> Prioritize walking distance or lot vacancy in generating your parking lot recommendation?</Text>
-      <View style={stylesRecommend.container}>
-        <TouchableOpacity style={stylesRecommend.button}>
-          <Text style={stylesRecommend.buttonText}>Walking Distance</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={stylesRecommend.button}>
-          <Text style={stylesRecommend.buttonText}>Lot vacancy</Text>
-        </TouchableOpacity>
-      </View> */}
       <View style={[stylesRecommend.container, { justifyContent: 'center' }]}>
         <TouchableOpacity 
           disabled={recommendDisabled} 
@@ -167,17 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 20,
   },
-  buttonRecommend: {
-    backgroundColor: '#007bff',
-    width: '100%',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    marginTop: 40
-  },
-  buttonDisabled: {
-    backgroundColor: '#55abff'
-  },
+  
   buttonText: {
     color: '#fff',
     fontSize: 18,

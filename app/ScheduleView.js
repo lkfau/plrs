@@ -1,27 +1,27 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Svg, Circle, Text as SvgText, Line } from 'react-native-svg';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { buttonDelete } from './Styles';
 
 const daysOfWeek = ['S', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
 
 const ScheduleView = ({ schedule, onPress, onDelete }) => {
-  const renderScheduleItems = () => {
-    return (
-      <View>
-        <Graph scheduleItems={schedule.items} />
-      </View>
-    );
-  };
 
   return (
     <View key={schedule.id}>
-      <TouchableOpacity style={styles.schedule} onPress={() => onPress(schedule)}>
-        <Text style={styles.title}>{schedule.name}</Text>
-        {renderScheduleItems()}
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.deleteButton} onPress={() => onDelete(schedule.schedule_id)}>
-        <Text style={styles.deleteButtonText}>Delete</Text>
-      </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={() => onPress(schedule)}>
+        <View style={styles.schedule}>
+        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={styles.title}>{schedule.name}</Text>
+          <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
+            <Text style={styles.deleteButtonText}><Ionicons name="close" size={16}/></Text>
+          </TouchableOpacity>
+        </View>
+        <Graph scheduleItems={schedule.items} />
+        </View>
+      </TouchableWithoutFeedback>
+
     </View>
   );
 };
@@ -74,7 +74,7 @@ const Graph = ({ scheduleItems }) => {
     });
   });
 
-  const svgWidth = 200;
+  const svgWidth = 300;
   const svgHeight = 250;
 
   // Generate arrival times based on the new interval
@@ -131,8 +131,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     padding: 16,
-    margin: 8,
-    width: 230,
+    margin: 8
   },
   title: {
     fontSize: 18,
@@ -141,17 +140,11 @@ const styles = StyleSheet.create({
     color: 'black',
     alignSelf: 'center',
   },
-  deleteButton: {
-    backgroundColor: 'red',
-    borderRadius: 5,
-    padding: 5,
-    alignSelf: 'center',
-    marginTop: -5,
-  },
   deleteButtonText: {
     color: 'white',
     fontWeight: 'bold',
   },
+  deleteButton: buttonDelete.container
 });
 
 export default ScheduleView;

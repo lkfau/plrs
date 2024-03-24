@@ -5,7 +5,8 @@ import DataContext from './context/data-context.js';
 import ScheduleView from './ScheduleView.js';
 import ScheduleEditor from './ScheduleEditor.js';
 import { useNavigation } from '@react-navigation/native';
-import { LinearGradient } from 'expo-linear-gradient';
+import PageContainer from './UI/PageContainer.js';
+import { button } from './Styles.js';
 
 const Schedules = () => {
   const [schedules, setSchedules] = useState([]);
@@ -31,14 +32,14 @@ const Schedules = () => {
       setLoading(false);
     } else {
       throw new Error('Schedule network response was not ok');
-    }    
+    }
   }
 
   const saveSchedule = async () => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules`, {
         method: selectedSchedule.schedule_id ? 'PUT' : 'POST',
-        headers: {'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           user_id: 1,
           ...selectedSchedule
@@ -76,7 +77,7 @@ const Schedules = () => {
       });
 
       if (!response.ok) throw new Error('Failed to delete schedule with schedule_id', schedule_id);
-      
+
       setSchedules(prevSchedules => {
         const scheduleIndex = prevSchedules.findIndex(schedule => schedule.schedule_id === selectedSchedule.schedule_id);
         let newSchedules = [...prevSchedules];
@@ -87,7 +88,7 @@ const Schedules = () => {
       console.error('Error deleting schedule:', error);
     }
   };
-  
+
   const toggleScheduleEditor = (schedule) => {
     if (schedule !== null) {
       setSelectedSchedule(schedule);
@@ -111,15 +112,22 @@ const Schedules = () => {
   };
 
   useEffect(() => {
-      getBuildingData();
-      getScheduleData();
+    getBuildingData();
+    getScheduleData();
   }, []);
 
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="SchedulesList"
-        options={() => ({ title: 'Schedules' })}
+        options={{
+          title: 'Schedules',
+          headerTransparent: true,
+          headerBackground: () => (
+            <View style={{flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.4)'}} />
+          ),
+          headerTintColor: '#fff'
+        }}
       >
         {() => (
           <SchedulesList
@@ -146,53 +154,29 @@ const Schedules = () => {
 }
 
 const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEditor, createSchedule, deleteSchedule }) => {
-  
+
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={['#ae3b54', '#284b85']}
-        style={StyleSheet.absoluteFill}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-      />
-      <ScrollView 
-        contentContainerStyle={styles.scrollViewContent}
-        refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules} />}
+    <PageContainer gradient={true} style={{paddingTop: 108.5}}>
+      <ScrollView
+        contentContainerStyle={{ alignItems: 'center', paddingVertical: 20 }}
+        vertical
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules}/>}
       >
         {schedules.map((schedule) => (
-          <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleEditor} onDelete={deleteSchedule}/>
+          <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleEditor} onDelete={deleteSchedule} />
         ))}
         <TouchableOpacity style={styles.addButton} onPress={createSchedule}>
           <Text style={styles.addButtonText}>Create Schedule</Text>
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </PageContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  addButton: {
-    backgroundColor: 'blue',
-    borderRadius: 8,
-    padding: 16,
-    margin: 8,
-    marginLeft: 20,
-    width: 200,
-    alignItems: 'center',
-  },
-  addButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  scrollViewContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
+  addButton: button.containerOutline,
+  addButtonText: button.title,
 });
 
 export default Schedules;

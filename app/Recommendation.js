@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Linking, Platform } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import FeedbackModal from './FeedbackModal';
+import { stylesRecommendation } from './Styles';
 
 const initialRegion = {
   latitude: 26.371449,
@@ -18,8 +19,7 @@ const fullnessOptions = [
 ];
 
 const Recommendation = ({ recommendation }) => {
-import { useNavigation } from '@react-navigation/native';
-import { stylesRecommendation } from './Styles';
+
 
   const [showModal, setShowModal] = useState(false);
 
@@ -81,14 +81,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
-  button: {
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    marginBottom: 10,
-    backgroundColor: 'transparent', // Remove background color
-    alignSelf: 'center',
-  },
+  
   iparkedButton: {
     backgroundColor: 'black',
     color: 'white',

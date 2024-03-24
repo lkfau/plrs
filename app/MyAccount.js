@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { LinearGradient } from 'expo-linear-gradient';
-import {stylesMyaccount} from './Styles'
+import { button, textInput, changeEmail } from './Styles'
+import PageContainer from './UI/PageContainer';
 
 const Account = () => {
   const navigation = useNavigation();
@@ -19,69 +19,62 @@ const Account = () => {
   };
 
   return (
-    <View style={stylesMyaccount.container}>
-      <LinearGradient
-          colors={['#ae3b54', '#284b85']}
-          style={StyleSheet.absoluteFill}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-        />
-      <TouchableOpacity style={stylesMyaccount.button} onPress={() => navigation.navigate('Schedules')}>
-        <Text style={stylesMyaccount.buttonText}>Schedules</Text>
+    <PageContainer>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Schedules')}>
+        <Text style={styles.buttonText}>Schedules</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={stylesMyaccount.button}>
-        <Text style={stylesMyaccount.buttonText}>Preferences</Text>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Preferences</Text>
       </TouchableOpacity>
 
-      <View>
-        {/* <Text style={styles.subtitle}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="example@example.com"
-          value={newEmail} // Set value to the state variable
-          onChangeText={setNewEmail} // Update state variable on change
-        /> */}
-        <TouchableOpacity style={stylesMyaccount.button} onPress={() => setModalVisible(true)}>
-          <Text style={stylesMyaccount.buttonText}>Change Email</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
+        <Text style={styles.buttonText}>Change Email</Text>
+      </TouchableOpacity>
+      
 
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
         <TouchableOpacity
-          style={stylesMyaccount.modalOverlay}
+          style={styles.modalOverlay}
           activeOpacity={1}
           onPressOut={() => setModalVisible(false)}
         >
-          <View style={stylesMyaccount.modalContainer}>
-            <Text style={stylesMyaccount.modalTitle}>Change Email</Text>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Change Email</Text>
             <TextInput
-              style={stylesMyaccount.input}
+              style={styles.input}
               placeholder="New Email"
               value={newEmail}
               onChangeText={setNewEmail}
-              placeholderTextColor="white" // Set placeholder text color to white
+              placeholderTextColor="black"
             />
-            <TouchableOpacity style={stylesMyaccount.changeButton} onPress={handleChangeEmail}>
-              <Text style={stylesMyaccount.buttonText}>Submit</Text>
+            <TouchableOpacity style={styles.button} onPress={handleChangeEmail}>
+              <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
             
           </View>
         </TouchableOpacity>
       </Modal>
 
-      <TouchableOpacity style={stylesMyaccount.button} onPress={() => navigation.navigate('ChangePassword')}>
-        <Text style={stylesMyaccount.buttonText}>Change Password</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ChangePassword')}>
+        <Text style={styles.buttonText}>Change Password</Text>
       </TouchableOpacity>
-
-
-    </View>
+    </PageContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  button: button.container,
+  buttonText: button.title,
+  input: textInput,
+  modalOverlay: changeEmail.overlay,
+  modalContainer: changeEmail.container,
+  modalTitle: changeEmail.title
+})
 
 export default Account;

@@ -1,17 +1,18 @@
-import CreateAccountPage from './CreateAccountPage';
-import Login from './LoginPage';
-import Home from './HomePage';
-import Account from './MyAccount';
-import Schedules from './SavedSchedules';
-import Recommend from './RecommendPage';
-import About from './About';
+import CreateAccountPage from '../CreateAccountPage';
+import Login from '../LoginPage';
+import Home from '../HomePage';
+import Account from '../MyAccount';
+import Schedules from '../SavedSchedules';
+import Recommend from '../RecommendPage';
+import About from '../About';
 
 export default pageOptions = [
   {
     title: 'Home',
     icon: 'home',
     component: Home,
-    showTitle: true,
+    showTitle: false,
+    transparentTitle: false,
     showLoggedIn: true,
     showNotLoggedIn: true
   },
@@ -20,6 +21,7 @@ export default pageOptions = [
     icon: 'create',
     component: CreateAccountPage,
     showTitle: true,
+    transparentTitle: true,
     showLoggedIn: false,
     showLoggedOut: true
   },
@@ -28,6 +30,7 @@ export default pageOptions = [
     icon: 'arrow-forward-circle-outline',
     component: Login,
     showTitle: true,
+    transparentTitle: true,
     showLoggedIn: false,
     showLoggedOut: true
   },
@@ -36,6 +39,7 @@ export default pageOptions = [
     icon: 'person-circle',
     component: Account,
     showTitle: true,
+    transparentTitle: false,
     showLoggedIn: true,
     showLoggedOut: false
   },
@@ -44,6 +48,7 @@ export default pageOptions = [
     icon: 'list',
     component: Schedules,
     showTitle: false,
+    transparentTitle: false,
     showLoggedIn: true,
     showLoggedOut: false
   },
@@ -52,6 +57,7 @@ export default pageOptions = [
     icon: 'sparkles',
     component: Recommend,
     showTitle: false,
+    transparentTitle: false,
     showLoggedIn: true,
     showLoggedOut: true
   },
@@ -60,6 +66,7 @@ export default pageOptions = [
     icon: 'information-circle',
     component: About,
     showTitle: true,
+    transparentTitle: true,
     showLoggedIn: true,
     showLoggedOut: true
   },
