@@ -17,7 +17,7 @@ const CreateAccountPage = () => {
       process.env.EXPO_PUBLIC_SEED + password
     );
 
-    const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/create_user`, {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/create_user`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +31,6 @@ const CreateAccountPage = () => {
     console.log(await response.json());
   }
 
-  console.log('erwheiworsgewrohi')
   return (
     <View style={stylesCreateaccount.container}>
       <Text style={stylesCreateaccount.title}>Create Account</Text>

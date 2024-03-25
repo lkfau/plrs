@@ -1,14 +1,15 @@
 // LoginPage.js
-import { useState } from 'react';
-import React from 'react';
+import { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Crypto from 'expo-crypto';
 import { stylesLogin } from './Styles';
+import DataContext from './context/data-context';
+
 
 const LoginPage = () => {
   const navigation = useNavigation();
-
+  const ctx = useContext(DataContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,7 +19,7 @@ const LoginPage = () => {
       process.env.EXPO_PUBLIC_SEED + password
     );
 
-    const response = await fetch (`${process.env.EXPO_PUBLIC_SERVER_IP}/login`, {
+    const response = await fetch (`${process.env.EXPO_PUBLIC_SERVER_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +31,9 @@ const LoginPage = () => {
     });
     
     console.log(response.status);
-    console.log(await response.json());
+    if (response.status === 200) {
+      if (ctx.logIn(await response.json())) navigation.navigate('Home')
+    }
   }
 
   return (

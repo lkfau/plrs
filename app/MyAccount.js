@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { button, textInput, changeEmail } from './Styles'
 import PageContainer from './UI/PageContainer';
+import DataContext from './context/data-context';
 
 const Account = () => {
   const navigation = useNavigation();
+  const ctx = useContext(DataContext);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [newEmail, setNewEmail] = useState('');
 
@@ -63,6 +66,10 @@ const Account = () => {
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ChangePassword')}>
         <Text style={styles.buttonText}>Change Password</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={() => ctx.logOut()}>
+        <Text style={styles.buttonText}>Log Out</Text>
       </TouchableOpacity>
     </PageContainer>
   );

@@ -6,8 +6,6 @@ export const paragraph = {
   fontSize: 15.5
 }
 
-
-
 export const pageContainer = {
   flex: 1,
   alignItems: 'center',

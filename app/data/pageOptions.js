@@ -17,18 +17,18 @@ export default pageOptions = [
     showNotLoggedIn: true
   },
   {
-    title: 'Create Account',
-    icon: 'create',
-    component: CreateAccountPage,
+    title: 'Login',
+    icon: 'arrow-forward-circle-outline',
+    component: Login,
     showTitle: true,
     transparentTitle: true,
     showLoggedIn: false,
     showLoggedOut: true
   },
   {
-    title: 'Log In',
-    icon: 'arrow-forward-circle-outline',
-    component: Login,
+    title: 'Create Account',
+    icon: 'create',
+    component: CreateAccountPage,
     showTitle: true,
     transparentTitle: true,
     showLoggedIn: false,
