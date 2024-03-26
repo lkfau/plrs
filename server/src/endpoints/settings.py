@@ -63,12 +63,12 @@ def preferences():
             user_preferences = Preferences(request_data=request_data)
             save_status = save_preferences(user_id, user_preferences)
             if (save_status):
-                return 'Preferences successfully saved.', 200
+                return jsonify({'message': 'Preferences successfully saved.'}), 200
             else:
                 return 'User not found.', 404
         
         else:
-            return 'Unsupported request method.', 405
+            return jsonify({'message': 'Unsupported request method.'}), 405
         
     except Exception as error:
         print('Server error: ', error)
