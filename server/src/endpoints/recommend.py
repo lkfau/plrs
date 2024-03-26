@@ -4,7 +4,7 @@ from ..endpoints.buildings import get_destination
 from ..endpoints.feedback import get_user_feedback
 from ..database.db_connection import run_query as query
 from flask import request, Blueprint, jsonify
-from ..endpoints.login import check_session, grab_user_info
+from ..endpoints.login import check_session
 
 
 # LotRecommendation: object return type for /recommend requests
@@ -89,13 +89,15 @@ app_recommend = Blueprint('app_recommend', __name__)
 
 def recommend():
     # get parameters
-
-    guest = request.args.get('guest', default=False, type=bool)
-    if not guest:
+    guest = False
+    bearer = request.headers.get('Authorization')
+    if bearer:
         bearer = request.headers.get('Authorization')
-        if (not bearer) or (not check_session(bearer.split()[1])): 
+        userinfo = check_session(bearer.split()[1])
+        if (not bearer) or (not userinfo): 
             return jsonify({'message': 'Unauthorized'}), 401
-        userinfo = grab_user_info(bearer.split()[1])
+    else:
+        guest = True
 
     schedule_id = request.args.get('schedule_id', default=0, type=int)
     building_id = request.args.get('building_id', default=0, type=int)
@@ -128,6 +130,9 @@ def recommend():
            lot.fullness = calc_lot_fullness_float(lot.lot_id, curtime, feedback)
 
     # sort lots and call the function with user not preferring vacancy just to test
-    lots = sort_lots(lots, userinfo.distance_or_vacancy)
+    if guest:
+        lots = sort_lots(lots, 'd')
+    else:
+        lots = sort_lots(lots, userinfo.distance_or_vacancy)
 
     return jsonify(list(map(lambda lot: lot.__dict__, lots[0:3]))), 200

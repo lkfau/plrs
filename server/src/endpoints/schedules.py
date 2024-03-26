@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import request, Blueprint, jsonify
 from ..database.db_connection import run_query as query
-from ..endpoints.login import check_session, grab_user_info
+from ..endpoints.login import check_session
 
 # Schedule: object return type for /schedule requests
 class Schedule:
@@ -137,12 +137,15 @@ def schedules():
         # authenticate user:
         # 'Authorization: Bearer {{sessionID}}'
         bearer = request.headers.get('Authorization')
-        print(bearer, bearer.split()[1])
-        if (not bearer) or (not check_session(bearer.split()[1])): 
+        if bearer:
+            userinfo = check_session(bearer.split()[1])
+        else:
             return jsonify({'message': 'Unauthorized'}), 401
         
+        if (not userinfo): 
+            return jsonify({'message': 'Unauthorized'}), 401
         if request.method == 'GET':
-            user_id = request.args.get('user_id', default=0, type=int)
+            user_id = userinfo.user_id
             schedule_id = request.args.get('schedule_id', default=0, type=int)
             get_items = request.args.get('get_items', default=0, type=bool)
              # case 1: get user's schedules
@@ -163,7 +166,7 @@ def schedules():
         # case 3: add new schedule
         elif request.method == 'POST':
             request_data = request.get_json()
-            user_id = request_data['user_id']
+            user_id = userinfo.user_id
             schedule = Schedule(request_data=request_data)
             added_schedule_id = add_schedule(user_id, schedule)
             if added_schedule_id:

@@ -30,9 +30,18 @@ def login_no_session(email, pwd):
     else:
         return 'Password or email incorrect', 400
 
+
+def grab_user_info(session_id):
+    query_result = query("get_user_info.sql", [session_id], "one")
+    return user_info(query_result)
+
 def check_session(session_id):
     user_session = session_ids(session_id_value=session_id)
-    return user_session.session_id_value and not user_session.too_old()
+    if user_session.session_id_value and not user_session.too_old():
+        query_result = query("get_user_info.sql", [session_id], "one")
+        return user_info(query_result)
+    else:
+        return False
 
 
 app_login = Blueprint('app_login', __name__)

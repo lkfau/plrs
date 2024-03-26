@@ -1,7 +1,8 @@
 from datetime import datetime
 from datetime import timedelta
 from ..database.db_connection import run_query as query
-from flask import request, Blueprint
+from flask import request, Blueprint, jsonify
+from ..endpoints.login import check_session
 
 class UserFeedback:
     def __init__(self, request_data = None, query_result = None):
@@ -43,9 +44,24 @@ app_feedback = Blueprint('app_feedback', __name__)
 @app_feedback.route('/feedback', methods=['POST'])
 
 def feedback():
+
+    guest = False
+    bearer = request.headers.get('Authorization')
+    if bearer:
+        bearer = request.headers.get('Authorization')
+        userinfo = check_session(bearer.split()[1])
+        if (not bearer) or (not userinfo): 
+            return jsonify({'message': 'Unauthorized'}), 401
+    else:
+        guest = True
+    
     request_data = request.get_json()
     # get feedback from request
-    feedback = UserFeedback(request_data=request_data)
+    if guest:
+        feedback = UserFeedback(request_data=request_data)
+        feedback.user_id = 0
+    else:
+        feedback = UserFeedback(request_data=request_data)
 
     # save feedback
     query_result = save_user_feedback(feedback)
