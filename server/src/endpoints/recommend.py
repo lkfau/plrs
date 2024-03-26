@@ -4,6 +4,7 @@ from ..endpoints.buildings import get_destination
 from ..endpoints.feedback import get_user_feedback
 from ..database.db_connection import run_query as query
 from flask import request, Blueprint, jsonify
+from ..endpoints.login import check_session, grab_user_info
 
 
 # LotRecommendation: object return type for /recommend requests
@@ -55,11 +56,11 @@ def get_best_distance(dest_x1, dest_y1, dest_x2, dest_y2, lot_x1, lot_y1, lot_x2
 def strToDate(dateString): 
     return datetime.strptime(dateString, "%Y-%m-%d %H:%M:%S").date()
 
-def sort_lots(lots, user_prefers_vacancy):
+def sort_lots(lots, distance_or_vacancy):
     lots.sort(key = lambda lot : lot.feet_to_destination)
 
     for i in range(len(lots)-1):
-        if user_prefers_vacancy == 1 and lots[i].fullness > 0.4:
+        if distance_or_vacancy == 'v' and lots[i].fullness >= 0.4:
             del lots[i]
         elif lots[i].fullness > 0.7:
             del lots[i]
@@ -88,9 +89,19 @@ app_recommend = Blueprint('app_recommend', __name__)
 
 def recommend():
     # get parameters
+
+    guest = request.args.get('guest', default=False, type=bool)
+    if not guest:
+        bearer = request.headers.get('Authorization')
+        if (not bearer) or (not check_session(bearer.split()[1])): 
+            return jsonify({'message': 'Unauthorized'}), 401
+        userinfo = grab_user_info(bearer.split()[1])
+
     schedule_id = request.args.get('schedule_id', default=0, type=int)
     building_id = request.args.get('building_id', default=0, type=int)
     permit_type_id = request.args.get('permit_type_id', default=0, type=int)
+    if guest:
+        permit_type_id = 4
     curtime = request.args.get('test_date', default=datetime.now(), type=strToDate)
     # get necessary data
     lots = get_parking_lots(permit_type_id)
@@ -117,6 +128,6 @@ def recommend():
            lot.fullness = calc_lot_fullness_float(lot.lot_id, curtime, feedback)
 
     # sort lots and call the function with user not preferring vacancy just to test
-    lots = sort_lots(lots, 0)
+    lots = sort_lots(lots, userinfo.distance_or_vacancy)
 
     return jsonify(list(map(lambda lot: lot.__dict__, lots[0:3]))), 200
