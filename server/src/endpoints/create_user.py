@@ -15,12 +15,7 @@ def create_user():
     if email == '' or pwd == '':
         return 'Error; New user must have an email and password', 404
     pwd = custom_hash(pwd)
-    email_verified = False
-    max_walking_distance = 10
-    multiple_parks = False
-    first_or_last_location = False
-    user = [email, email_verified, max_walking_distance, multiple_parks, first_or_last_location, pwd]
-    #email, email_verified, max_walking_distance, multiple_parks, first_or_last_location, password_hash
+    user = [email, pwd]
     query("create_user.sql", user)
     return 'Created new user', 200
 

@@ -3,6 +3,17 @@ from flask_cors import cross_origin
 from ..database.db_connection import run_query as query
 from ..security.crypt_functions import session_ids, custom_hash
 
+class user_info:
+    def __init__(self, query_result):
+        self.user_id = query_result[0]
+        self.email_verified = query_result[1]
+        self.distance_or_vacancy = query_result[2]
+        self.last_schedule_id = query_result[3]
+        self.first_or_last_location = query_result[4]
+
+def grab_user_info(session_id):
+    query_result = query("get_user_info.sql", [session_id], "one")
+    return user_info(query_result)
 
 def login_no_session(email, pwd):
     
@@ -22,6 +33,7 @@ def login_no_session(email, pwd):
 def check_session(session_id):
     user_session = session_ids(session_id_value=session_id)
     return user_session.session_id_value and not user_session.too_old()
+
 
 app_login = Blueprint('app_login', __name__)
 @app_login.route('/login', methods=['POST'])

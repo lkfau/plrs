@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import request, Blueprint, jsonify
 from ..database.db_connection import run_query as query
-from ..endpoints.login import check_session
+from ..endpoints.login import check_session, grab_user_info
 
 # Schedule: object return type for /schedule requests
 class Schedule:

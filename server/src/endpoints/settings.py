@@ -1,5 +1,6 @@
 from flask import request, Blueprint, jsonify
 from ..database.db_connection import run_query as query
+from ..endpoints.login import check_session, grab_user_info
 
 # Preferences: object return type for /preferences requests
 class Preferences:
@@ -42,17 +43,22 @@ app_settings = Blueprint('app_settings', __name__)
 
 # /preferences
 def preferences():
+
+    bearer = request.headers.get('Authorization')
+    if (not bearer) or (not check_session(bearer.split()[1])): 
+        return jsonify({'message': 'Unauthorized'}), 401
+    userinfo = grab_user_info(bearer.split()[1])
     try:
 
         # case 1: get user preferences
         if request.method == 'GET':
-            user_id = request.args.get('user_id', default=0, type=int)
+            user_id = userinfo.user_id
             user_preferences = get_preferences(user_id)
             return jsonify(user_preferences.__dict__), 200
         
         # case 2: save user preferences
         elif request.method == 'POST':
-            user_id = request.args.get('user_id', default=0, type=int)
+            user_id = userinfo.user_id
             request_data = request.get_json()
             user_preferences = Preferences(request_data=request_data)
             save_status = save_preferences(user_id, user_preferences)
