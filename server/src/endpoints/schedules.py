@@ -159,9 +159,9 @@ def schedules():
             schedule = Schedule(request_data=request_data)
             added_schedule_id = add_schedule(user_id, schedule)
             if added_schedule_id:
-                return jsonify({'message': 'Schedule successfully added.', 'schedule_id': added_schedule_id}), 200
+                return 'Schedule successfully added.', 200
             else:
-                return jsonify({'message': 'Schedule add failed.'}), 500
+                return 'Schedule add failed.', 500
             
         # case 4: update existing schedule
         elif request.method == 'PUT':
@@ -170,9 +170,9 @@ def schedules():
             schedule = Schedule(request_data=request_data)
             update_status = update_schedule(schedule_id, schedule)
             if update_status:
-                return jsonify({'message': 'Schedule successfully updated.'}), 200
+                return 'Schedule successfully updated.', 200
             else:
-                return jsonify({'message': 'Schedule update failed.'}), 500 
+                return 'Schedule update failed.', 500 
             
         # case 5: delete existing schedule
         elif request.method == 'DELETE':
