@@ -12,7 +12,6 @@ class session_ids:
             self.session_id_value, self.session_id_bday = self.generate_session_id()
         else:
             self.session_id_value = session_id_value
-            print(session_id_value)
             self.session_id_bday = self.get_session_id_bday_from_db()
 
     def generate_session_id(self):
@@ -23,17 +22,18 @@ class session_ids:
     
     def get_session_id_bday_from_db(self):
         query_result = query('get_session_age.sql', [self.session_id_value], "one")
-        return query_result[0]
+        if query_result:
+            return query_result[0]
+        else:
+            return datetime(1, 1, 1)
     
     def too_old(self):
         currttime = datetime.now()
         # Calculate the difference between current time and session_id_bday
         diff = currttime - self.session_id_bday
+
         # Check if the difference is more than 3 days
-        if diff.total_seconds() > 259200:
-            return True
-        else:
-            return False
+        return abs(diff.total_seconds()) > 259200
         
     def save_session(self, pwd):
         query('save_session_id.sql', [self.session_id_value, self.session_id_bday, pwd])

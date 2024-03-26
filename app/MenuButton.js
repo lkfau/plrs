@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Text, Animated, View, Modal, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { stylesMenubutton } from './Styles';
 
 const MenuButton = ({ options }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -30,7 +31,7 @@ const MenuButton = ({ options }) => {
 
   return (
     <View>
-      <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
+      <TouchableOpacity onPress={() => setModalVisible(true)} style={stylesMenubutton.button}>
       <Ionicons name={modalVisible ? 'close' : 'menu-outline'} size={32} />
       </TouchableOpacity>
       <Modal
@@ -39,15 +40,15 @@ const MenuButton = ({ options }) => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <TouchableOpacity style={styles.close} onPress={() => setModalVisible(false)}></TouchableOpacity>
-        <Animated.View style={[styles.modalContainer, { transform: [{ translateY }] }]}>
+        <TouchableOpacity style={stylesMenubutton.close} onPress={() => setModalVisible(false)}></TouchableOpacity>
+        <Animated.View style={[stylesMenubutton.modalContainer, { transform: [{ translateY }] }]}>
           {options.map((option, index) => (
             <TouchableOpacity
               key={index}
-              style={[styles.option, index < options.length-1 && styles.optionBorder]}
+              style={[stylesMenubutton.option, index < options.length-1 && stylesMenubutton.optionBorder]}
               onPress={() => handleOptionPress(option.screenName)}
             >
-              <Text style={styles.optionText}>{option.title}</Text>
+              <Text style={stylesMenubutton.optionText}>{option.title}</Text>
             </TouchableOpacity>
           ))}
         </Animated.View>
@@ -55,34 +56,5 @@ const MenuButton = ({ options }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    marginRight: 10,
-  },
-  modalContainer: {
-    marginTop: 40,
-    backgroundColor: '#fff',
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    elevation: 5,
-  },
-  option: {
-    padding: 10,
-  },
-  optionBorder: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  optionText: {
-    fontSize: 20
-  },
-  close: {
-    width: 40,
-    marginLeft: 'auto',
-    height: 60,
-    elevation: 100
-  }
-});
 
 export default MenuButton;

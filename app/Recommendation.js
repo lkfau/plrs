@@ -1,134 +1,71 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, Button, Linking } from 'react-native';
+import { useState, useMemo } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Linking, Platform } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { useNavigation } from '@react-navigation/native';
+import FeedbackModal from './FeedbackModal';
+import { stylesRecommendation } from './Styles';
 
-const Recommendation = () => {
+const initialRegion = {
+  latitude: 26.371449,
+  longitude: -80.102117,
+  latitudeDelta: 0.024,
+  longitudeDelta: 0.024
+}; // Set initial region to a random location
+
+const fullnessOptions = [
+  { text: 'Vacant', color: 'green', threshold: 0.25},
+  { text: 'Most likely vacant', color: 'gold', threshold: 0.5},
+  { text: 'Most likely full', color: 'orange', threshold: 0.75},
+  { text: 'Full', color: 'red', threshold: 1},
+];
+
+const Recommendation = ({ recommendation }) => {
+
+
   const [showModal, setShowModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [destination, setDestination] = useState(null);
-  const initialRegion = {
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  }; // Set initial region to a random location
 
-  const handleParkedButton = () => {
-    setShowModal(true);
-  };
+  const destination = useMemo(() => ({
+    latitude: parseFloat(recommendation.latitude),
+    longitude: parseFloat(recommendation.longitude),
+    latitudeDelta: 0.024,
+    longitudeDelta: 0.024
+  }), [recommendation.latitude, recommendation.longitude]);
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
-  const handleNextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
-  const handleReenter = () => {
-    // Handle navigation to the schedules page
-  };
-
-  const handleGoToRecommendation1 = () => {
-    setCurrentPage(1);
-  };
-
-  const handleGetDirections = () => {
+  const openMapHandler = () => {
     // Open Apple Maps with directions from current location to the destination
-    const destinationURL = `http://maps.apple.com/?daddr=${destination.latitude},${destination.longitude}`;
-    Linking.openURL(destinationURL);
-  };
-
-  const getRandomLocation = () => {
-    // Function to generate random latitude and longitude for destination
-    const randomLatitude = 37.78825 + Math.random() * (0.1);
-    const randomLongitude = -122.4324 + Math.random() * (0.1);
-    return { latitude: randomLatitude, longitude: randomLongitude };
-  };
-
-  const renderRecommendationContent = () => {
-    if (currentPage <= 3) {
-      return (
-        <View style={styles.recommendationContent}>
-          <Text style={styles.lotText}>Lot {currentPage}</Text>
-          <View style={styles.mapContainer}>
-            <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
-              {destination && (
-                <Marker coordinate={destination} title="Destination" />
-              )}
-            </MapView>
-          </View>
-          <Text style={styles.statusText}>Most Likely Full</Text>
-          <TouchableOpacity style={styles.button} onPress={handleNextPage}>
-            <Text style={styles.buttonText}>Get New Recommendation</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleParkedButton}>
-            <Text style={styles.iparkedButton}>I Parked</Text>
-          </TouchableOpacity>
-          {destination && (
-            <TouchableOpacity style={styles.button} onPress={handleGetDirections}>
-              <Text style={styles.buttonText}>Get Directions from Me</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.recommendationContent}>
-          <Text style={styles.lotText}>Sorry, we are out of recommendations.</Text>
-          <TouchableOpacity style={styles.button} onPress={handleGoToRecommendation1}>
-            <Text style={styles.buttonText}>Go back to recommendation 1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleReenter}>
-            <Text style={styles.buttonText}>Reenter</Text>
-          </TouchableOpacity>
-        </View>
-      );
+    let destinationURL = null;
+    if (Platform.OS == 'ios') {
+      destinationURL = `http://maps.apple.com/?daddr=${destination.latitude},${destination.longitude}`;
+    } else if (Platform.OS === 'android') {
+      destinationURL = `https://www.google.com/maps?q=${destination.latitude},${destination.longitude}`;
     }
+    if (destinationURL) Linking.openURL(destinationURL);
   };
-
-  const handleSetDestination = () => {
-    setDestination(getRandomLocation());
-  };
+  console.log(recommendation)
+  const fullnessOption = useMemo(() => fullnessOptions.find(option => recommendation.fullness < option.threshold), [recommendation.fullness]);
 
   return (
-    <View style={styles.container}>
-      {renderRecommendationContent()}
-      {currentPage <= 3 && (
-        <TouchableOpacity style={styles.arrowButton} onPress={handleNextPage}>
-          <Text style={styles.arrowText}>➜</Text>
-        </TouchableOpacity>
-      )}
-      {/* Modal for "I Parked" button */}
-      <Modal visible={showModal} transparent animationType="slide">
-        <View style={styles.modalBackground}>
-          {/* Pop-up screen for "I Parked" button */}
-          <View style={styles.popupContainer}>
-            <Text style={styles.popupText}>Is the parking lot fully occupied?</Text>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={[styles.modalButton, styles.greenButton]}>
-                <Text style={styles.buttonText}>Yes</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.modalButton, styles.redButton]}>
-                <Text style={styles.buttonText}>No</Text>
-              </TouchableOpacity>
-            </View>
-            <Button title="Close" onPress={handleCloseModal} />
-          </View>
+    <>
+      <View style={styles.recommendationContent}>
+        <Text style={styles.lotText}>{recommendation.lot_name}</Text>
+        <View style={styles.mapContainer}>
+          <MapView style={{ flex: 1 }} initialRegion={initialRegion}>      
+            <Marker coordinate={destination} title={recommendation.lot_name} />        
+          </MapView>
         </View>
-      </Modal>
-    </View>
+        <Text style={[styles.statusText, {color: fullnessOption.color}]}>{fullnessOption.text}</Text>
+        <TouchableOpacity style={styles.button} onPress={openMapHandler}>
+          <Text style={styles.buttonText}>Get Directions</Text>
+        </TouchableOpacity>    
+        <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)}>
+          <Text style={styles.iparkedButton}>I Parked</Text>
+        </TouchableOpacity>    
+      </View>
+      <FeedbackModal lot_id={recommendation.lot_id} visible={showModal} onHide={() => setShowModal(false)} />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff', // Set background color here
-  },
   lotText: {
     fontSize: 24,
     marginBottom: 20,
@@ -142,17 +79,9 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 18,
     marginBottom: 10,
-    color: 'red',
     textAlign: 'center',
   },
-  button: {
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    marginBottom: 10,
-    backgroundColor: 'transparent', // Remove background color
-    alignSelf: 'center',
-  },
+  
   iparkedButton: {
     backgroundColor: 'black',
     color: 'white',
@@ -207,16 +136,7 @@ const styles = StyleSheet.create({
   },
   redButton: {
     backgroundColor: 'red',
-  },
-  arrowButton: {
-    position: 'absolute',
-    right: 20,
-    top: '50%',
-    transform: [{ translateY: -12 }],
-  },
-  arrowText: {
-    fontSize: 30,
-  },
+  }
 });
 
 export default Recommendation;
