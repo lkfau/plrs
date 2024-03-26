@@ -8,7 +8,7 @@ class UserFeedback:
     def __init__(self, request_data = None, query_result = None):
         if (request_data != None):
             self.lot_id = request_data['lot_id']
-            self.user_id = request_data['user_id']
+            self.user_id = 0
             self.lot_is_full = request_data['lot_is_full']
         elif (query_result != None):
             self.lot_id = query_result[0]
@@ -62,6 +62,7 @@ def feedback():
         feedback.user_id = 0
     else:
         feedback = UserFeedback(request_data=request_data)
+        feedback.user_id = userinfo.user_id
 
     # save feedback
     query_result = save_user_feedback(feedback)
