@@ -24,7 +24,7 @@ def login_no_session(email, pwd):
     if checkpwd[0] == pwd:   
         #create and save a session id then pass back the session id and user id
         user_session = session_ids()
-        user_session.save_session(pwd)
+        user_session.save_session(email, pwd)
 
         return jsonify(user_session.session_id_value), 200
     else:

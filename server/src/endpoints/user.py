@@ -5,8 +5,8 @@ from ..security.crypt_functions import session_ids, custom_hash
 
 
 
-app_create_user = Blueprint('app_create_user', __name__)
-@app_create_user.route('/create_user', methods=['POST'])
+app_user = Blueprint('app_user', __name__)
+@app_user.route('/create_user', methods=['POST'])
 @cross_origin()
 def create_user():
     request_data = request.get_json()

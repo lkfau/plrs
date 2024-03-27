@@ -35,8 +35,8 @@ class session_ids:
         # Check if the difference is more than 3 days
         return abs(diff.total_seconds()) > 259200
         
-    def save_session(self, pwd):
-        query('save_session_id.sql', [self.session_id_value, self.session_id_bday, pwd])
+    def save_session(self, email, pwd):
+        query('save_session_id.sql', [self.session_id_value, self.session_id_bday, email, pwd])
 
 
 def read_seed(file_path):

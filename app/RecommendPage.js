@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useCallback, useContext, useState, useMemo } from 'react';
 import { StyleSheet, SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect  } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import RecommendScheduleSelector from './RecommendScheduleSelector';
@@ -8,6 +8,7 @@ import RecommendBuildingSelector from './RecommendBuildingSelector';
 import RecommendationList from './RecommendationList';
 import { stylesRecommend } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
+import DataContext from './context/data-context';
 
 const RecommendPage = () => {
   const [recoSchedule, setRecoSchedule] = useState(null);
@@ -46,10 +47,11 @@ const RecommendPage = () => {
 }
 
 const GetRecommendation = ({ onRecommend }) => {
+  const ctx = useContext(DataContext);
 
   // React hooks for managing state
-  const [schedules, setSchedules] = useState(null);// State to store schedules data
-  const [buildings, setBuildings] = useState(null);// State to store buildings data
+  const [schedules, setSchedules] = useState(null); // State to store schedules data
+  const [buildings, setBuildings] = useState(null); // State to store buildings data
   const [currentTab, setCurrentTab] = useState('Use Building');
 
   const [selectedSchedule, setSelectedSchedule] = useState(null);
@@ -65,8 +67,13 @@ const GetRecommendation = ({ onRecommend }) => {
   //Fetching schedule/user data
   async function fetchData() {
     try {
-      const scheduleResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules?user_id=1`);// Fetch schedules data
-      const buildingResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/buildings`);// Fetch buildings data
+      // Fetch schedules data
+      const scheduleResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules`, {
+        headers: {Authorization: 'Bearer ' + ctx.getSessionID()}
+      });
+
+      // Fetch buildings data
+      const buildingResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/buildings`);
 
       // Check if both responses are successful
       if (!scheduleResponse.ok || !buildingResponse.ok)
@@ -94,10 +101,10 @@ const GetRecommendation = ({ onRecommend }) => {
       onRecommend(selectedSchedule, null);
   }
 
-  // useEffect hook to fetch data when the component mounts
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useFocusEffect hook to fetch data when the screen shows
+  useFocusEffect(useCallback(() => { 
+    fetchData(); 
+  }, [])); 
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
