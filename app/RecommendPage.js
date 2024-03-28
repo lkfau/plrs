@@ -9,6 +9,7 @@ import RecommendationList from './RecommendationList';
 import { stylesRecommend } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import DataContext from './context/data-context';
+import { button } from './Styles';
 
 const RecommendPage = () => {
   const [recoSchedule, setRecoSchedule] = useState(null);
@@ -147,7 +148,7 @@ const GetRecommendation = ({ onRecommend }) => {
       <View style={[stylesRecommend.container, { justifyContent: 'center' }]}>
         <TouchableOpacity 
           disabled={recommendDisabled} 
-          style={[stylesRecommend.buttonRecommend, recommendDisabled ? stylesRecommend.buttonDisabled :  {}]}
+          style={button.containerOutline}
           onPress={recommendHandler}
         >
           <Text style={styles.buttonText}>Get Recommendation</Text>

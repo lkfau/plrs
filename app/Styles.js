@@ -24,7 +24,7 @@ export const pageHeader = {
 export const button = {
   containerOutline: {
     backgroundColor: '#0073ef',
-    width: '100%',
+    width: '90%',
     paddingVertical: 20,
     paddingHorizontal: 30,
     marginTop: 20,

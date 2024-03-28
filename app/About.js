@@ -27,7 +27,7 @@ const About = () => {
             <Text style={styles.paragraph}>About you and contact information</Text>  
           </View>
           <View style={styles.teamMember}>
-            <Image style={styles.portrait} source={require('./assets/userPlaceholder.png')} />
+            <Image style={styles.portrait} source={require('./assets/headshotSadie.jpg')} />
             <Text style={styles.paragraph}>About you and contact information</Text>
           </View>
           <View style={styles.teamMember}>
