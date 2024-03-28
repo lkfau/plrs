@@ -13,7 +13,6 @@ const FeedbackModal = ({ lot_id, visible, onHide }) => {
       },
       body: JSON.stringify({
         lot_id: lot_id,
-        user_id: 1,
         lot_is_full: lotIsFull
       }),
     });

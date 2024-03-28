@@ -27,7 +27,7 @@ const Schedules = () => {
   async function getScheduleData() {
     setLoading(true);
     
-    const scheduleResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules?get_items=true&user_id=1`, {
+    const scheduleResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules?get_items=true`, {
       headers: {Authorization: 'Bearer ' + ctx.getSessionID()}
     });
     if (scheduleResponse.ok) {
@@ -42,11 +42,8 @@ const Schedules = () => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules`, {
         method: selectedSchedule.schedule_id ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: 1,
-          ...selectedSchedule
-        }),
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ctx.getSessionID() },
+        body: JSON.stringify(selectedSchedule),
       });
 
       if (!response.ok) throw new Error('Failed to save schedule');
