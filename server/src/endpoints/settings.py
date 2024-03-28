@@ -31,11 +31,9 @@ def preferences():
     bearer = request.headers.get('Authorization')
     if bearer:
         userinfo = check_session(bearer.split()[1])
-    else:
+    if (not bearer or not userinfo): 
         return jsonify({'message': 'Unauthorized'}), 401
     
-    if (not userinfo): 
-        return jsonify({'message': 'Unauthorized'}), 401
     try:
 
         # case 1: get user preferences

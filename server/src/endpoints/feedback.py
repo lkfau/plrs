@@ -1,6 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
-from ..database.db_connection import run_query as query
+from ..database.db_connection import run_query as query, run_scalar as scalar
 from flask import request, Blueprint, jsonify
 from ..endpoints.login import check_session
 
@@ -28,15 +28,14 @@ def get_user_feedback(max_minutes_ago):
 
 
 def save_user_feedback(feedback):
-
-    #run query
-    user_feedback_result = query("add_user_feedback.sql", [
-        feedback.lot_id, 
+    #run scalar
+    user_feedback_result = scalar("add_user_feedback", [
         feedback.user_id, 
+        feedback.lot_id, 
         feedback.lot_is_full,
         datetime.now()
-    ])
-    return user_feedback_result
+    ], "one")
+    return user_feedback_result[0] == False
 
 
 

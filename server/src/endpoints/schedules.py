@@ -139,11 +139,9 @@ def schedules():
         bearer = request.headers.get('Authorization')
         if bearer:
             userinfo = check_session(bearer.split()[1])
-        else:
+        if (not bearer or not userinfo): 
             return jsonify({'message': 'Unauthorized'}), 401
         
-        if (not userinfo): 
-            return jsonify({'message': 'Unauthorized'}), 401
         if request.method == 'GET':
             user_id = userinfo.user_id
             schedule_id = request.args.get('schedule_id', default=0, type=int)

@@ -58,4 +58,41 @@ def run_query(query_name, query_params, return_type='none', execute_many=False):
             conn.close()
 
         # return query results
+        return result
+
+# run_scalar(): runs locally stored SQL query on database, 
+#               replaces query parameters with query_params, 
+#               returns output
+def run_scalar(function_name, function_params, return_type='none'):
+    conn = None
+    result = None
+    try:
+        #pull connection parameters from config
+        connection_params = config()
+
+        # initialize database connection
+        conn = psycopg2.connect(**connection_params) 
+        cur = conn.cursor()
+        
+        cur.callproc(function_name, function_params)
+        conn.commit()
+
+        # return one or all rows based on fetch_all
+        match return_type:
+            case 'one':
+                result = cur.fetchone()
+            case 'all':
+                result = cur.fetchall()
+            case 'none':
+                result = True
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        # log error to console
+        print('PostgreSQL Error:', error, 'End Error') 
+    finally:
+        # close connection if it was created
+        if conn is not None:
+            conn.close()
+
+        # return query results
         return result 
