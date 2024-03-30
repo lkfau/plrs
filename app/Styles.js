@@ -28,6 +28,7 @@ export const button = {
     paddingVertical: 20,
     paddingHorizontal: 30,
     marginTop: 20,
+    marginLeft: 20,
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#fff',
@@ -234,7 +235,7 @@ export const stylesRecommend = StyleSheet.create({
       paddingVertical: 15,
       paddingHorizontal: 30,
       marginTop: 20,
-      borderWidth: 1,
+      borderWidth: 2,
       borderRadius: 10, 
       borderColor: '#007bff'
     },
@@ -262,7 +263,7 @@ export const stylesRecommend = StyleSheet.create({
     },
     buttonSelected: {
       backgroundColor: '#0073ef',      
-      borderWidth: 1,
+      borderWidth: 2,
       borderRadius: 10, 
       borderColor: 'white'
     },
@@ -286,19 +287,57 @@ export const stylesRecommendation = StyleSheet.create({
     },
     lotText: {
       fontSize: 24,
-      marginBottom: 20,
+      marginTop: 20,
       textAlign: 'center',
+      fontWeight: 'bold',
+      marginBottom: 20
+    },
+    buttonGetDirections: {
+      position: 'absolute',
+      bottom: 5,
+      right: 0,
+      backgroundColor: 'transparent', // Remove background color
+      paddingVertical: 5,
+      paddingHorizontal: 5,
     },
     mapContainer: {
-      width: 350,
-      height: 350,
+      width: 300,
+      height: 300,
       marginBottom: 20,
+      marginLeft: 30
+    },
+    roundedMapContainer: {
+      borderRadius: 15,
+      overflow: 'hidden',
+      alignContent: 'center',
+      marginTop: 20
+    },
+    map: {
+      flex: 1,
+    },
+    greaterMapContainer: {
+      backgroundColor: 'white',
+      paddingBottom: 10,
+      marginBottom: 10,
+      borderRadius: 20
     },
     statusText: {
       fontSize: 18,
       marginBottom: 10,
       color: 'red',
-      textAlign: 'center',
+      marginLeft: 60,
+      fontWeight: 'bold'
+    },
+    indicatorContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    distance: {
+      color: 'black',
+      marginLeft: 130,
+      fontWeight: 'bold',
+      fontSize: 18,
+      marginBottom: 10
     },
     button: {
       paddingVertical: 15,
@@ -308,19 +347,12 @@ export const stylesRecommendation = StyleSheet.create({
       backgroundColor: 'transparent', // Remove background color
       alignSelf: 'center',
     },
-    iparkedButton: {
-      backgroundColor: 'black',
-      color: 'white',
-      paddingVertical: 15,
-      paddingHorizontal: 30,
-      borderRadius: 10,
-      marginBottom: 10,
-    },
     buttonText: {
-      color: 'black',
-      fontSize: 18,
+      color: '#0073ef',
+      fontSize: 15,
       textAlign: 'center',
       textDecorationLine: 'underline',
+      fontWeight: 'bold'
     },
     modalBackground: {
       flex: 1,

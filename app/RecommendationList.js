@@ -3,7 +3,7 @@ import { View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Recommendation from './Recommendation';
-import { stylesRecommendation } from './Styles';
+import { stylesRecommendation, button } from './Styles';
 const RecommendationList = ({ schedule_id, building_id }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [recommendations, setRecommendations] = useState(null);
@@ -49,11 +49,11 @@ const RecommendationList = ({ schedule_id, building_id }) => {
             ) : (
               <>
                 <Text style={stylesRecommendation.lotText}>Sorry, out of recommendations.</Text>
-                <TouchableOpacity style={stylesRecommendation.buttonLink} onPress={() => setCurrentPage(0)}>
-                  <Text style={stylesRecommendation.buttonLinkText}>Return to first recommendation</Text>
+                <TouchableOpacity style={button.containerOutline} onPress={() => setCurrentPage(0)}>
+                  <Text style={button.title}>Back to Beginning</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={stylesRecommendation.buttonLink} onPress={getNewRecommendationHandler}>
-                  <Text style={stylesRecommendation.buttonLinkText}>Get new recommendations</Text>
+                <TouchableOpacity style={button.containerOutline} onPress={getNewRecommendationHandler}>
+                  <Text style={button.title}>Start Over</Text>
                 </TouchableOpacity>
               </>
             )}
