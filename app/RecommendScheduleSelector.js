@@ -14,17 +14,15 @@ const RecommendScheduleSelector = ({ schedules, onSelect }) => {
   }
 
   return (
-    <View>
-      <View>
-        <LinearGradient
-          colors={['#ae3b54', '#284b85']}
-          style={StyleSheet.absoluteFill}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-        />
+    <LinearGradient
+      colors={['#ae3b54', '#284b85']}
+      style={stylesScheduleselector.container}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+    >
+      <View style={stylesScheduleselector.dropdownContainer}>
         <Text style={stylesScheduleselector.txt}>Select saved schedule</Text>
-      </View>
-      <Dropdown
+        <Dropdown
         style={stylesScheduleselector.select}
         placeholderStyle={stylesScheduleselector.dropdownText}
         selectedTextStyle={stylesScheduleselector.dropdownText}
@@ -38,23 +36,10 @@ const RecommendScheduleSelector = ({ schedules, onSelect }) => {
         searchPlaceholder="Search..."
         value={selectedSchedule}
         onChange={item => selectScheduleHandler(item.schedule_id)}
-      />
+      />  
     </View>
+    </LinearGradient>
   );
 }
-
-const styles = StyleSheet.create({
-  select: {
-    borderColor: 'gray',
-    backgroundColor: 'white',
-    marginHorizontal: 20,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 8,
-    padding: 8,
-  },
-  dropdownText: {
-    fontSize: 16,
-  }
-});
   
 export default RecommendScheduleSelector

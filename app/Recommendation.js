@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Linking, Platform } from 'rea
 import MapView, { Marker } from 'react-native-maps';
 import FeedbackModal from './FeedbackModal';
 import { stylesRecommendation } from './Styles';
+import { button } from './Styles';
 
 const initialRegion = {
   latitude: 26.371449,

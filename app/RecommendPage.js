@@ -55,6 +55,12 @@ const GetRecommendation = ({ onRecommend }) => {
   const [buildings, setBuildings] = useState(null); // State to store buildings data
   const [currentTab, setCurrentTab] = useState('Use Building');
 
+  const [selectedButton, setSelectedButton] = useState(null);
+
+  const handlePress = (buttonName) => {
+    setSelectedButton(buttonName);
+  };
+
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [selectedBuilding, setSelectedBuilding] = useState(null);
 
@@ -115,7 +121,7 @@ const GetRecommendation = ({ onRecommend }) => {
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
           />
-      <View style={{ height: "25%" }}>
+      <View style={{ height: "25%" }}>      
         {schedules && buildings &&
           <Tab.Navigator
           
@@ -134,17 +140,42 @@ const GetRecommendation = ({ onRecommend }) => {
               children={() => <RecommendBuildingSelector buildings={buildings} onSelect={setSelectedBuilding} />}>
             </Tab.Screen>
           </Tab.Navigator>}
-      </View>
+      </View>   
       <Text style={stylesRecommend.txt}>Would you like to park near your first or last location?</Text>
       <View style={stylesRecommend.container}>
-        <TouchableOpacity style={stylesRecommend.button}>
-          <Text style={stylesRecommend.buttonText}>First Location</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={stylesRecommend.button}>
-          <Text style={stylesRecommend.buttonText}>Last Location</Text>
-        </TouchableOpacity>
-      </View>
-
+      <TouchableOpacity
+        style={[
+          stylesRecommend.button,
+          selectedButton === 'first' && stylesRecommend.buttonSelected,
+        ]}
+        onPress={() => handlePress('first')}
+      >
+        <Text
+          style={[
+            stylesRecommend.buttonText,
+            selectedButton === 'first' && stylesRecommend.buttonTextSelected,
+          ]}
+        >
+          First Location
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[
+          stylesRecommend.button,
+          selectedButton === 'last' && stylesRecommend.buttonSelected,
+        ]}
+        onPress={() => handlePress('last')}
+      >
+        <Text
+          style={[
+            stylesRecommend.buttonText,
+            selectedButton === 'last' && stylesRecommend.buttonTextSelected,
+          ]}
+        >
+          Last Location
+        </Text>
+      </TouchableOpacity>
+  </View>
       <View style={[stylesRecommend.container, { justifyContent: 'center' }]}>
         <TouchableOpacity 
           disabled={recommendDisabled} 
@@ -165,8 +196,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     borderRadius: 10,
     marginTop: 20,
-  },
-  
+  },  
   buttonText: {
     color: '#fff',
     fontSize: 18,

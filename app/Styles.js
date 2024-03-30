@@ -53,6 +53,9 @@ export const button = {
     fontSize: 14,
     textAlign: 'center',
     marginTop: 5
+  },
+  submit: {
+    justifyContent: 'center'
   }
 }
 
@@ -234,21 +237,19 @@ export const stylesRecommend = StyleSheet.create({
       fontWeight: 'bold',
     },
     button: {
-      backgroundColor: '#0073ef',
+      backgroundColor: 'white',
       paddingVertical: 15,
       paddingHorizontal: 30,
       marginTop: 20,
       borderWidth: 1,
-      borderColor: "#ffffff",
+      borderRadius: 10, 
+      borderColor: '#007bff'
     },
     buttonText: {
-        color: '#fff',
+        color: '#007bff',
         fontSize: 18,
         textAlign: 'center',
         fontWeight: 'bold',
-    },
-    selectedButton: {
-      backgroundColor: '#00f'
     },
     container: {
       flexDirection: 'row', // to arrange elements horizontally
@@ -265,6 +266,15 @@ export const stylesRecommend = StyleSheet.create({
     },
     buttonDisabled: {
       backgroundColor: '#55abff'
+    },
+    buttonSelected: {
+      backgroundColor: '#0073ef',      
+      borderWidth: 1,
+      borderRadius: 10, 
+      borderColor: 'white'
+    },
+    buttonTextSelected: {
+      color: 'white',
     },
 });
 
@@ -369,7 +379,7 @@ export const stylesRecommendbuildingselector = StyleSheet.create({
     txt: {
       textAlign: 'center', 
       padding: 25, 
-      color: '#ffffff',
+      color: 'white',
       fontWeight: 'bold',
     },
     select: {
@@ -384,22 +394,35 @@ export const stylesRecommendbuildingselector = StyleSheet.create({
 });
 
 export const stylesScheduleselector = StyleSheet.create({
-    txt: {
+  container:
+  {
+    flex: 1
+  },
+  txt: {
     textAlign: 'center', 
     padding: 25, 
     color: '#ffffff',
     fontWeight: 'bold',
-    },
-    select: {
-      borderColor: 'gray',
-      borderWidth: StyleSheet.hairlineWidth,
-      borderRadius: 8,
-      padding: 8,
-    },
-    dropdownText: {
-      fontSize: 16,
-    }
+  },
+  select: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+  },
+  dropdownText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  dropdownContainer: {
+    paddingHorizontal: 16, // Add padding to the left and right
+    paddingTop: 10, // Add top padding if necessary
+    paddingBottom: 10,
+  },
 });
+
 
 export const stylesScheduleeditor = StyleSheet.create({
     container: {
