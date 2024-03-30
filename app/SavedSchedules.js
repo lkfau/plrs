@@ -166,17 +166,12 @@ const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEdi
         {schedules.map((schedule) => (
           <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleEditor} onDelete={deleteSchedule} />
         ))}
-        <TouchableOpacity style={styles.addButton} onPress={createSchedule}>
-          <Text style={styles.addButtonText}>Create Schedule</Text>
+        <TouchableOpacity style={button.containerOutline} onPress={createSchedule}>
+          <Text style={button.title}>Create Schedule</Text>
         </TouchableOpacity>
       </ScrollView>
     </PageContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  addButton: button.containerOutline,
-  addButtonText: button.title,
-});
 
 export default Schedules;

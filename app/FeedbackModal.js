@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native'; 
+import { feedback } from './Styles';
+
 const FeedbackModal = ({ lot_id, visible, onHide }) => {
 
   const navigation = useNavigation();
@@ -23,21 +25,21 @@ const FeedbackModal = ({ lot_id, visible, onHide }) => {
 
   return (
     <Modal visible={visible} transparent animationType="fade">
-      <View style={styles.modalBackground}>
-        <View style={styles.popupContainer}>
-          <View style={styles.header}>
-            <Text style={styles.popupTitle}>Feedback</Text>
-            <TouchableOpacity style={styles.closeButton} onPress={onHide}>
+      <View style={feedback.modalBackground}>
+        <View style={feedback.popupContainer}>
+          <View style={feedback.header}>
+            <Text style={feedback.popupTitle}>Feedback</Text>
+            <TouchableOpacity style={feedback.closeButton} onPress={onHide}>
               <Ionicons color={'rgb(100, 100, 100)'} name={'close'} size={24} />
             </TouchableOpacity>
           </View>
-          <Text style={styles.popupText}>Is the parking lot fully occupied?</Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.modalButton, styles.greenButton]}>
-              <Text style={styles.buttonText} onPress={() => submitFeedback(false)}>Not full</Text>
+          <Text style={feedback.popupText}>Is the parking lot fully occupied?</Text>
+          <View style={feedback.buttonContainer}>
+            <TouchableOpacity style={[feedback.modalButton, feedback.greenButton]}>
+              <Text style={feedback.buttonText} onPress={() => submitFeedback(false)}>Not full</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.modalButton, styles.redButton]}>
-              <Text style={styles.buttonText} onPress={() => submitFeedback(true)}>Full</Text>
+            <TouchableOpacity style={[feedback.modalButton, feedback.redButton]}>
+              <Text style={feedback.buttonText} onPress={() => submitFeedback(true)}>Full</Text>
             </TouchableOpacity>
           </View>
         </View>

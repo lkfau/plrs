@@ -88,6 +88,35 @@ export const textInput = {
   marginBottom: 10,
 }
 
+export const recommendButtons = {
+  txt: {
+    textAlign: 'center', 
+    padding: 25, 
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+  dropdownText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  container: {
+    flex: 1
+  },
+  dropdownContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  select: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+  },
+}
+
 // Page-specific styles
 
 // About
@@ -126,7 +155,7 @@ export const changeEmail = {
     fontWeight: 'bold',
     color: '#000',
     marginBottom: 20,
-  }
+  },
 }
 
 //to be replaced
@@ -230,12 +259,6 @@ export const stylesMenubutton = StyleSheet.create({
 });
 
 export const stylesRecommend = StyleSheet.create({
-    txt: {
-      textAlign: 'center', 
-      padding: 25,
-      color: '#ffffff',
-      fontWeight: 'bold',
-    },
     button: {
       backgroundColor: 'white',
       paddingVertical: 15,
@@ -276,6 +299,12 @@ export const stylesRecommend = StyleSheet.create({
     buttonTextSelected: {
       color: 'white',
     },
+    recommendButtonText: {
+      color: '#fff',
+      fontSize: 18,
+      textAlign: 'center',
+      fontWeight: 'bold'
+    },
 });
 
 export const stylesRecommendation = StyleSheet.create({
@@ -291,8 +320,8 @@ export const stylesRecommendation = StyleSheet.create({
       textAlign: 'center',
     },
     mapContainer: {
-      width: 300,
-      height: 300, // Adjust according to your map component
+      width: 350,
+      height: 350,
       marginBottom: 20,
     },
     statusText: {
@@ -372,6 +401,42 @@ export const stylesRecommendation = StyleSheet.create({
     },
     arrowText: {
       fontSize: 30,
+    },
+    arrowContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    recommendationContent: {
+      flexGrow: 1,
+      paddingVertical: 20,
+      backgroundColor: 'transparent', // Remove background color
+    },
+    transparent: {
+      opacity: 0
+    },
+    buttonLink: {
+      paddingVertical: 15,
+      paddingHorizontal: 30,
+      borderRadius: 10,
+      marginBottom: 10,
+      backgroundColor: 'transparent', // Remove background color
+      alignSelf: 'center',
+    },
+    buttonLinkText: {
+      color: 'black',
+      fontSize: 18,
+      textAlign: 'center',
+      textDecorationLine: 'underline',
+    },
+    transparent: {
+      opacity: 0
+    },
+    recommendationContent: {
+      flexGrow: 1,
+      paddingVertical: 20,
+      backgroundColor: 'transparent', // Remove background color
     },
 });
 
@@ -521,23 +586,110 @@ export const stylesScheduleitem = StyleSheet.create({
 
 export const stylesScheduleview = StyleSheet.create({
     schedule: {
-      backgroundColor: '#fff',
-      borderWidth: 1,
-      borderColor: '#284b85',
-      padding: 16,
-      marginTop: 8,
-      marginBottom: 8,
-      width: 350,
-    },
-    title: {
-      textAlign: 'center',
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginBottom: 8,
-      color: 'black'
-    },
-    body: {
-      alignItems: 'center',
-    },
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+    margin: 8
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: 'black',
+    alignSelf: 'center',
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  deleteButton: buttonDelete.container,
+  delete: {
+    ...buttonDelete.container,
+    transform: [
+      { translateX: 10 },
+      { translateY: -10 }
+    ]
+  },
+  deleteIcon: buttonDelete.icon
 });
-  
+
+export const aboutPage = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
+  contentContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  header: pageHeader,
+  paragraph: {...paragraph, color: '#fff', textAlign: 'center', paddingLeft: 10, paddingRight: 10},
+  teamMember: teamMember.container,
+  portrait: teamMember.portrait,
+  textContainer: {
+    width: '80%',
+    alignSelf: 'center',
+    maxHeight: 120,
+    overflow: 'hidden',
+  },
+  textContainerStatement: {
+    maxHeight: 120,
+    overflow: 'hidden',
+  }
+});
+
+export const feedback = StyleSheet.create({
+  closeButton: {
+    marginLeft: 'auto'
+  },
+  buttonText: {
+    color: 'black',
+    fontSize: 24,
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  popupContainer: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 30,
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  popupTitle: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  popupText: {
+    fontSize: 16,
+    marginVertical: 20,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 30
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 50,
+    borderRadius: 10,
+    marginBottom: 30,
+  },
+  greenButton: {
+    backgroundColor: 'rgb(122, 245, 122)',
+  },
+  redButton: {
+    backgroundColor: 'rgb(255, 139, 135)',
+  }
+});

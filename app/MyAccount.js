@@ -23,16 +23,16 @@ const Account = () => {
 
   return (
     <PageContainer>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Schedules')}>
-        <Text style={styles.buttonText}>Schedules</Text>
+      <TouchableOpacity style={button.container} onPress={() => navigation.navigate('Schedules')}>
+        <Text style={button.title}>Schedules</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Preferences</Text>
+      <TouchableOpacity style={button.container}>
+        <Text style={button.title}>Preferences</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
-        <Text style={styles.buttonText}>Change Email</Text>
+      <TouchableOpacity style={button.container} onPress={() => setModalVisible(true)}>
+        <Text style={button.title}>Change Email</Text>
       </TouchableOpacity>
       
 
@@ -43,45 +43,36 @@ const Account = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <TouchableOpacity
-          style={styles.modalOverlay}
+          style={changeEmail.overlay}
           activeOpacity={1}
           onPressOut={() => setModalVisible(false)}
         >
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Change Email</Text>
+          <View style={changeEmail.container}>
+            <Text style={changeEmail.title}>Change Email</Text>
             <TextInput
-              style={styles.input}
+              style={textInput}
               placeholder="New Email"
               value={newEmail}
               onChangeText={setNewEmail}
               placeholderTextColor="black"
             />
-            <TouchableOpacity style={styles.button} onPress={handleChangeEmail}>
-              <Text style={styles.buttonText}>Submit</Text>
+            <TouchableOpacity style={button.container} onPress={handleChangeEmail}>
+              <Text style={button.title}>Submit</Text>
             </TouchableOpacity>
             
           </View>
         </TouchableOpacity>
       </Modal>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ChangePassword')}>
-        <Text style={styles.buttonText}>Change Password</Text>
+      <TouchableOpacity style={button.container} onPress={() => navigation.navigate('ChangePassword')}>
+        <Text style={button.title}>Change Password</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => ctx.logOut()}>
-        <Text style={styles.buttonText}>Log Out</Text>
+      <TouchableOpacity style={button.container} onPress={() => ctx.logOut()}>
+        <Text style={button.title}>Log Out</Text>
       </TouchableOpacity>
     </PageContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  button: button.container,
-  buttonText: button.title,
-  input: textInput,
-  modalOverlay: changeEmail.overlay,
-  modalContainer: changeEmail.container,
-  modalTitle: changeEmail.title
-})
 
 export default Account;

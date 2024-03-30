@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Svg, Circle, Text as SvgText, Line } from 'react-native-svg';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { buttonDelete } from './Styles';
+import { stylesScheduleview } from './Styles';
 
 const daysOfWeek = ['S', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
 
@@ -11,11 +11,11 @@ const ScheduleView = ({ schedule, onPress, onDelete }) => {
   return (
     <View key={schedule.id}>
       <TouchableWithoutFeedback onPress={() => onPress(schedule)}>
-        <View style={styles.schedule}>
+        <View style={stylesScheduleview.schedule}>
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.title}>{schedule.name}</Text>
-          <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
-            <Text style={styles.deleteButtonText}><Ionicons name="close" size={16}/></Text>
+          <Text style={stylesScheduleview.title}>{schedule.name}</Text>
+          <TouchableOpacity style={stylesScheduleview.deleteButton} onPress={onDelete}>
+            <Text style={stylesScheduleview.deleteButtonText}><Ionicons name="close" size={16}/></Text>
           </TouchableOpacity>
         </View>
         <Graph scheduleItems={schedule.items} />
@@ -125,26 +125,5 @@ const Graph = ({ scheduleItems }) => {
     </Svg>
   );
 };
-
-const styles = StyleSheet.create({
-  schedule: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    margin: 8
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    color: 'black',
-    alignSelf: 'center',
-  },
-  deleteButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  deleteButton: buttonDelete.container
-});
 
 export default ScheduleView;

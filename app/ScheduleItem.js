@@ -6,7 +6,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Checkbox from './UI/Checkbox';
 import weekdays from './data/weekdays.json';
-import { stylesScheduleitem, buttonDelete } from './Styles';
+import { stylesScheduleitem, buttonDelete, stylesScheduleview } from './Styles';
 
 const ScheduleItem = ({ item, onChange, onDelete }) => {
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -56,8 +56,8 @@ const ScheduleItem = ({ item, onChange, onDelete }) => {
 
   return (
       <View style={stylesScheduleitem.container}>
-        <TouchableOpacity style={styles.delete} onPress={onDelete}>
-          <Text style={styles.deleteIcon}><Ionicons name="close" size={16}/></Text>
+        <TouchableOpacity style={stylesScheduleview.delete} onPress={onDelete}>
+          <Text style={stylesScheduleview.deleteIcon}><Ionicons name="close" size={16}/></Text>
         </TouchableOpacity>
         <View>
           <Dropdown
@@ -105,16 +105,5 @@ const ScheduleItem = ({ item, onChange, onDelete }) => {
       </View>
   );
 };
-
-const styles = StyleSheet.create({
-  delete: {
-    ...buttonDelete.container,
-    transform: [
-      { translateX: 10 },
-      { translateY: -10 }
-    ]
-  },
-  deleteIcon: buttonDelete.icon
-});
 
 export default ScheduleItem;
