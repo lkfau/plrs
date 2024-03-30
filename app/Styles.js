@@ -160,74 +160,44 @@ export const changeEmail = {
 
 //to be replaced
 
-export const stylesCreateaccount = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingHorizontal: 20,
-    },
-    title: {
-      fontSize: 24,
-      marginBottom: 20,
-    },
-    inputContainer: {
-      width: '100%',
-      marginBottom: 15,
-    },
-    input: {
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 5,
-      padding: 10,
-      fontSize: 16,
-    },
-    button: {
-      backgroundColor: '#007bff',
-      paddingVertical: 15,
-      paddingHorizontal: 30,
-      borderRadius: 10,
-      marginTop: 20,
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 18,
-      textAlign: 'center',
-    },
+const stylesCreateAndLogin = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 15,
+  },
+  input: {
+    ...textInput,
+    fontSize: 16,
+  },
+  inputPass: {
+    ...textInput,
+    marginVertical: 10,
+    width: 200,
+    fontSize: 16,
+  },
+  button: {
+    ...button.container,
+    backgroundColor: '#007bff',
+    marginTop: 20,
+  },
+  buttonText: {
+    ...button.title,
+  },
 });
 
-export const stylesLogin = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#fff',
-    },
-    title: {
-      fontSize: 24,
-      marginBottom: 20,
-    },
-    input: {
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 5,
-      padding: 10,
-      marginVertical: 10,
-      width: 200,
-      color: 'black'
-    },
-    button: {
-      backgroundColor: '#007bff',
-      paddingVertical: 15,
-      paddingHorizontal: 30,
-      borderRadius: 10,
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 18,
-    },
-});
+export const stylesCreateaccount = StyleSheet.create(stylesCreateAndLogin);
+export const stylesLogin = StyleSheet.create(stylesCreateAndLogin);
 
 export const stylesMenubutton = StyleSheet.create({
     button: {

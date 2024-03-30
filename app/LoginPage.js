@@ -40,13 +40,13 @@ const LoginPage = () => {
     <View style={stylesLogin.container}>
       <Text style={stylesLogin.title}>Login Page</Text>
       <TextInput 
-        style={stylesLogin.input} 
+        style={stylesLogin.inputPass} 
         placeholder="Email" 
         value={email} 
         onChangeText={email => setEmail(email)} 
       />
       <TextInput 
-        style={stylesLogin.input}
+        style={stylesLogin.inputPass}
         placeholder="Password" 
         secureTextEntry={true} 
         value={password} 
