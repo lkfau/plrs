@@ -246,9 +246,9 @@ export const stylesRecommend = StyleSheet.create({
         fontWeight: 'bold',
     },
     container: {
-      flexDirection: 'row', // to arrange elements horizontally
-      justifyContent: 'space-between', // to space the elements evenly
-      paddingHorizontal: 20, // optional: adds padding to the sides
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingHorizontal: 20,
     },
     buttonRecommend: {
       backgroundColor: '#007bff',
@@ -438,7 +438,7 @@ export const stylesRecommendation = StyleSheet.create({
     recommendationContent: {
       flexGrow: 1,
       paddingVertical: 20,
-      backgroundColor: 'transparent', // Remove background color
+      backgroundColor: 'transparent',
     },
 });
 
@@ -484,8 +484,8 @@ export const stylesScheduleselector = StyleSheet.create({
     color: '#333',
   },
   dropdownContainer: {
-    paddingHorizontal: 16, // Add padding to the left and right
-    paddingTop: 10, // Add top padding if necessary
+    paddingHorizontal: 16,
+    paddingTop: 10,
     paddingBottom: 10,
   },
 });

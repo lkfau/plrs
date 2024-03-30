@@ -55,7 +55,7 @@ const Recommendation = ({ recommendation }) => {
         </View>
           <View style={stylesRecommendation.indicatorContainer}>
             <Text style={[stylesRecommendation.statusText, {color: fullnessOption.color}]}>{fullnessOption.text}</Text>
-            <Text style={stylesRecommendation.distance}>1000 ft</Text>
+            <Text style={stylesRecommendation.distance}>{recommendation.feet_to_destination} ft</Text>
           </View>
         </View>
          
