@@ -29,6 +29,7 @@ export const button = {
     paddingHorizontal: 30,
     marginTop: 20,
     marginLeft: 20,
+    marginRight: 20,
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#fff',
@@ -290,7 +291,7 @@ export const stylesRecommendation = StyleSheet.create({
       marginTop: 20,
       textAlign: 'center',
       fontWeight: 'bold',
-      marginBottom: 20
+      marginBottom: 20,
     },
     buttonGetDirections: {
       position: 'absolute',
