@@ -1,21 +1,26 @@
+import { useContext } from 'react';
+import DataContext from './context/data-context';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native'; 
 const FeedbackModal = ({ lot_id, visible, onHide }) => {
 
   const navigation = useNavigation();
-
+  const ctx = useContext(DataContext)
   const submitFeedback = async (lotIsFull) => {
+    console.log('Bearer ' + ctx.getSessionID())
     const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/feedback`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorizartion': 'Bearer ' + ctx.getSessionID()
       },
       body: JSON.stringify({
         lot_id: lot_id,
         lot_is_full: lotIsFull
       }),
     });
+    console.log(response)
     if (response.status == 200) {
       navigation.navigate('GetRecommendation');
     }
