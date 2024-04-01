@@ -86,7 +86,7 @@ return (
         <Text style={stylesCreateaccount.buttonText}>Create Account</Text>
       </TouchableOpacity>
 
-      <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}>
         <Text>Already have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text style={{marginLeft: 5, color: '#007bff', textDecorationLine: 'underline'}}>Log in.</Text>

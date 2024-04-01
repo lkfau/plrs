@@ -1,11 +1,10 @@
 import CreateAccountPage from '../CreateAccountPage';
 import Login from '../LoginPage';
 import Home from '../HomePage';
-import Account from '../MyAccount';
 import Schedules from '../SavedSchedules';
 import Recommend from '../RecommendPage';
 import About from '../About';
-import Settings from '../Settings'
+import OptionsPage from '../OptionsPage';
 
 export default pageOptions = [
   {
@@ -59,23 +58,14 @@ export default pageOptions = [
     component: About,
     showTitle: true,
     transparentTitle: true,
-    showLoggedIn: true,
+    showLoggedIn: false,
     showLoggedOut: true
-  },
-  {
-    title: 'Account',
-    icon: 'person-circle',
-    component: Account,
-    showTitle: true,
-    transparentTitle: false,
-    showLoggedIn: true,
-    showLoggedOut: false,
   },
   {
     title: 'Settings',
     icon: 'settings',
-    component: Settings,
-    showTitle: true,
+    component: OptionsPage,
+    showTitle: false,
     transparentTitle: false,
     showLoggedIn: true,
     showLoggedOut: false

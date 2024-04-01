@@ -30,8 +30,6 @@ const Account = () => {
       <TouchableOpacity style={button.containerOutline} onPress={() => setModalVisible(true)}>
         <Text style={button.title}>Change Email</Text>
       </TouchableOpacity>
-      
-
       <Modal
         animationType="fade"
         transparent={true}
@@ -60,7 +58,7 @@ const Account = () => {
         </TouchableOpacity>
       </Modal>
 
-      <TouchableOpacity style={button.containerOutline} onPress={() => navigation.navigate('Change Password')}>
+      <TouchableOpacity style={button.containerOutline} onPress={() => navigation.navigate('ChangePassword')}>
         <Text style={button.title}>Change Password</Text>
       </TouchableOpacity>
 

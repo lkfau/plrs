@@ -71,7 +71,7 @@ const LoginPage = () => {
         <TouchableOpacity style={stylesLogin.button} onPress={logIn}>
           <Text style={stylesLogin.buttonText}>Sign On</Text>
         </TouchableOpacity>
-        <View style={{flex: 1, marginTop: 15, marginBottom: 15, flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}>
           <Text>Don't have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Create Account')}>
             <Text style={{marginLeft: 5, color: '#007bff', textDecorationLine: 'underline'} }>Create an account.</Text>

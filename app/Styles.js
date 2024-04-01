@@ -162,24 +162,22 @@ export const changeEmail = {
 
 export const inputContLogin = {
   container: {
-    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 25,
-    marginVertical: 250,
+    padding: 20,
+    marginTop: 80,
     borderRadius: 10,
   },
 }
 
 export const inputContCreate = {
   container: {
-    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 25,
-    marginVertical: 200,
+    marginTop: 80,
+    padding: 20,
     borderRadius: 10,
   },
   input: {
