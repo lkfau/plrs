@@ -1,4 +1,3 @@
-// App.js
 import { useContext } from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -9,9 +8,10 @@ import pageOptions from './data/pageOptions';
 
 const AppContextContainer = () => {
   return <DataContextProvider>
-    <App />
-</DataContextProvider>
-}
+          <App />
+         </DataContextProvider>
+    }
+
 const App = () => {
   const Tab = createBottomTabNavigator();
   const ctx = useContext(DataContext);
@@ -39,6 +39,6 @@ const App = () => {
       </Tab.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default AppContextContainer;

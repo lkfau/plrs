@@ -5,6 +5,7 @@ import Account from '../MyAccount';
 import Schedules from '../SavedSchedules';
 import Recommend from '../RecommendPage';
 import About from '../About';
+import Settings from '../Settings'
 
 export default pageOptions = [
   {
@@ -35,15 +36,6 @@ export default pageOptions = [
     showLoggedOut: true
   },
   {
-    title: 'Account',
-    icon: 'person-circle',
-    component: Account,
-    showTitle: true,
-    transparentTitle: false,
-    showLoggedIn: true,
-    showLoggedOut: false
-  },
-  {
     title: 'Schedules',
     icon: 'list',
     component: Schedules,
@@ -70,4 +62,31 @@ export default pageOptions = [
     showLoggedIn: true,
     showLoggedOut: true
   },
+  {
+    title: 'Account',
+    icon: 'person-circle',
+    component: Account,
+    showTitle: true,
+    transparentTitle: false,
+    showLoggedIn: true,
+    showLoggedOut: false,
+  },
+  {
+    title: 'Settings',
+    icon: 'settings',
+    component: Settings,
+    showTitle: true,
+    transparentTitle: false,
+    showLoggedIn: true,
+    showLoggedOut: false
+  },
+  // {
+  //   title: 'Change Password',
+  //   icon: 'Change Password',
+  //   component: Settings,
+  //   showTitle: true,
+  //   transparentTitle: false,
+  //   showLoggedIn: true,
+  //   showLoggedOut: false
+  // },
 ];

@@ -160,6 +160,56 @@ export const changeEmail = {
   },
 }
 
+export const inputContLogin = {
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 25,
+    marginVertical: 250,
+    borderRadius: 10,
+  },
+}
+
+export const inputContCreate = {
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 25,
+    marginVertical: 200,
+    borderRadius: 10,
+  },
+  input: {
+
+  },
+}
+
+export const inputCreate = {
+  input: {
+    ...textInput,
+    marginVertical: 10,
+    width: 275,
+    fontSize: 16,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderTopWidth: 0,
+    borderBottomWidth: 1,
+  },
+}
+
+export const btn = {
+  button: {
+    ...button.container,
+    backgroundColor: '#007bff',
+    marginTop: 20,
+    borderRadius: 50,
+    width: 200,
+  },
+}
+
 //to be replaced
 
 const stylesCreateAndLogin = StyleSheet.create({
@@ -168,7 +218,9 @@ const stylesCreateAndLogin = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
+    marginVertical: 250,
+    borderRadius: 10,
   },
   title: {
     fontSize: 24,
@@ -176,7 +228,10 @@ const stylesCreateAndLogin = StyleSheet.create({
   },
   inputContainer: {
     width: '100%',
-    marginBottom: 15,
+    height: 'auto',
+    marginBottom: 10,
+    paddingBottom: 5,
+
   },
   input: {
     ...textInput,
@@ -185,13 +240,22 @@ const stylesCreateAndLogin = StyleSheet.create({
   inputPass: {
     ...textInput,
     marginVertical: 10,
-    width: 200,
+    width: 275,
     fontSize: 16,
+    borderBottomWidth: 1,
+    borderRightWidth: 0,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+  },
+  inputFocused: {
+    backgroundColor: '#f9f7f6',
   },
   button: {
     ...button.container,
     backgroundColor: '#007bff',
     marginTop: 20,
+    borderRadius: 50,
+    width: 200,
   },
   buttonText: {
     ...button.title,
