@@ -1,12 +1,15 @@
 import { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { button, textInput, changeEmail } from './Styles'
 import PageContainer from './UI/PageContainer';
 import DataContext from './context/data-context';
 
+
 const Account = () => {
   const navigation = useNavigation();
+  const Stack = createStackNavigator();
   const ctx = useContext(DataContext);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -22,20 +25,11 @@ const Account = () => {
   };
 
   return (
-    <PageContainer>
-      <TouchableOpacity style={button.container} onPress={() => navigation.navigate('Schedules')}>
-        <Text style={button.title}>Schedules</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={button.container}>
-        <Text style={button.title}>Preferences</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={button.container} onPress={() => setModalVisible(true)}>
+    
+    <PageContainer gradient={true}>
+      <TouchableOpacity style={button.containerOutline} onPress={() => setModalVisible(true)}>
         <Text style={button.title}>Change Email</Text>
       </TouchableOpacity>
-      
-
       <Modal
         animationType="fade"
         transparent={true}
@@ -47,7 +41,7 @@ const Account = () => {
           activeOpacity={1}
           onPressOut={() => setModalVisible(false)}
         >
-          <View style={changeEmail.container}>
+          <View style={changeEmail.containerOutline}>
             <Text style={changeEmail.title}>Change Email</Text>
             <TextInput
               style={textInput}
@@ -56,7 +50,7 @@ const Account = () => {
               onChangeText={setNewEmail}
               placeholderTextColor="black"
             />
-            <TouchableOpacity style={button.container} onPress={handleChangeEmail}>
+            <TouchableOpacity style={button.containerOutline} onPress={handleChangeEmail}>
               <Text style={button.title}>Submit</Text>
             </TouchableOpacity>
             
@@ -64,11 +58,11 @@ const Account = () => {
         </TouchableOpacity>
       </Modal>
 
-      <TouchableOpacity style={button.container} onPress={() => navigation.navigate('ChangePassword')}>
+      <TouchableOpacity style={button.containerOutline} onPress={() => navigation.navigate('ChangePassword')}>
         <Text style={button.title}>Change Password</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={button.container} onPress={() => ctx.logOut()}>
+      <TouchableOpacity style={button.containerOutline} onPress={() => ctx.logOut()}>
         <Text style={button.title}>Log Out</Text>
       </TouchableOpacity>
     </PageContainer>
