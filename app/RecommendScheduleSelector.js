@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { stylesScheduleselector } from './Styles';
+import { recommendButtons } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -16,17 +16,17 @@ const RecommendScheduleSelector = ({ schedules, onSelect }) => {
   return (
     <LinearGradient
       colors={['#ae3b54', '#284b85']}
-      style={stylesScheduleselector.container}
+      style={recommendButtons.container}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
     >
-      <View style={stylesScheduleselector.dropdownContainer}>
-        <Text style={stylesScheduleselector.txt}>Select saved schedule</Text>
+      <View style={recommendButtons.dropdownContainer}>
+        <Text style={recommendButtons.txt}>Select saved schedule</Text>
         <Dropdown
-        style={stylesScheduleselector.select}
-        placeholderStyle={stylesScheduleselector.dropdownText}
-        selectedTextStyle={stylesScheduleselector.dropdownText}
-        inputSearchStyle={stylesScheduleselector.dropdownText}
+        style={recommendButtons.select}
+        placeholderStyle={recommendButtons.dropdownText}
+        selectedTextStyle={recommendButtons.dropdownText}
+        inputSearchStyle={recommendButtons.dropdownText}
         data={schedules}
         search
         maxHeight={300}

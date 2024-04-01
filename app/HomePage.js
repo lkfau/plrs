@@ -14,23 +14,16 @@ const HomePage = ({ navigation }) => {
   return (
     <PageContainer gradient={true}>  
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.header}>Parking Lot Recommendation System</Text>
+          <Text style={pageHeader}>Parking Lot Recommendation System</Text>
         </TouchableOpacity>
         {pageOptions.map(option => (
-          <TouchableOpacity key={option.title} style={styles.button} onPress={() => navigation.navigate(option.title)}>
-            <Text style={styles.buttonTitle}>{option.title}</Text>
-            <Text style={styles.buttonDescription}>{option.description}</Text>
+          <TouchableOpacity key={option.title} style={button.containerOutline} onPress={() => navigation.navigate(option.title)}>
+            <Text style={button.title}>{option.title}</Text>
+            <Text style={button.description}>{option.description}</Text>
           </TouchableOpacity>
         ))}
     </PageContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  header: pageHeader,
-  button: button.containerOutline,
-  buttonTitle: button.title,
-  buttonDescription: button.description
-})
 
 export default HomePage;

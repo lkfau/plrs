@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { View, SafeAreaView, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Recommendation from './Recommendation';
-
+import { stylesRecommendation, button } from './Styles';
 const RecommendationList = ({ schedule_id, building_id }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [recommendations, setRecommendations] = useState(null);
@@ -31,36 +31,36 @@ const RecommendationList = ({ schedule_id, building_id }) => {
   }, [schedule_id, building_id])
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={stylesRecommendation.arrowContainer}>
       {recommendations &&
         <>
           <View>
             <TouchableOpacity 
-              style={currentPage === 0 ? styles.transparent : {}} 
+              style={currentPage === 0 ? stylesRecommendation.transparent : {}} 
               disabled={currentPage === 0} 
               onPress={() => setCurrentPage(p => p-1)}
             >
               <Ionicons name={'arrow-back'} size={30} />
             </TouchableOpacity>
           </View>
-          <View style={styles.recommendationContent}>
+          <View style={stylesRecommendation.recommendationContent}>
             {currentPage < recommendations.length ? (
               <Recommendation recommendation={recommendations[currentPage]} />
             ) : (
               <>
-                <Text style={styles.title}>Sorry, out of recommendations.</Text>
-                <TouchableOpacity style={styles.buttonLink} onPress={() => setCurrentPage(0)}>
-                  <Text style={styles.buttonLinkText}>Return to first recommendation</Text>
+                <Text style={stylesRecommendation.lotText}>Sorry, out of recommendations.</Text>
+                <TouchableOpacity style={button.containerOutline} onPress={() => setCurrentPage(0)}>
+                  <Text style={button.title}>Back to Beginning</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonLink} onPress={getNewRecommendationHandler}>
-                  <Text style={styles.buttonLinkText}>Get new recommendations</Text>
+                <TouchableOpacity style={button.containerOutline} onPress={getNewRecommendationHandler}>
+                  <Text style={button.title}>Start Over</Text>
                 </TouchableOpacity>
               </>
             )}
           </View>
           <View>
             <TouchableOpacity 
-             style={currentPage >= recommendations.length ? styles.transparent : {}} 
+             style={currentPage >= recommendations.length ? stylesRecommendation.transparent : {}} 
              disabled={currentPage >= recommendations.length} 
               onPress={() => setCurrentPage(p => p+1)}
             >
@@ -71,44 +71,5 @@ const RecommendationList = ({ schedule_id, building_id }) => {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  transparent: {
-    opacity: 0
-  },
-  buttonLink: {
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    marginBottom: 10,
-    backgroundColor: 'transparent', // Remove background color
-    alignSelf: 'center',
-  },
-  buttonLinkText: {
-    color: 'black',
-    fontSize: 18,
-    textAlign: 'center',
-    textDecorationLine: 'underline',
-  },
-  recommendationContent: {
-    flexGrow: 1,
-    paddingVertical: 20,
-    backgroundColor: 'transparent', // Remove background color
-  },
-  arrowText: {
-    fontSize: 30,
-  },
-});
 
 export default RecommendationList;

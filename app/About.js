@@ -2,54 +2,61 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { pageHeader, paragraph, teamMember } from './Styles'; // Import the stylesheet
 import PageContainer from './UI/PageContainer';
+import { aboutPage } from './Styles';
 
 const About = () => {
-
   return (
     <PageContainer gradient={true} style={{paddingTop: 108.5}}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingVertical: 20, gap: 30}}>
+      <ScrollView 
+        style={aboutPage.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={aboutPage.contentContainer}
+      >
         <View>
-          <Text style={styles.header}>Mission statement</Text>
-          <Text style={styles.paragraph}>
-            University parking is challenging for students, guests and faculty. So we designed this 
-            System in order to automatically recommend parking lots based on lot availability and distance 
-            to the desired destination. 
-          </Text>
+          <Text style={aboutPage.header}>Mission statement</Text>
+          <View style={aboutPage.textContainerStatement}>
+            <Text style={aboutPage.paragraph}>
+              University parking presents challenges for students, guests, and faculty. Hence, we developed a system to automatically suggest parking lots based on availability and proximity to your destination.
+            </Text>
+          </View>
         </View>
+
         <View>
-          <Text style={styles.header}>Meet the team</Text>
-          <View style={styles.teamMember}>
-            <Image style={styles.portrait} source={require('./assets/userPlaceholder.png')} />
-            <Text style={styles.paragraph}>About you and contact information</Text>
+          <Text style={aboutPage.header}>Meet the team</Text>
+          <View style={aboutPage.teamMember}>
+            <Image style={aboutPage.portrait} source={require('./assets/userPlaceholder.png')} />
+            <View style={aboutPage.textContainer}>
+              <Text style={aboutPage.paragraph}>About you and contact information</Text>
+            </View>
           </View>
-          <View style={styles.teamMember}>
-            <Image style={styles.portrait} source={require('./assets/headshotRomeo.jpg')} />
-            <Text style={styles.paragraph}>About you and contact information</Text>  
+          <View style={aboutPage.teamMember}>
+            <Image style={aboutPage.portrait} source={require('./assets/headshotRomeo.jpg')} />
+            <View style={aboutPage.textContainer}>
+              <Text style={aboutPage.paragraph}>About you and contact information</Text>
+            </View> 
           </View>
-          <View style={styles.teamMember}>
-            <Image style={styles.portrait} source={require('./assets/headshotSadie.jpg')} />
-            <Text style={styles.paragraph}>About you and contact information</Text>
+          <View style={aboutPage.teamMember}>
+            <Image style={aboutPage.portrait} source={require('./assets/headshotSadie.jpg')} />
+            <View style={aboutPage.textContainer}>
+              <Text style={aboutPage.paragraph}>Sadie is graduating in Spring 2024 with a B.S. in Computer with a minor in Mathematics, a B.A. in History, and a certificate in Data Science. </Text>
+            </View> 
           </View>
-          <View style={styles.teamMember}>
-            <Image style={styles.portrait} source={require('./assets/userPlaceholder.png')} />
-            <Text style={styles.paragraph}>About you and contact information</Text>
+          <View style={aboutPage.teamMember}>
+            <Image style={aboutPage.portrait} source={require('./assets/userPlaceholder.png')} />
+            <View style={aboutPage.textContainer}>
+              <Text style={aboutPage.paragraph}>About you and contact information</Text>
+            </View> 
           </View>
-          <View style={styles.teamMember}>
-            <Image style={styles.portrait} source={require('./assets/userPlaceholder.png')} />
-            <Text style={styles.paragraph}>About you and contact information</Text>
+          <View style={aboutPage.teamMember}>
+            <Image style={aboutPage.portrait} source={require('./assets/userPlaceholder.png')} />
+            <View style={aboutPage.textContainer}>
+              <Text style={aboutPage.paragraph}>About you and contact information</Text>
+            </View>            
           </View>
         </View>
       </ScrollView>
     </PageContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  header: pageHeader,
-  paragraph: {...paragraph, color: '#fff'},
-  teamMember: teamMember.container,
-  portrait: teamMember.portrait,
-})
-
 
 export default About;

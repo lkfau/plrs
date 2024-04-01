@@ -6,10 +6,9 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import RecommendScheduleSelector from './RecommendScheduleSelector';
 import RecommendBuildingSelector from './RecommendBuildingSelector';
 import RecommendationList from './RecommendationList';
-import { stylesRecommend } from './Styles';
+import { recommendButtons, stylesRecommend, button } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import DataContext from './context/data-context';
-import { button } from './Styles';
 
 const RecommendPage = () => {
   const [recoSchedule, setRecoSchedule] = useState(null);
@@ -114,7 +113,7 @@ const GetRecommendation = ({ onRecommend }) => {
   }, [])); 
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={recommendButtons.container}>
       <LinearGradient
             colors={['#ae3b54', '#284b85']}
             style={StyleSheet.absoluteFill}
@@ -141,7 +140,7 @@ const GetRecommendation = ({ onRecommend }) => {
             </Tab.Screen>
           </Tab.Navigator>}
       </View>   
-      <Text style={stylesRecommend.txt}>Would you like to park near your first or last location?</Text>
+      <Text style={recommendButtons.txt}>Would you like to park near your first or last location?</Text>
       <View style={stylesRecommend.container}>
       <TouchableOpacity
         style={[
@@ -182,31 +181,11 @@ const GetRecommendation = ({ onRecommend }) => {
           style={button.containerOutline}
           onPress={recommendHandler}
         >
-          <Text style={styles.buttonText}>Get Recommendation</Text>
+          <Text style={stylesRecommend.recommendButtonText}>Get Recommendation</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    marginTop: 20,
-  },  
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    textAlign: 'center',
-  },
-  container: {
-    flexDirection: 'row', // to arrange elements horizontally
-    justifyContent: 'space-between', // to space the elements evenly
-    paddingHorizontal: 20, // optional: adds padding to the sides
-  },
-});
 
 export default RecommendPage;

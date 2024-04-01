@@ -28,6 +28,8 @@ export const button = {
     paddingVertical: 20,
     paddingHorizontal: 30,
     marginTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#fff',
@@ -88,6 +90,35 @@ export const textInput = {
   marginBottom: 10,
 }
 
+export const recommendButtons = {
+  txt: {
+    textAlign: 'center', 
+    padding: 25, 
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+  dropdownText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  container: {
+    flex: 1
+  },
+  dropdownContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  select: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+  },
+}
+
 // Page-specific styles
 
 // About
@@ -126,79 +157,49 @@ export const changeEmail = {
     fontWeight: 'bold',
     color: '#000',
     marginBottom: 20,
-  }
+  },
 }
 
 //to be replaced
 
-export const stylesCreateaccount = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingHorizontal: 20,
-    },
-    title: {
-      fontSize: 24,
-      marginBottom: 20,
-    },
-    inputContainer: {
-      width: '100%',
-      marginBottom: 15,
-    },
-    input: {
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 5,
-      padding: 10,
-      fontSize: 16,
-    },
-    button: {
-      backgroundColor: '#007bff',
-      paddingVertical: 15,
-      paddingHorizontal: 30,
-      borderRadius: 10,
-      marginTop: 20,
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 18,
-      textAlign: 'center',
-    },
+const stylesCreateAndLogin = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 15,
+  },
+  input: {
+    ...textInput,
+    fontSize: 16,
+  },
+  inputPass: {
+    ...textInput,
+    marginVertical: 10,
+    width: 200,
+    fontSize: 16,
+  },
+  button: {
+    ...button.container,
+    backgroundColor: '#007bff',
+    marginTop: 20,
+  },
+  buttonText: {
+    ...button.title,
+  },
 });
 
-export const stylesLogin = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#fff',
-    },
-    title: {
-      fontSize: 24,
-      marginBottom: 20,
-    },
-    input: {
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 5,
-      padding: 10,
-      marginVertical: 10,
-      width: 200,
-      color: 'black'
-    },
-    button: {
-      backgroundColor: '#007bff',
-      paddingVertical: 15,
-      paddingHorizontal: 30,
-      borderRadius: 10,
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 18,
-    },
-});
+export const stylesCreateaccount = StyleSheet.create(stylesCreateAndLogin);
+export const stylesLogin = StyleSheet.create(stylesCreateAndLogin);
 
 export const stylesMenubutton = StyleSheet.create({
     button: {
@@ -230,18 +231,12 @@ export const stylesMenubutton = StyleSheet.create({
 });
 
 export const stylesRecommend = StyleSheet.create({
-    txt: {
-      textAlign: 'center', 
-      padding: 25,
-      color: '#ffffff',
-      fontWeight: 'bold',
-    },
     button: {
       backgroundColor: 'white',
       paddingVertical: 15,
       paddingHorizontal: 30,
       marginTop: 20,
-      borderWidth: 1,
+      borderWidth: 2,
       borderRadius: 10, 
       borderColor: '#007bff'
     },
@@ -252,9 +247,9 @@ export const stylesRecommend = StyleSheet.create({
         fontWeight: 'bold',
     },
     container: {
-      flexDirection: 'row', // to arrange elements horizontally
-      justifyContent: 'space-between', // to space the elements evenly
-      paddingHorizontal: 20, // optional: adds padding to the sides
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingHorizontal: 20,
     },
     buttonRecommend: {
       backgroundColor: '#007bff',
@@ -269,12 +264,18 @@ export const stylesRecommend = StyleSheet.create({
     },
     buttonSelected: {
       backgroundColor: '#0073ef',      
-      borderWidth: 1,
+      borderWidth: 2,
       borderRadius: 10, 
       borderColor: 'white'
     },
     buttonTextSelected: {
       color: 'white',
+    },
+    recommendButtonText: {
+      color: '#fff',
+      fontSize: 18,
+      textAlign: 'center',
+      fontWeight: 'bold'
     },
 });
 
@@ -287,19 +288,57 @@ export const stylesRecommendation = StyleSheet.create({
     },
     lotText: {
       fontSize: 24,
-      marginBottom: 20,
+      marginTop: 20,
       textAlign: 'center',
+      fontWeight: 'bold',
+      marginBottom: 20,
+    },
+    buttonGetDirections: {
+      position: 'absolute',
+      bottom: 5,
+      right: 0,
+      backgroundColor: 'transparent', // Remove background color
+      paddingVertical: 5,
+      paddingHorizontal: 5,
     },
     mapContainer: {
       width: 300,
-      height: 300, // Adjust according to your map component
+      height: 300,
       marginBottom: 20,
+      marginLeft: 30
+    },
+    roundedMapContainer: {
+      borderRadius: 15,
+      overflow: 'hidden',
+      alignContent: 'center',
+      marginTop: 20
+    },
+    map: {
+      flex: 1,
+    },
+    greaterMapContainer: {
+      backgroundColor: 'white',
+      paddingBottom: 10,
+      marginBottom: 10,
+      borderRadius: 20
     },
     statusText: {
       fontSize: 18,
       marginBottom: 10,
       color: 'red',
-      textAlign: 'center',
+      marginLeft: 60,
+      fontWeight: 'bold'
+    },
+    indicatorContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    distance: {
+      color: 'black',
+      marginLeft: 130,
+      fontWeight: 'bold',
+      fontSize: 18,
+      marginBottom: 10
     },
     button: {
       paddingVertical: 15,
@@ -309,19 +348,12 @@ export const stylesRecommendation = StyleSheet.create({
       backgroundColor: 'transparent', // Remove background color
       alignSelf: 'center',
     },
-    iparkedButton: {
-      backgroundColor: 'black',
-      color: 'white',
-      paddingVertical: 15,
-      paddingHorizontal: 30,
-      borderRadius: 10,
-      marginBottom: 10,
-    },
     buttonText: {
-      color: 'black',
-      fontSize: 18,
+      color: '#0073ef',
+      fontSize: 15,
       textAlign: 'center',
       textDecorationLine: 'underline',
+      fontWeight: 'bold'
     },
     modalBackground: {
       flex: 1,
@@ -373,6 +405,42 @@ export const stylesRecommendation = StyleSheet.create({
     arrowText: {
       fontSize: 30,
     },
+    arrowContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    recommendationContent: {
+      flexGrow: 1,
+      paddingVertical: 20,
+      backgroundColor: 'transparent', // Remove background color
+    },
+    transparent: {
+      opacity: 0
+    },
+    buttonLink: {
+      paddingVertical: 15,
+      paddingHorizontal: 30,
+      borderRadius: 10,
+      marginBottom: 10,
+      backgroundColor: 'transparent', // Remove background color
+      alignSelf: 'center',
+    },
+    buttonLinkText: {
+      color: 'black',
+      fontSize: 18,
+      textAlign: 'center',
+      textDecorationLine: 'underline',
+    },
+    transparent: {
+      opacity: 0
+    },
+    recommendationContent: {
+      flexGrow: 1,
+      paddingVertical: 20,
+      backgroundColor: 'transparent',
+    },
 });
 
 export const stylesRecommendbuildingselector = StyleSheet.create({
@@ -417,8 +485,8 @@ export const stylesScheduleselector = StyleSheet.create({
     color: '#333',
   },
   dropdownContainer: {
-    paddingHorizontal: 16, // Add padding to the left and right
-    paddingTop: 10, // Add top padding if necessary
+    paddingHorizontal: 16,
+    paddingTop: 10,
     paddingBottom: 10,
   },
 });
@@ -521,23 +589,110 @@ export const stylesScheduleitem = StyleSheet.create({
 
 export const stylesScheduleview = StyleSheet.create({
     schedule: {
-      backgroundColor: '#fff',
-      borderWidth: 1,
-      borderColor: '#284b85',
-      padding: 16,
-      marginTop: 8,
-      marginBottom: 8,
-      width: 350,
-    },
-    title: {
-      textAlign: 'center',
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginBottom: 8,
-      color: 'black'
-    },
-    body: {
-      alignItems: 'center',
-    },
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+    margin: 8
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: 'black',
+    alignSelf: 'center',
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  deleteButton: buttonDelete.container,
+  delete: {
+    ...buttonDelete.container,
+    transform: [
+      { translateX: 10 },
+      { translateY: -10 }
+    ]
+  },
+  deleteIcon: buttonDelete.icon
 });
-  
+
+export const aboutPage = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
+  contentContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  header: pageHeader,
+  paragraph: {...paragraph, color: '#fff', textAlign: 'center', paddingLeft: 10, paddingRight: 10},
+  teamMember: teamMember.container,
+  portrait: teamMember.portrait,
+  textContainer: {
+    width: '80%',
+    alignSelf: 'center',
+    maxHeight: 120,
+    overflow: 'hidden',
+  },
+  textContainerStatement: {
+    maxHeight: 120,
+    overflow: 'hidden',
+  }
+});
+
+export const feedback = StyleSheet.create({
+  closeButton: {
+    marginLeft: 'auto'
+  },
+  buttonText: {
+    color: 'black',
+    fontSize: 24,
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  popupContainer: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 30,
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  popupTitle: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  popupText: {
+    fontSize: 16,
+    marginVertical: 20,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 30
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 50,
+    borderRadius: 10,
+    marginBottom: 30,
+  },
+  greenButton: {
+    backgroundColor: 'rgb(122, 245, 122)',
+  },
+  redButton: {
+    backgroundColor: 'rgb(255, 139, 135)',
+  }
+});
