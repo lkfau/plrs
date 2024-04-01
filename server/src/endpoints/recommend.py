@@ -2,9 +2,10 @@ import math
 from datetime import datetime
 from ..endpoints.buildings import get_destination
 from ..endpoints.feedback import get_user_feedback
+from ..endpoints.login import check_session
+from ..endpoints.settings import get_user_permits
 from ..database.db_connection import run_query as query
 from flask import request, Blueprint, jsonify
-from ..endpoints.login import check_session
 
 
 # LotRecommendation: object return type for /recommend requests
@@ -15,8 +16,8 @@ class LotRecommendation:
         self.lot_name = query_result[1]
         self.lot_rect = query_result[2:6]
 
-def get_parking_lots(permit_type_id):
-    query_result = query('get_parking_lots.sql', [permit_type_id], "all") #get parking lots
+def get_parking_lots(permit_type_ids):
+    query_result = query('get_parking_lots.sql', [permit_type_ids], "all") #get parking lots
     lots_result = list(map(lambda lot : LotRecommendation(query_result=lot), query_result))
     return lots_result
 
@@ -92,7 +93,6 @@ def recommend():
     guest = False
     bearer = request.headers.get('Authorization')
     if bearer:
-        bearer = request.headers.get('Authorization')
         userinfo = check_session(bearer.split()[1])
         if (not bearer) or (not userinfo): 
             return jsonify({'message': 'Unauthorized'}), 401
@@ -101,13 +101,14 @@ def recommend():
 
     schedule_id = request.args.get('schedule_id', default=0, type=int)
     building_id = request.args.get('building_id', default=0, type=int)
-    permit_type_id = request.args.get('permit_type_id', default=0, type=int)
-    if guest:
-        permit_type_id = 4
+
     curtime = request.args.get('test_date', default=datetime.now(), type=strToDate)
+
     # get necessary data
-    lots = get_parking_lots(permit_type_id)
+    
     feedback = get_user_feedback(30)
+    user_permits = get_user_permits(None if guest else userinfo.user_id)
+    lots = get_parking_lots(user_permits)
     destination = None
 
     if schedule_id:
@@ -121,13 +122,14 @@ def recommend():
     
     # iteratively deserialize lots into LotRecommendation object array
     for lot in lots:
-           lot.feet_to_destination = get_best_distance(destination.latitude, destination.longitude, destination.latitude, destination.longitude, lot.lot_rect[0], lot.lot_rect[1], lot.lot_rect[2], lot.lot_rect[3])
-           
-           lot.latitude= (lot.lot_rect[0] + lot.lot_rect[2]) / 2
-           lot.longitude= (lot.lot_rect[1] + lot.lot_rect[3]) / 2
-           del lot.lot_rect
+        lot.feet_to_destination = get_best_distance(destination.latitude, destination.longitude, destination.latitude, destination.longitude, lot.lot_rect[0], lot.lot_rect[1], lot.lot_rect[2], lot.lot_rect[3])
+        
+        lot.latitude= (lot.lot_rect[0] + lot.lot_rect[2]) / 2
+        lot.longitude= (lot.lot_rect[1] + lot.lot_rect[3]) / 2
+        del lot.lot_rect
 
-           lot.fullness = calc_lot_fullness_float(lot.lot_id, curtime, feedback)
+
+        lot.fullness = calc_lot_fullness_float(lot.lot_id, curtime, feedback)
 
     # sort lots and call the function with user not preferring vacancy just to test
     if guest:

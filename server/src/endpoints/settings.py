@@ -18,6 +18,10 @@ def save_preferences(user_id, new_preferences):
     ])
     return save_result
 
+def get_user_permits(user_id):
+    permit_result = query('get_user_permits.sql', [user_id], 'all')
+    return [permit[0] for permit in permit_result]
+
 # create endpoint
 app_settings = Blueprint('app_settings', __name__)
 

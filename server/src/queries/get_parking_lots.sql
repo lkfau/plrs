@@ -8,5 +8,5 @@ SELECT DISTINCT
 FROM parking_lot p
 INNER JOIN parking_lot_permit_type t
     ON p.lot_id = t.lot_id
-    AND %s IN (t.permit_type_id, 0)
+    AND t.permit_type_id = ANY(%s)
 ORDER BY p.lot_id;
