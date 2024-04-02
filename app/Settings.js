@@ -6,6 +6,13 @@ import { button, textInput, changeEmail } from './Styles';
 import PageContainer from './UI/PageContainer';
 import DataContext from './context/data-context';
 
+const pageOptions = [
+  { title: 'Account', description: 'Change email, Change password, Log out' },
+  { title: 'Schedules', description: 'Manage schedules' },
+  { title: 'Permits', description: 'Select permit type(s)' },
+  { title: 'About', description: 'Mission statement, Meet the team' }
+];
+
 const Settings = () => {
   const navigation = useNavigation();
     const ctx = useContext(DataContext);
@@ -24,21 +31,12 @@ const Settings = () => {
   
     return (
       <PageContainer gradient={true}>
-        <TouchableOpacity style={button.containerOutline} onPress={() => navigation.navigate('Account')}>
-          <Text style={button.title}>My Account</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={button.containerOutline} onPress={() => navigation.navigate('Schedules')}>
-          <Text style={button.title}>Schedules</Text>
-        </TouchableOpacity>
-  
-        <TouchableOpacity style={button.containerOutline}>
-          <Text style={button.title}>Permits</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={button.containerOutline} onPress={() => navigation.navigate('About')}>
-          <Text style={button.title}>About</Text>
-        </TouchableOpacity>
+        {pageOptions.map(option => ( 
+          <TouchableOpacity key={option.title} style={button.containerOutline} onPress={() => navigation.navigate(option.title)}>
+            <Text style={button.title}>{option.title}</Text>
+            <Text style={button.description}>{option.description}</Text>
+          </TouchableOpacity>
+        ))}
       </PageContainer>
     );
   };

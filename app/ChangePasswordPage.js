@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Crypto from 'expo-crypto';
-import { inputContLogin, stylesLogin } from './Styles';
+import { button, inputContLogin, stylesLogin } from './Styles';
 import DataContext from './context/data-context';
 import PageContainer from './UI/PageContainer';
 
@@ -78,7 +78,7 @@ const ChangePasswordPage = () => {
             stylesLogin.inputPass,
             isConfirmPasswordFocused && stylesLogin.inputFocused, // Apply focused style conditionally
           ]}
-          placeholder="Confrim Password"
+          placeholder="Confirm Password"
           secureTextEntry={true}
           value={confirmPassword}
           onChangeText={(pwd) => setConfirmPassword(pwd)}
@@ -86,6 +86,9 @@ const ChangePasswordPage = () => {
           onBlur={handleConfirmPasswordBlur}
         />
       </View>
+      <TouchableOpacity style={[button.containerOutline, {width: 200}]}>
+        <Text style={button.title}>Submit</Text>
+      </TouchableOpacity>
     </PageContainer>
   );
 };

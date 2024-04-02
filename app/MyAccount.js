@@ -15,6 +15,27 @@ const Account = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [newEmail, setNewEmail] = useState('');
 
+  // const createAccount = async () => {
+  //   const passwordHash = await Crypto.digestStringAsync(
+  //     Crypto.CryptoDigestAlgorithm.SHA256,
+  //     process.env.EXPO_PUBLIC_SEED + password
+  //   );
+
+  //   const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/create_user`, {
+  //     method: "POST",
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       email: email,
+  //       pwd: passwordHash
+  //     })
+  //   });
+
+  //   console.log(await response.json());
+  // }
+
+
   const handleChangeEmail = () => {
     // Add your logic to handle email change here
     console.log('New Email:', newEmail);
