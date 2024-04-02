@@ -29,7 +29,7 @@ for user in range(USERS):
     formatted_datetime = random_datetime.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
     lot_is_full = values.pop()
     lot_id = random.choice(LOT_IDs)
-    value_sets.append(f"{lot_id}, {USER_ID}, {lot_is_full}, '{formatted_datetime}')")
+    value_sets.append(f"({lot_id}, {USER_ID}, {lot_is_full}, '{formatted_datetime}')")
 values = ",\n".join(value_sets)
 
 # SQL insert
