@@ -1,0 +1,1 @@
+DELETE FROM user_permit_type WHERE user_id = %s;

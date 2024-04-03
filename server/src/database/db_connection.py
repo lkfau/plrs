@@ -80,9 +80,7 @@ def run_scalar(function_name, function_params, return_type='none'):
         # return one or all rows based on fetch_all
         match return_type:
             case 'one':
-                result = cur.fetchone()
-            case 'all':
-                result = cur.fetchall()
+                result = cur.fetchone()[0]
             case 'none':
                 result = True
 

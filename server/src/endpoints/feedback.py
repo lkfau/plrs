@@ -35,7 +35,7 @@ def save_user_feedback(feedback):
         feedback.lot_is_full,
         datetime.now()
     ], "one")
-    return user_feedback_result[0] == False
+    return user_feedback_result
 
 
 
@@ -65,7 +65,7 @@ def feedback():
 
     # save feedback
     query_result = save_user_feedback(feedback)
-
+    print(query_result)
     # return result
     if query_result:
         return 'Feedback successfully saved', 200
