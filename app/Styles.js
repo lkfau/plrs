@@ -134,6 +134,7 @@ export const teamMember = {
     height: 80,
     resizeMode: 'stretch',
     borderRadius: 100,
+    marginLeft: 10
   }
 }
 
@@ -701,7 +702,11 @@ export const aboutPage = StyleSheet.create({
   textContainerStatement: {
     maxHeight: 120,
     overflow: 'hidden',
-  }
+  },
+  memberText: {
+    width: '80%',
+    color: 'white',
+  },  
 });
 
 export const feedback = StyleSheet.create({
