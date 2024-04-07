@@ -58,28 +58,29 @@ def strToDate(dateString):
     return datetime.strptime(dateString, "%Y-%m-%d %H:%M:%S").date()
 
 def sort_lots(lots, distance_or_vacancy):
+    i = 0 
     lots.sort(key = lambda lot : lot.feet_to_destination)
 
     for i in range(len(lots)-1):
         if distance_or_vacancy == 'v' and lots[i].fullness >= 0.4:
             del lots[i]
-        elif lots[i].fullness > 0.7:
+        elif lots[i].fullness > 0.65:
             del lots[i]
 
     return lots
 
 def calc_lot_fullness_float(lot_id, curtime, user_responses):
     lot_fullness_float = 0
-    i = 0
+    j = 0
     for response in user_responses:
         if response.lot_id == lot_id:
             timediff = curtime - response.date_created
             #make the response become weighted less as it gets older
             if response.lot_is_full == 1:
-                lot_fullness_float += 1 - (1.02 ** (-((2101 - timediff.total_seconds()) / 7.1)))
-            i += 1
-    if i > 0:
-        lot_fullness_float = lot_fullness_float / i
+                lot_fullness_float += 1 - (1.02 ** (-((2101 - timediff.total_seconds()) / 5)))
+            j += 1
+    if j > 0:
+        lot_fullness_float = lot_fullness_float / j
     else:
         lot_fullness_float = 0
     return lot_fullness_float

@@ -2,16 +2,16 @@ import random
 from datetime import datetime
 
 # Set start and end date
-start_datetime = datetime(2024, 2, 18, 11, 0, 0)
-end_datetime = datetime(2024, 2, 18, 11, 45, 0)
+start_datetime = datetime(2024, 4, 7, 11, 20, 0)
+end_datetime = datetime(2024, 4, 7, 11, 45, 0)
 # Starts user id at this value
 USER_ID = 9999
 # Set the lot id to use
-LOT_IDs = [1,12,10]
+LOT_IDs = [42,30,27]
 # Percentage of true 
-TRUE_PERCENTAGE = 0.8
+TRUE_PERCENTAGE = 0.7
 # Number of "users" feedback
-USERS = 10
+USERS = 30
 value_sets = []
 # Generate random true and false
 num_true = int(USERS * TRUE_PERCENTAGE)
