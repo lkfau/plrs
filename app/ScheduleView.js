@@ -71,7 +71,7 @@ const Graph = ({ scheduleItems }) => {
       const time = parseInt(scheduleItem.arrival_time) * 60 + parseInt(scheduleItem.arrival_time.substring(3));
       points.push({
         x: displayLeft + (displayWidth * (day / 6)),
-        y: displayBottom - (displayHeight * ((time - adjustedMinTime) / (adjustedTimeRange))),
+        y: displayTop + (displayHeight * ((time - adjustedMinTime) / (adjustedTimeRange))),
         itemIndex: index
       });
     });
@@ -93,7 +93,7 @@ const Graph = ({ scheduleItems }) => {
       {/* Draw y-axis labels (arrival times) */}
       {arrivalTimes.map((time, index) => {
         // Calculate y-coordinate for the y-axis labels
-        const y = displayBottom - (index * (displayHeight / (arrivalTimes.length - 1)))
+        const y = displayTop + (index * (displayHeight / (arrivalTimes.length - 1)))
         // Draw horizontal lines
         return (
           <React.Fragment key={index}>
