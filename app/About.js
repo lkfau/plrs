@@ -8,7 +8,7 @@ const About = () => {
   const teamMembers = [
     {
       image: require('./assets/headshot1.jpg'),
-      description: 'Description for team member 1',
+      description: 'Romeo Francois graduated in Spring 2024 with a B.S in Computer Science and a data science certification. He worked primarily on designing UI elements for this app.',
     },
     {
       image: require('./assets/headshot2.jpg'),
@@ -31,7 +31,7 @@ const About = () => {
   return (
     <PageContainer gradient={true} style={{ paddingTop: 108.5 }}>
       <View style={{ flex: 1 }}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator='false'>
           <View style={{ marginBottom: 20, marginTop: 20}}>
             <Text style={aboutPage.header}>Mission statement</Text>
             <View style={aboutPage.textContainerStatement}>

@@ -4,6 +4,7 @@ import Home from '../HomePage';
 import Schedules from '../SavedSchedules';
 import Recommend from '../RecommendPage';
 import OptionsPage from '../OptionsPage';
+import Account from '../MyAccount';
 
 export default pageOptions = [
   {
