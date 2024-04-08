@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
   },
   checked: {
-    backgroundColor: 'green',
+    backgroundColor: '#0073ef',
   },
 })
 

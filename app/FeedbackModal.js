@@ -10,7 +10,6 @@ const FeedbackModal = ({ lot_id, visible, onHide }) => {
   const navigation = useNavigation();
   const ctx = useContext(DataContext)
   const submitFeedback = async (lotIsFull) => {
-    console.log('Bearer ' + ctx.getSessionID())
     const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/feedback`, {
       method: 'POST',
       headers: {
@@ -22,7 +21,6 @@ const FeedbackModal = ({ lot_id, visible, onHide }) => {
         lot_is_full: lotIsFull
       }),
     });
-    console.log(response)
     if (response.status == 200) {
       navigation.navigate('GetRecommendation');
     }

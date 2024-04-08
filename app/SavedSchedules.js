@@ -6,7 +6,7 @@ import ScheduleView from './ScheduleView.js';
 import ScheduleEditor from './ScheduleEditor.js';
 import { useNavigation } from '@react-navigation/native';
 import PageContainer from './UI/PageContainer.js';
-import { button } from './Styles.js';
+import { button, stylesCreateaccount } from './Styles.js';
 
 const Schedules = () => {
   const [schedules, setSchedules] = useState([]);
@@ -144,7 +144,19 @@ const Schedules = () => {
         name="EditSchedule"
         options={() => ({
           title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule',
-          headerRight: () => <TouchableOpacity onPress={saveSchedule}><Text>Save</Text></TouchableOpacity>
+          headerRight: () => (
+            <TouchableOpacity 
+              onPress={saveSchedule} 
+              style={{
+                backgroundColor: '#0073ef', 
+                paddingHorizontal: 10, 
+                paddingVertical: 5, 
+                marginRight: 20,
+                borderRadius: 5
+              }}>
+                <Text style={{color: '#fff', fontWeight: 'bold'}}>Save</Text>
+              </TouchableOpacity>
+          )
         })}
       >
         {() => <ScheduleEditor schedule={selectedSchedule} setSchedule={setSelectedSchedule} />}

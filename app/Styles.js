@@ -577,7 +577,7 @@ export const stylesScheduleeditor = StyleSheet.create({
       margin: 8,
       padding: 12,
       borderRadius: 8,
-      backgroundColor: 'green'
+      backgroundColor: '#0073ef'
     },
     addButtonText: {
       color: '#fff',

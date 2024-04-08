@@ -21,8 +21,6 @@ const Settings = () => {
     const [newEmail, setNewEmail] = useState('');
   
     const handleChangeEmail = () => {
-      // Add your logic to handle email change here
-      console.log('New Email:', newEmail);
       // Reset email field
       setNewEmail('');
       // Close modal

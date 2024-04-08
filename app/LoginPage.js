@@ -36,7 +36,6 @@ const LoginPage = () => {
       })
     });
     
-    console.log(response.status);
     if (response.status === 200) {
       if (ctx.logIn(await response.json())) navigation.navigate('Home')
     }
