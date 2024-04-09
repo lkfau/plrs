@@ -2,8 +2,9 @@ from flask import request,Blueprint, jsonify
 from flask_cors import cross_origin
 from ..database.db_connection import run_query as query
 from ..security.crypt_functions import session_ids, custom_hash
-
-
+from ..email.email import send_email
+import random
+import string
 
 app_user = Blueprint('app_user', __name__)
 @app_user.route('/create_user', methods=['POST'])
@@ -12,12 +13,31 @@ def create_user():
     request_data = request.get_json()
     email = request_data['email']
     pwd = request_data['pwd']
-    if email == '' or pwd == '':
-        return 'Error; New user must have an email and password', 404
-    pwd = custom_hash(pwd)
-    user = [email, pwd]
-    query("create_user.sql", user)
-    return 'Created new user', 200
+
+    
+    auth_code = (
+        ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
+        + '-' +
+        ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
+    )
+
+    send_email_result = send_email(
+        email,
+        'Your PLRS Email Verification Code', 
+        f'Your email authentication code is {auth_code}.'
+    )
+
+    if send_email_result:
+        return 'Email sent', 200
+    else:
+        return 'Email failed to send', 500
+   
+    # if email == '' or pwd == '':
+    #     return 'Error; New user must have an email and password', 404
+    # pwd = custom_hash(pwd)
+    # user = [email, pwd]
+    # query("create_user.sql", user)
+    # return 'Created new user', 200
 
 app_update_user_email = Blueprint('app_update_user_email', __name__)
 @app_update_user_email.route('/update_user_email', methods=['PUT'])
