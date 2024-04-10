@@ -1,3 +1,3 @@
 UPDATE plrs_user
-SET email = %s
-WHERE user_id = %s
+SET email = %s, email_verified = false
+WHERE user_id = %s;

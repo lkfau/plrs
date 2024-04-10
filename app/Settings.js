@@ -6,12 +6,17 @@ import PageContainer from './UI/PageContainer';
 import PermitModal from './PermitModal';
 
 
+// Import the checkmark icon from FontAwesome
+import { FontAwesome5 } from '@expo/vector-icons';
+
 const pageOptions = [
   { title: 'Account', description: 'Change email, Change password, Log out' },
   { title: 'Schedules', description: 'Manage schedules' },
   { title: 'Permits', description: 'Select permit type(s)' },
   { title: 'About', description: 'Mission statement, Meet the team' }
 ];
+
+const permitOptions = ['Red', 'blue', 'black', 'orange'];
 
 const Settings = () => {
   const navigation = useNavigation();
@@ -28,7 +33,6 @@ const Settings = () => {
           style={button.containerOutline}
           onPress={() => {
             if (option.title === 'Permits') {
-              console.log('te')
               setModalVisible(true);
             } else {
               navigation.navigate(option.title);
