@@ -140,6 +140,27 @@ export const teamMember = {
 
 //My account (change email modal)
 
+export const changePermit = {
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  container: {
+    width: '80%',
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 15,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 20,
+  },
+}
+
 export const changeEmail = {
   overlay: {
     flex: 1,
@@ -209,6 +230,15 @@ export const btn = {
   },
 }
 
+export const checkBox = {
+  box: {
+    width: 25,
+    height: 25,
+    borderColor: '#000',
+    borderWidth: 2,
+    marginRight: 5
+  },
+}
 //to be replaced
 
 const stylesCreateAndLogin = StyleSheet.create({

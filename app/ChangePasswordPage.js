@@ -85,10 +85,10 @@ const ChangePasswordPage = () => {
           onFocus={handleConfirmPasswordFocus}
           onBlur={handleConfirmPasswordBlur}
         />
+        <TouchableOpacity style={stylesLogin.button}>
+          <Text style={stylesLogin.buttonText}>Submit</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={[button.containerOutline, {width: 200}]}>
-        <Text style={button.title}>Submit</Text>
-      </TouchableOpacity>
     </PageContainer>
   );
 };
