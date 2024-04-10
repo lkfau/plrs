@@ -231,13 +231,11 @@ export const btn = {
 }
 
 export const checkBox = {
-  box: {
-    width: 25,
-    height: 25,
-    borderColor: '#000',
-    borderWidth: 2,
-    marginRight: 5
-  },
+  width: 25,
+  height: 25,
+  borderColor: '#000',
+  borderWidth: 2,
+  marginRight: 5
 }
 //to be replaced
 

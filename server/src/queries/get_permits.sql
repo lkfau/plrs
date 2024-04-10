@@ -3,7 +3,11 @@ SELECT p.permit_type_id, p.type_name, CASE
   ELSE FALSE
 END AS user_has_permit
 FROM permit_type p
-LEFT JOIN user_permit_type u ON u.permit_type_id = p.permit_type_id
+LEFT JOIN LATERAL (
+    SELECT user_id, permit_type_id
+    FROM user_permit_type
+    WHERE permit_type_id = p.permit_type_id
+    AND user_id = %s
+) AS u ON TRUE
 WHERE p.permit_required = TRUE
-AND (u.user_id IS NULL OR u.user_id = %s)
 ORDER BY p.permit_type_id;
