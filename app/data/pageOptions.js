@@ -3,8 +3,8 @@ import Login from '../LoginPage';
 import Home from '../HomePage';
 import Schedules from '../SavedSchedules';
 import Recommend from '../RecommendPage';
-import About from '../About';
 import OptionsPage from '../OptionsPage';
+import Account from '../MyAccount';
 
 export default pageOptions = [
   {
@@ -50,15 +50,6 @@ export default pageOptions = [
     showTitle: false,
     transparentTitle: false,
     showLoggedIn: true,
-    showLoggedOut: true
-  },
-  {
-    title: 'About',
-    icon: 'information-circle',
-    component: About,
-    showTitle: true,
-    transparentTitle: true,
-    showLoggedIn: false,
     showLoggedOut: true
   },
   {

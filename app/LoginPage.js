@@ -9,10 +9,12 @@ import PageContainer from './UI/PageContainer';
 const LoginPage = () => {
   const navigation = useNavigation();
   const ctx = useContext(DataContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailFocused, setIsEmailFocused] = useState(false); // State to track email input focus
   const [isPasswordFocused, setIsPasswordFocused] = useState(false); // State to track password input focus
+  const [incorrectInput, setIncorrectInput] = useState(false); // State to track incorrect input
 
   const handleEmailFocus = () => setIsEmailFocused(true);
   const handleEmailBlur = () => setIsEmailFocused(false);
@@ -36,9 +38,14 @@ const LoginPage = () => {
       })
     });
     
-    console.log(response.status);
     if (response.status === 200) {
-      if (ctx.logIn(await response.json())) navigation.navigate('Home')
+      if (ctx.logIn(await response.json())) {
+        navigation.navigate('Home');
+      } else {
+        setIncorrectInput(false);
+      }
+    } else {
+      setIncorrectInput(true);
     }
   }
 
@@ -68,6 +75,9 @@ const LoginPage = () => {
           onFocus={handlePasswordFocus}
           onBlur={handlePasswordBlur}
         />
+        {incorrectInput && (
+          <Text style={{ color: 'red', marginTop: 10 }}>Incorrect email and/or password</Text>
+        )}
         <TouchableOpacity style={stylesLogin.button} onPress={logIn}>
           <Text style={stylesLogin.buttonText}>Sign On</Text>
         </TouchableOpacity>

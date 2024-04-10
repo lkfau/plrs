@@ -7,7 +7,6 @@ const pageOptions = [
   { title: 'Schedules', description: 'Manage schedules' },
   { title: 'Recommend', description: 'Get a parking lot recommendation' },
   { title: 'Settings', description: 'Manage your account, Select permit type, Recommendation Preferences' },
-  { title: 'About', description: 'Mission statement, Meet the team' }
 ];
 
 const HomePage = ({ navigation }) => {

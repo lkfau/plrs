@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { button, textInput, changeEmail } from './Styles'
+import { button, textInput, changeEmail, inputContLogin, stylesLogin } from './Styles'
 import PageContainer from './UI/PageContainer';
 import DataContext from './context/data-context';
 
@@ -12,8 +12,41 @@ const Account = () => {
   const Stack = createStackNavigator();
   const ctx = useContext(DataContext);
 
-  const [modalVisible, setModalVisible] = useState(false);
+  //Modals for both email and password
+  const [modalEmailVisible, setModalEmailVisible] = useState(false);
+  const [modalPasswordVisible, setModalPasswordVisible] = useState(false);
+
+  //const [oldEmail, setOldEmail] = useState(email)
   const [newEmail, setNewEmail] = useState('');
+  const [isNewEmailFocused, setIsNewEmailFocused] = useState(false); // State to track email input focus
+
+  const [oldEmail, setOldEmail] = useState('');
+  const [isOldEmailFocused, setIsOldEmailFocused] = useState(false);
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [isOldPasswordFocused, setIsOldPasswordFocused] = useState(false); // State to track email input focus
+  const [isNewPasswordFocused, setIsNewPasswordFocused] = useState(false); // State to track password input focus
+  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false); // State to track password input focus
+
+
+  const handleOldPasswordFocus = () => setIsOldPasswordFocused(true);
+  const handleOldPasswordFocusBlur = () => setIsOldPasswordFocused(false);
+
+  const handleNewPasswordFocus = () => setIsNewPasswordFocused(true);
+  const handleNewPasswordBlur = () => setIsNewPasswordFocused(false);
+
+  const handleConfirmPasswordFocus = () => setIsConfirmPasswordFocused(true);
+  const handleConfirmPasswordBlur = () => setIsConfirmPasswordFocused(false);
+
+  const handleNewEmailFocus = () => setIsNewEmailFocused(true);
+  const handleNewEmailBlur = () => setIsNewEmailFocused(false);
+
+  const handleOldEmailFocus = () => setIsOldEmailFocused(true);
+  const handleOldEmailBlur = () => setIsOldEmailFocused(false);
+
 
   // const createAccount = async () => {
   //   const passwordHash = await Crypto.digestStringAsync(
@@ -45,43 +78,126 @@ const Account = () => {
     setModalVisible(false);
   };
 
+  const handleChangePassword = () => {
+    // Add your logic to handle email change here
+    console.log('New Password:', newPassword);
+    // Reset email field
+    //setNewEmail('');
+    // Close modal
+    setModalVisible(false);
+  };
+
   return (
     
     <PageContainer gradient={true}>
-      <TouchableOpacity style={button.containerOutline} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity style={button.containerOutline} onPress={() => setModalEmailVisible(true)}>
         <Text style={button.title}>Change Email</Text>
       </TouchableOpacity>
       <Modal
         animationType="fade"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        visible={modalEmailVisible}
+        onRequestClose={() => setModalEmailVisible(false)}
       >
         <TouchableOpacity
           style={changeEmail.overlay}
           activeOpacity={1}
-          onPressOut={() => setModalVisible(false)}
+          onPressOut={() => setModalEmailVisible(false)}
         >
-          <View style={changeEmail.containerOutline}>
-            <Text style={changeEmail.title}>Change Email</Text>
+          <View style={inputContLogin.container}>
             <TextInput
-              style={textInput}
-              placeholder="New Email"
-              value={newEmail}
-              onChangeText={setNewEmail}
-              placeholderTextColor="black"
+              style={[
+                stylesLogin.inputPass,
+                isOldEmailFocused && stylesLogin.inputFocused, // Apply focused style conditionally
+              ]}
+              placeholder="Old Email"
+              placeholderTextColor="gray"
+              value={oldEmail}
+              onFocus={handleOldEmailFocus}
+              onBlur={handleOldEmailBlur}
             />
-            <TouchableOpacity style={button.containerOutline} onPress={handleChangeEmail}>
-              <Text style={button.title}>Submit</Text>
+            <TextInput
+              style={[
+                stylesLogin.inputPass,
+                isNewEmailFocused && stylesLogin.inputFocused, // Apply focused style conditionally
+              ]}
+              placeholder="New Email"
+              placeholderTextColor="gray"
+              value={newEmail}
+              onChangeText={(email) => setNewEmail(email)}
+              onFocus={handleNewEmailFocus}
+              onBlur={handleNewEmailBlur}
+            />
+            <TouchableOpacity style={stylesLogin.button} onPress={handleChangeEmail}>
+              <Text style={stylesLogin.buttonText}>Submit</Text>
             </TouchableOpacity>
-            
           </View>
         </TouchableOpacity>
       </Modal>
 
-      <TouchableOpacity style={button.containerOutline} onPress={() => navigation.navigate('ChangePassword')}>
+
+
+      <TouchableOpacity style={button.containerOutline} onPress={() => setModalPasswordVisible(true)}>
         <Text style={button.title}>Change Password</Text>
       </TouchableOpacity>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalPasswordVisible}
+        onRequestClose={() => setModalPasswordVisible(false)}
+      >
+        <TouchableOpacity
+          style={changeEmail.overlay}
+          activeOpacity={1}
+          onPressOut={() => setModalPasswordVisible(false)}
+        >
+          <View style={inputContLogin.container}>
+            <TextInput
+              style={[
+                stylesLogin.inputPass,
+                isOldPasswordFocused && stylesLogin.inputFocused, // Apply focused style conditionally
+              ]}
+              placeholder="Old Password"
+              placeholderTextColor="gray"
+              value={oldPassword}
+            //onChangeText={(pwd) => setEmail(pwd)}
+              onFocus={handleOldPasswordFocus}
+              onBlur={handleOldPasswordFocusBlur}
+            />
+            <TextInput
+              style={[
+                stylesLogin.inputPass,
+                isNewPasswordFocused && stylesLogin.inputFocused, // Apply focused style conditionally
+              ]}
+              placeholder="New Password"
+              placeholderTextColor="gray"
+              secureTextEntry={true}
+              value={newPassword}
+            // onChangeText={(pwd) => setPassword(pwd)}
+              onFocus={handleNewPasswordFocus}
+              onBlur={handleNewPasswordBlur}
+            />
+            <TextInput
+              style={[
+                stylesLogin.inputPass,
+                isConfirmPasswordFocused && stylesLogin.inputFocused, // Apply focused style conditionally
+              ]}
+              placeholder="Confirm Password"
+              placeholderTextColor="gray"
+              secureTextEntry={true}
+              value={confirmPassword}
+              onChangeText={(pwd) => setConfirmPassword(pwd)}
+              onFocus={handleConfirmPasswordFocus}
+              onBlur={handleConfirmPasswordBlur}
+            />
+            <TouchableOpacity style={stylesLogin.button} onPress={handleChangePassword}>
+              <Text style={stylesLogin.buttonText}>Submit</Text>
+            </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+      </Modal>
+
+
 
       <TouchableOpacity style={button.containerOutline} onPress={() => ctx.logOut()}>
         <Text style={button.title}>Log Out</Text>
