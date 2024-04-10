@@ -47,7 +47,7 @@ def run_query(query_name, query_params, return_type='none', execute_many=False):
             case 'all':
                 result = cur.fetchall()
             case 'none':
-                result = True
+                result = cur.rowcount
 
     except (Exception, psycopg2.DatabaseError) as error:
         # log error to console

@@ -21,7 +21,7 @@ def login_no_session(email, pwd):
     pwd = custom_hash(pwd)
     checkpwd = query('get_password_hash.sql', [email], "one")
 
-    if checkpwd[0] == pwd:   
+    if checkpwd and checkpwd[0] == pwd: 
         #create and save a session id then pass back the session id and user id
         user_session = session_ids()
         user_session.save_session(email, pwd)
