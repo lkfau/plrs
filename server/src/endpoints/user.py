@@ -16,29 +16,29 @@ def create_user():
     pwd = request_data['pwd']
 
     
-    auth_code = (
-        ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
-        + '-' +
-        ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
-    )
+    # auth_code = (
+    #     ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
+    #     + '-' +
+    #     ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
+    # )
 
-    send_email_result = send_email(
-        email,
-        'Your PLRS Email Verification Code', 
-        f'Your email authentication code is {auth_code}.'
-    )
+    # send_email_result = send_email(
+    #     email,
+    #     'Your PLRS Email Verification Code', 
+    #     f'Your email authentication code is {auth_code}.'
+    # )
 
-    if send_email_result:
-        return 'Email sent', 200
-    else:
-        return 'Email failed to send', 500
+    # if send_email_result:
+    #     return 'Email sent', 200
+    # else:
+    #     return 'Email failed to send', 500
    
-    # if email == '' or pwd == '':
-    #     return 'Error; New user must have an email and password', 404
-    # pwd = custom_hash(pwd)
-    # user = [email, pwd]
-    # query("create_user.sql", user)
-    # return 'Created new user', 200
+    if email == '' or pwd == '':
+        return 'Error; New user must have an email and password', 404
+    pwd = custom_hash(pwd)
+    user = [email, pwd]
+    query("create_user.sql", user)
+    return 'Created new user', 200
 
 app_update_user_email = Blueprint('app_update_user_email', __name__)
 @app_update_user_email.route('/update_user_email', methods=['PUT'])
