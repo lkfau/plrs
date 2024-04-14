@@ -19,8 +19,8 @@ def login_no_session(email, pwd):
     
     #hash and then check against stored hash if same then pass a new session id
     pwd = custom_hash(pwd)
-    checkpwd = query('get_password_hash.sql', [email], "one")
 
+    checkpwd = query('get_password_hash.sql', [email], "one")
     if checkpwd and checkpwd[0] == pwd: 
         #create and save a session id then pass back the session id and user id
         user_session = session_ids()
@@ -35,10 +35,10 @@ def grab_user_info(session_id):
     query_result = query("get_user_info.sql", [session_id], "one")
     return user_info(query_result)
 
-def check_session(session_id):
+def check_session(session_id, email_verified=True):
     user_session = session_ids(session_id_value=session_id)
     if user_session.session_id_value and not user_session.too_old():
-        query_result = query("get_user_info.sql", [session_id], "one")
+        query_result = query("get_user_info.sql", [session_id, email_verified], "one")
         return user_info(query_result)
     else:
         return False

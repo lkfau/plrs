@@ -6,6 +6,7 @@ const DataContext = React.createContext({
     buildings: null,
     setBuildings: () => {},
     loggedIn: false,
+    verifyingEmail: false,
     logIn: () => {},
     logOut: () => {},
     getSessionID: () => {}
@@ -14,14 +15,21 @@ const DataContext = React.createContext({
 export const DataContextProvider = (props) => {
     const [buildings, setBuildings] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
-    
-    const logIn = (sessionID) => {
+    const [verifyingEmail, setVerifyingEmail] = useState(false);
+
+    const logIn = (sessionID, verifyingEmail) => {
       if (!sessionID) {
         console.log('Session ID required to log in.');
       } else if (!loggedIn) {
         try {
           SecureStore.setItem('sessionID', sessionID);
-          setLoggedIn(true);
+          if (verifyingEmail) {
+            setVerifyingEmail(verifyingEmail);    
+          } else {
+            setLoggedIn(true);
+            setVerifyingEmail(false);  
+          }
+            
           return true;
         } catch (err) {
           console.log(err);
@@ -34,6 +42,7 @@ export const DataContextProvider = (props) => {
       try {
         SecureStore.setItem('sessionID', '');
         setLoggedIn(false);
+        setVerifyingEmail(false);
         return true;
       } catch (err) {
         console.log(err);
@@ -52,7 +61,7 @@ export const DataContextProvider = (props) => {
     
     return (
         <DataContext.Provider
-            value={{buildings, setBuildings, loggedIn, logIn, logOut, getSessionID}}>
+            value={{buildings, setBuildings, loggedIn, verifyingEmail, logIn, logOut, getSessionID}}>
             {props.children}
         </DataContext.Provider>
     )

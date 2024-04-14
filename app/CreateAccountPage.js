@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import DataContext from './context/data-context';
 import * as Crypto from 'expo-crypto';
 import { inputContCreate, stylesCreateaccount, inputCreate, btn } from './Styles';
 import PageContainer from './UI/PageContainer';
 
 const CreateAccountPage = () => {
+  const ctx = useContext(DataContext);
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("");
@@ -23,6 +25,16 @@ const CreateAccountPage = () => {
   const handleConfirmPasswordBlur = () => setIsConfirmPasswordFocused(false);
 
   const createAccount = async () => {
+    if (!email || email.length < 2) {
+      console.log('handle invalid email');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      console.log('handle different passwords')
+      return;
+    }
+
     const passwordHash = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA256,
       process.env.EXPO_PUBLIC_SEED + password
@@ -39,7 +51,13 @@ const CreateAccountPage = () => {
       })
     });
 
-    console.log(await response.json());
+    if (response.status === 200) {
+      const data = await response.json();
+      if (data.session_id && data.email_sent)
+        ctx.logIn(data.session_id, email)
+      else 
+        console.log('create account fail :(')
+    }
   }
 
 return (
@@ -64,6 +82,7 @@ return (
         ]}
         placeholder="Password"
         secureTextEntry={true}
+        onChangeText={pwd => setPassword(pwd)}
         onFocus={handlePasswordFocus}
         onBlur={handlePasswordBlur}
       />
@@ -76,12 +95,11 @@ return (
         placeholder="Confirm Password"
         secureTextEntry={true}
         value={confirmPassword}
-        onChangeText={(pwd) => setConfirmPassword(pwd)}
+        onChangeText={pwd => setConfirmPassword(pwd)}
         onFocus={handleConfirmPasswordFocus}
         onBlur={handleConfirmPasswordBlur}
       />
       
-
       <TouchableOpacity style={btn.button} onPress={createAccount}>
         <Text style={stylesCreateaccount.buttonText}>Create Account</Text>
       </TouchableOpacity>

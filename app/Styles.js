@@ -44,6 +44,10 @@ export const button = {
     alignItems: 'center',
     borderRadius: 10
   },
+  disabled: {
+    backgroundColor: '#888',
+    color: '#ccc'
+  },
   title: {
     color: '#fff',
     fontSize: 18,
@@ -88,6 +92,7 @@ export const textInput = {
   borderRadius: 5,
   padding: 10,
   marginBottom: 10,
+  backgroundColor: '#fff'
 }
 
 export const recommendButtons = {

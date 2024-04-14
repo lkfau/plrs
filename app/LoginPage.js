@@ -37,10 +37,10 @@ const LoginPage = () => {
         pwd: passwordHash
       })
     });
-    
     if (response.status === 200) {
-      if (ctx.logIn(await response.json())) {
-        navigation.navigate('Home');
+      const data = await response.json()
+      if (ctx.logIn(data, false)) {
+        navigation.navigate('main', {screen: 'home'});
       } else {
         setIncorrectInput(false);
       }

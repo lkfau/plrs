@@ -178,7 +178,7 @@ const GetRecommendation = ({ onRecommend }) => {
       <View style={[stylesRecommend.container, { justifyContent: 'center' }]}>
         <TouchableOpacity 
           disabled={recommendDisabled} 
-          style={button.containerOutline}
+          style={[button.containerOutline, recommendDisabled ? button.disabled : null]}
           onPress={recommendHandler}
         >
           <Text style={stylesRecommend.recommendButtonText}>Get Recommendation</Text>
