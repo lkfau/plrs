@@ -125,6 +125,14 @@ def delete_schedule(schedule_id):
     delete_schedule_result = query('delete_schedule.sql', [schedule_id, schedule_id])
     return delete_schedule_result
 
+def check_schedule_owner(user_id, schedule_id):
+    # check if the user owns the schedule they are modifying
+    check_schedule_owner_result = query('check_schedule_owner.sql', [schedule_id])
+    if (check_schedule_owner_result != user_id):
+        return False
+    else:
+        return True
+
 # create endpoint
 app_schedules = Blueprint('app_schedules', __name__)
 
@@ -175,8 +183,11 @@ def schedules():
         # case 4: update existing schedule
         elif request.method == 'PUT':
             request_data = request.get_json()
+            user_id = request_data['user_id']
             schedule_id = request_data['schedule_id']
             schedule = Schedule(request_data=request_data)
+            if (check_schedule_owner(user_id, schedule_id) != True):
+                 return jsonify({'message': 'Unauthorized to modify schedule.'}), 403
             update_status = update_schedule(schedule_id, schedule)
             if update_status:
                 return jsonify({'message': 'Schedule successfully updated.'}), 200
@@ -186,6 +197,9 @@ def schedules():
         # case 5: delete existing schedule
         elif request.method == 'DELETE':
             schedule_id = request.args.get('schedule_id', default=0, type=int)
+            user_id = request.args.get('user_id', default=0, type=int)
+            if (check_schedule_owner(user_id, schedule_id) != True):
+                return jsonify({'message': 'Unauthorized to modify schedule.'}), 403
             delete_status = delete_schedule(schedule_id)
             if delete_status:
                 return 'Schedule successfully deleted.', 200
