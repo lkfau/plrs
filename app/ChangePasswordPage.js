@@ -47,8 +47,24 @@ const ChangePasswordPage = () => {
 //     console.log(await response.json());
 //   }
 
+const handlePressOut = (event) => {
+  if (event.target === event.currentTarget) {
+    onClose();
+  }
+};
+
   return (
-    <PageContainer gradient={true}>
+    <Modal
+    animationType="fade"
+    transparent={true}
+    visible={visible}
+    onRequestClose={onClose}
+  >
+    <TouchableOpacity
+      style={changePermit.overlay}
+      activeOpacity={1}
+      onPressOut={handlePressOut} // Use the custom handler
+    >
       <View style={inputContLogin.container}>
         <TextInput
           style={[
@@ -89,7 +105,8 @@ const ChangePasswordPage = () => {
           <Text style={stylesLogin.buttonText}>Submit</Text>
         </TouchableOpacity>
       </View>
-    </PageContainer>
+    </TouchableOpacity>
+    </Modal>
   );
 };
 
