@@ -8,6 +8,7 @@ class Preferences:
         # case 1: create instance from front-end request (save)
             self.first_or_last_location = request_data['first_or_last_location']
             self.distance_or_vacancy = request_data['distance_or_vacancy']
+            self.include_metered = request_data['include_metered']
 
 class Permit:
     def __init__(self, query_result = None):
@@ -21,6 +22,7 @@ def save_preferences(user_id, new_preferences):
     save_result = query('save_user_preferences.sql', [
         new_preferences.first_or_last_location,
         new_preferences.distance_or_vacancy,
+        new_preferences.include_metered,
         user_id
     ])
     return save_result
