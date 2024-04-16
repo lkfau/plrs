@@ -114,7 +114,7 @@ def recommend():
 
     if schedule_id:
         first_or_last_location = request.args.get('first_or_last_location', default='first', type=str)
-        destination = get_destination(schedule_id=schedule_id, first_or_last_location=first_or_last_location, weekday=curtime.weekday() + 1 % 7)
+        destination = get_destination(schedule_id=schedule_id, first_or_last_location=first_or_last_location, weekday=(curtime.weekday() + 1) % 7)
     elif building_id:
         building_id = request.args.get('building_id', default=0, type=int)
         destination = get_destination(building_id=building_id)

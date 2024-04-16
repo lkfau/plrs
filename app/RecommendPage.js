@@ -1,27 +1,21 @@
 import React, { useCallback, useContext, useState, useMemo } from 'react';
 import { StyleSheet, SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
-import { useNavigation, useFocusEffect  } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import RecommendScheduleSelector from './RecommendScheduleSelector';
 import RecommendBuildingSelector from './RecommendBuildingSelector';
 import RecommendationList from './RecommendationList';
 import { recommendButtons, stylesRecommend, button } from './Styles';
-import { LinearGradient } from 'expo-linear-gradient';
 import DataContext from './context/data-context';
 
 const RecommendPage = () => {
-  const [recoSchedule, setRecoSchedule] = useState(null);
-  const [recoBuilding, setRecoBuilding] = useState(null);
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [selectedBuilding, setSelectedBuilding] = useState(null);
+  const [firstOrLastLocation, setFirstOrLastLocation] = useState(null);
 
   const Stack = createStackNavigator();
   const navigation = useNavigation();
-
-  const getRecommendationHandler = (schedule_id, building_id) => {
-    setRecoSchedule(schedule_id);
-    setRecoBuilding(building_id);
-    navigation.navigate('RecommendationList');
-  }
 
   return <Stack.Navigator>
     <Stack.Screen
@@ -30,23 +24,38 @@ const RecommendPage = () => {
     >
       {() => (
         <GetRecommendation
-          onRecommend={getRecommendationHandler}
+          schedule={selectedSchedule}
+          setSchedule={setSelectedSchedule}
+          building={selectedBuilding}
+          setBuilding={setSelectedBuilding}
+          firstOrLastLocation={firstOrLastLocation}
+          setFirstOrLastLocation={setFirstOrLastLocation}
+          onRecommend={() => navigation.navigate('RecommendationList')}
         />
       )}
     </Stack.Screen>
     <Stack.Screen
       name="RecommendationList"
-      options={() => ({
-        title: 'Recommendation',
-        // title: selectedSchedule?.name?.length ? selectedSchedule.name : 'Edit Schedule',
-      })}
+      options={{ title: 'Recommendation' }}
     >
-      {() => <RecommendationList schedule_id={recoSchedule} building_id={recoBuilding}  />}
+      {() => <RecommendationList
+        schedule_id={selectedSchedule}
+        building_id={selectedBuilding}
+        first_or_last_location={firstOrLastLocation}
+      />}
     </Stack.Screen>
   </Stack.Navigator>
 }
 
-const GetRecommendation = ({ onRecommend }) => {
+const GetRecommendation = ({
+  schedule,
+  setSchedule,
+  building,
+  setBuilding,
+  firstOrLastLocation,
+  setFirstOrLastLocation,
+  onRecommend
+}) => {
   const ctx = useContext(DataContext);
 
   // React hooks for managing state
@@ -54,132 +63,92 @@ const GetRecommendation = ({ onRecommend }) => {
   const [buildings, setBuildings] = useState(null); // State to store buildings data
   const [currentTab, setCurrentTab] = useState('Use Building');
 
-  const [selectedButton, setSelectedButton] = useState(null);
-
-  const handlePress = (buttonName) => {
-    setSelectedButton(buttonName);
-  };
-
-  const [selectedSchedule, setSelectedSchedule] = useState(null);
-  const [selectedBuilding, setSelectedBuilding] = useState(null);
-
   const Tab = createMaterialTopTabNavigator(); // Material Top Tab Navigator for tabbed navigation
 
   const recommendDisabled = useMemo(() => (
-       (currentTab === 'Use Schedule' && selectedSchedule === null) 
-    || (currentTab === 'Use Building' && selectedBuilding === null)
-  ), [currentTab, selectedSchedule, selectedBuilding]);
+    (currentTab === 'Use Schedule' && (schedule === null || firstOrLastLocation === null))
+    || (currentTab === 'Use Building' && building === null)
+  ), [currentTab, schedule, building]);
 
-  //Fetching schedule/user data
-  async function fetchData() {
+  async function fetchScheduleData() {
     try {
-      // Fetch schedules data
       const scheduleResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules`, {
-        headers: {Authorization: 'Bearer ' + ctx.getSessionID()}
+        headers: { Authorization: 'Bearer ' + ctx.getSessionID() }
       });
 
-      // Fetch buildings data
-      const buildingResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/buildings`);
-
-      // Check if both responses are successful
-      if (!scheduleResponse.ok || !buildingResponse.ok)
+      if (!scheduleResponse.ok)
         throw new Error('Network response was not ok');
 
-      // Parse response data into JSON format
       const scheduleData = await scheduleResponse.json();
-      const buildingData = await buildingResponse.json();
-
-      // Update state with fetched data
       setSchedules(scheduleData);
-      setBuildings(buildingData);
 
     } catch (error) {
-      // Log and throw error if fetching fails
       console.error('Error fetching data:', error);
-      throw error;
     }
   };
 
-  const recommendHandler = () => {
-    if (currentTab === 'Use Building')
-      onRecommend(null, selectedBuilding);
-    else
-      onRecommend(selectedSchedule, null);
+  async function fetchBuildingData() {
+    try {
+      const buildingResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/buildings`);
+
+      if (!buildingResponse.ok)
+        throw new Error('Network response was not ok');
+
+      const buildingData = await buildingResponse.json();
+      setBuildings(buildingData);
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   }
 
   // useFocusEffect hook to fetch data when the screen shows
-  useFocusEffect(useCallback(() => { 
-    fetchData(); 
-  }, [])); 
+  useFocusEffect(useCallback(() => {
+    setSchedule(null);
+    setBuilding(null);
+    fetchBuildingData();
+    if (ctx.loggedIn)
+      fetchScheduleData();
+  }, [ctx.loggedIn]));
 
   return (
     <SafeAreaView style={recommendButtons.container}>
-      <LinearGradient
-            colors={['#ae3b54', '#284b85']}
-            style={StyleSheet.absoluteFill}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          />
-      <View style={{ height: "25%" }}>      
-        {schedules && buildings &&
-          <Tab.Navigator
-          
-            screenListeners={({ navigation }) => ({
-              state: (e) => {
-                setCurrentTab(e.data.state.routeNames[e.data.state.index]);
-              }
-            })}
-          >
-            <Tab.Screen
-              name="Use Schedule"
-              children={(props) => <RecommendScheduleSelector schedules={schedules} onSelect={setSelectedSchedule} />}>
-            </Tab.Screen>
-            <Tab.Screen
-              name="Use Building"
-              children={() => <RecommendBuildingSelector buildings={buildings} onSelect={setSelectedBuilding} />}>
-            </Tab.Screen>
-          </Tab.Navigator>}
-      </View>   
-      <Text style={recommendButtons.txt}>Would you like to park near your first or last location?</Text>
-      <View style={stylesRecommend.container}>
-      <TouchableOpacity
-        style={[
-          stylesRecommend.button,
-          selectedButton === 'first' && stylesRecommend.buttonSelected,
-        ]}
-        onPress={() => handlePress('first')}
-      >
-        <Text
-          style={[
-            stylesRecommend.buttonText,
-            selectedButton === 'first' && stylesRecommend.buttonTextSelected,
-          ]}
-        >
-          First Location
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[
-          stylesRecommend.button,
-          selectedButton === 'last' && stylesRecommend.buttonSelected,
-        ]}
-        onPress={() => handlePress('last')}
-      >
-        <Text
-          style={[
-            stylesRecommend.buttonText,
-            selectedButton === 'last' && stylesRecommend.buttonTextSelected,
-          ]}
-        >
-          Last Location
-        </Text>
-      </TouchableOpacity>
-  </View>
-      <View style={[stylesRecommend.container, { justifyContent: 'center' }]}>
-        <TouchableOpacity 
-          disabled={recommendDisabled} 
-          style={[button.containerOutline, recommendDisabled ? button.disabled : null]}
-          onPress={recommendHandler}
+      <View style={{ flexGrow: 1}}>
+        {buildings && (
+          (ctx.loggedIn ) ? (schedules && (
+            <Tab.Navigator
+              screenListeners={{
+                state: (e) => {
+                  setCurrentTab(e.data.state.routeNames[e.data.state.index]);
+                }
+              }}
+            >
+              <Tab.Screen
+                name="Use Schedule"
+                children={() => (
+                  <RecommendScheduleSelector
+                    schedules={schedules}
+                    setSchedule={setSchedule}
+                    firstOrLastLocation={firstOrLastLocation}
+                    setFirstOrLastLocation={setFirstOrLastLocation}
+                  />
+                )}>
+              </Tab.Screen>
+              <Tab.Screen
+                name="Use Building"
+                children={() => <RecommendBuildingSelector buildings={buildings} onSelect={setBuilding} invertGradient={true} />}>
+              </Tab.Screen>
+            </Tab.Navigator>
+          )) : (
+            <RecommendBuildingSelector buildings={buildings} onSelect={setBuilding} invertGradient={false}/>
+          )
+        )}
+      </View>
+      <View>
+        <TouchableOpacity
+          disabled={recommendDisabled}
+          style={[button.container, {marginTop: 0, borderRadius: 0, paddingVertical: 30}, recommendDisabled ? button.disabled : null]}
+          onPress={onRecommend}
         >
           <Text style={stylesRecommend.recommendButtonText}>Get Recommendation</Text>
         </TouchableOpacity>

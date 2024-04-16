@@ -4,18 +4,20 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Recommendation from './Recommendation';
 import { stylesRecommendation, button } from './Styles';
-const RecommendationList = ({ schedule_id, building_id }) => {
+
+const RecommendationList = ({ schedule_id, building_id, first_or_last_location }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [recommendations, setRecommendations] = useState(null);
 
   const navigation = useNavigation();
 
   const fetchRecommendations = async () => {
+    console.log(first_or_last_location)
     let recommendURL = process.env.EXPO_PUBLIC_SERVER_URL + '/recommend'
-    if (schedule_id) {
-      recommendURL += '?schedule_id=' + schedule_id;
-    } else if (building_id) {
-      recommendURL += '?building_id=' + building_id;
+    if (schedule_id !== null && first_or_last_location !== null) {
+      recommendURL += `?schedule_id=${schedule_id}&first_or_last_location=${first_or_last_location ? 'last' : 'first'}`;
+    } else if (building_id !== null) {
+      recommendURL += `?building_id=${building_id}`;
     }
     const response = await fetch(recommendURL);
     let recommendation_results = await response.json();

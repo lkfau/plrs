@@ -1,12 +1,15 @@
 --Update user preference
 UPDATE plrs_user u
-SET first_or_last_location = %s
-FROM user_schedule s 
+SET first_or_last_location = CASE
+  WHEN %s = 'last' THEN TRUE
+  ELSE FALSE
+END
+FROM user_schedule s
 WHERE s.user_id = u.user_id
-AND s.schedule_id = 5;
+AND s.schedule_id = %s;
 
 --Pull building
-SELECT b.building_id, b.name, b.latitude, b.longitude, i.arrival_weekdays
+SELECT b.building_id, b.name, b.latitude, b.longitude
 FROM schedule_item i
 INNER JOIN building b ON b.building_id = i.building_id
 INNER JOIN user_schedule s ON s.schedule_id = i.schedule_id

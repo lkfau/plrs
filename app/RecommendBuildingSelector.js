@@ -4,7 +4,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { recommendButtons } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const RecommendBuildingSelector = ({ buildings, onSelect }) => {
+const RecommendBuildingSelector = ({ buildings, onSelect, invertGradient }) => {
   const [selectedBuilding, setSelectedBuilding] = useState(null);
 
   const selectBuildingHandler = (building_id) => {
@@ -16,8 +16,8 @@ const RecommendBuildingSelector = ({ buildings, onSelect }) => {
     <LinearGradient
       colors={['#ae3b54', '#284b85']}
       style={recommendButtons.container}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 0 }}
+      start={{ x: invertGradient ? 1 : 0, y: 0 }}
+      end={{ x: invertGradient ? 0 : 1, y: 0 }}
     >
       <View style={recommendButtons.dropdownContainer}>
         <Text style={recommendButtons.txt}>Select saved building</Text>

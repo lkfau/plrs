@@ -17,14 +17,17 @@ def get_buildings():
         return buildings
 
 def get_destination(building_id = None, schedule_id = None, first_or_last_location = None, weekday = None):
+        query_result = None
         if schedule_id != None:
             query_result = query('get_destination_from_schedule.sql', [
-                first_or_last_location == 'last',
+                first_or_last_location,
+                schedule_id,
                 schedule_id,
                 int(pow(2, weekday))
             ], "one")
         else:
             query_result = query('get_destination_from_building.sql', [building_id], "one")
+        
         building = Building(query_result=query_result)
         return building
         
