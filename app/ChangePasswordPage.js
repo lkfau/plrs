@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Crypto from 'expo-crypto';
-import { button, inputContLogin, stylesLogin } from './Styles';
 import DataContext from './context/data-context';
-import PageContainer from './UI/PageContainer';
+import { inputContLogin, stylesLogin } from './Styles';
 
-const ChangePasswordPage = () => {
+const ChangePasswordPage = ({ visible, onClose }) => {
   const navigation = useNavigation();
   const ctx = useContext(DataContext);
 
@@ -14,10 +13,9 @@ const ChangePasswordPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [isOldPasswordFocused, setIsOldPasswordFocused] = useState(false); // State to track email input focus
-  const [isNewPasswordFocused, setIsNewPasswordFocused] = useState(false); // State to track password input focus
-  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false); // State to track password input focus
-
+  const [isOldPasswordFocused, setIsOldPasswordFocused] = useState(false);
+  const [isNewPasswordFocused, setIsNewPasswordFocused] = useState(false);
+  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false);
 
   const handleOldPasswordFocus = () => setIsOldPasswordFocused(true);
   const handleOldPasswordFocusBlur = () => setIsOldPasswordFocused(false);
@@ -28,84 +26,68 @@ const ChangePasswordPage = () => {
   const handleConfirmPasswordFocus = () => setIsConfirmPasswordFocused(true);
   const handleConfirmPasswordBlur = () => setIsConfirmPasswordFocused(false);
 
-//   const EditAccount = async () => {
-//     const passwordHash = await Crypto.digestStringAsync(
-//       Crypto.CryptoDigestAlgorithm.SHA256,
-//       process.env.EXPO_PUBLIC_SEED + password
-//     );
+  const handlePressOutsideModal = (event) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+  };
 
-//     const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/create_user`, {
-//       method: "POST",
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         pwd: passwordHash
-//       })
-//     });
-
-//     console.log(await response.json());
-//   }
-
-const handlePressOut = (event) => {
-  if (event.target === event.currentTarget) {
-    onClose();
-  }
-};
+  const handleSubmit = () => {
+    // Add your submit logic here
+    onClose(); // Close the modal after submitting
+  };
 
   return (
     <Modal
-    animationType="fade"
-    transparent={true}
-    visible={visible}
-    onRequestClose={onClose}
-  >
-    <TouchableOpacity
-      style={changePermit.overlay}
-      activeOpacity={1}
-      onPressOut={handlePressOut} // Use the custom handler
+      animationType="fade"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}
     >
-      <View style={inputContLogin.container}>
-        <TextInput
-          style={[
-            stylesLogin.inputPass,
-            isOldPasswordFocused && stylesLogin.inputFocused, // Apply focused style conditionally
-          ]}
-          placeholder="Old Password"
-          value={oldPassword}
-        //onChangeText={(pwd) => setEmail(pwd)}
-          onFocus={handleOldPasswordFocus}
-          onBlur={handleOldPasswordFocusBlur}
-        />
-        <TextInput
-          style={[
-            stylesLogin.inputPass,
-            isNewPasswordFocused && stylesLogin.inputFocused, // Apply focused style conditionally
-          ]}
-          placeholder="New Password"
-          secureTextEntry={true}
-          value={newPassword}
-         // onChangeText={(pwd) => setPassword(pwd)}
-          onFocus={handleNewPasswordFocus}
-          onBlur={handleNewPasswordBlur}
-        />
-       <TextInput
-          style={[
-            stylesLogin.inputPass,
-            isConfirmPasswordFocused && stylesLogin.inputFocused, // Apply focused style conditionally
-          ]}
-          placeholder="Confirm Password"
-          secureTextEntry={true}
-          value={confirmPassword}
-          onChangeText={(pwd) => setConfirmPassword(pwd)}
-          onFocus={handleConfirmPasswordFocus}
-          onBlur={handleConfirmPasswordBlur}
-        />
-        <TouchableOpacity style={stylesLogin.button}>
-          <Text style={stylesLogin.buttonText}>Submit</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+      <TouchableOpacity
+        style={stylesLogin.overlay}
+        activeOpacity={1}
+        onPress={handlePressOutsideModal}
+      >
+        <View style={inputContLogin.container}>
+          <TextInput
+            style={[
+              stylesLogin.inputPass,
+              isOldPasswordFocused && stylesLogin.inputFocused,
+            ]}
+            placeholder="Old Password"
+            value={oldPassword}
+            onFocus={handleOldPasswordFocus}
+            onBlur={handleOldPasswordFocusBlur}
+          />
+          <TextInput
+            style={[
+              stylesLogin.inputPass,
+              isNewPasswordFocused && stylesLogin.inputFocused,
+            ]}
+            placeholder="New Password"
+            secureTextEntry={true}
+            value={newPassword}
+            onFocus={handleNewPasswordFocus}
+            onBlur={handleNewPasswordBlur}
+          />
+          <TextInput
+            style={[
+              stylesLogin.inputPass,
+              isConfirmPasswordFocused && stylesLogin.inputFocused,
+            ]}
+            placeholder="Confirm Password"
+            secureTextEntry={true}
+            value={confirmPassword}
+            onChangeText={(pwd) => setConfirmPassword(pwd)}
+            onFocus={handleConfirmPasswordFocus}
+            onBlur={handleConfirmPasswordBlur}
+          />
+          <TouchableOpacity style={stylesLogin.button} onPress={handleSubmit}>
+            <Text style={stylesLogin.buttonText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
     </Modal>
   );
 };

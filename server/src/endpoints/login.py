@@ -10,6 +10,7 @@ class user_info:
         self.distance_or_vacancy = query_result[2]
         self.last_schedule_id = query_result[3]
         self.first_or_last_location = query_result[4]
+        self.include_metered = query_result[5]
 
 def grab_user_info(session_id):
     query_result = query("get_user_info.sql", [session_id], "one")
