@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { recommendButtons } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const RecommendBuildingSelector = ({ buildings, onSelect, invertGradient }) => {
-  const [selectedBuilding, setSelectedBuilding] = useState(null);
-
-  const selectBuildingHandler = (building_id) => {
-    setSelectedBuilding(building_id);
-    onSelect(building_id);
-  }
+const RecommendBuildingSelector = ({ buildings, selectedBuilding, onSelect, invertGradient }) => {
 
   return (
     <LinearGradient
@@ -34,7 +27,7 @@ const RecommendBuildingSelector = ({ buildings, onSelect, invertGradient }) => {
           placeholder="Select item"
           searchPlaceholder="Search..."
           value={selectedBuilding}
-          onChange={item => selectBuildingHandler(item.building_id)}
+          onChange={item => onSelect(item.building_id)}
         />
       </View>
     </LinearGradient>

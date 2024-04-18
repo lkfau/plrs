@@ -101,7 +101,6 @@ def recommend():
     else:
         guest = True
 
-    print(guest)
     schedule_id = request.args.get('schedule_id', default=0, type=int)
     building_id = request.args.get('building_id', default=0, type=int)
 

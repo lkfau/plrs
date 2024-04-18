@@ -65,14 +65,15 @@ def bitmask_to_array(weekdays):
     return result
             
 # load user schedules
-def get_schedules(user_id):
-    query_result = query('get_user_schedules.sql', [user_id], "all") #get user schedules
+def get_schedules(user_id, weekday):
+    weekday = None if weekday == None else int(pow(2, weekday))
+    query_result = query('get_user_schedules.sql', [user_id, weekday], "all") #get user schedules
     user_schedules = list(map(lambda schedule : Schedule(query_result=schedule), query_result))
     return user_schedules
 
 # load user schedules with items
-def get_schedules_with_items(user_id):
-    user_schedules = get_schedules(user_id)
+def get_schedules_with_items(user_id, weekday):
+    user_schedules = get_schedules(user_id, weekday)
     schedule_items = get_schedule_items(user_id=user_id)
     for schedule in user_schedules:
         schedule.items = list(filter(lambda item : item.schedule_id == schedule.schedule_id, schedule_items))
@@ -144,16 +145,19 @@ def schedules():
         
         if request.method == 'GET':
             user_id = userinfo.user_id
+         
             schedule_id = request.args.get('schedule_id', default=0, type=int)
             get_items = request.args.get('get_items', default=0, type=bool)
-             # case 1: get user's schedules
+            weekday = request.args.get('weekday', default=None, type=int)
+
+            # case 1: get user's schedules
             if (user_id > 0 and get_items == False):
-                user_schedules = get_schedules(user_id)
+                user_schedules = get_schedules(user_id, weekday)
                 return jsonify(list(map(lambda schedule: schedule.__dict__, user_schedules))), 200
             
             # case 2: get schedules with items
             elif (user_id > 0 and get_items == True):
-                user_schedules = get_schedules_with_items(user_id)
+                user_schedules = get_schedules_with_items(user_id, weekday)
                 return jsonify(list(map(lambda schedule : schedule.to_dict(), user_schedules))), 200
 
              # case 2: get items in schedule

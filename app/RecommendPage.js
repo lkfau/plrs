@@ -72,7 +72,7 @@ const GetRecommendation = ({
 
   async function fetchScheduleData() {
     try {
-      const scheduleResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules`, {
+      const scheduleResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/schedules?weekday=${new Date().getDay()}`, {
         headers: { Authorization: 'Bearer ' + ctx.getSessionID() }
       });
 
@@ -128,16 +128,24 @@ const GetRecommendation = ({
                 children={() => (
                   <RecommendScheduleSelector
                     schedules={schedules}
+                    selectedSchedule={schedule}
                     setSchedule={setSchedule}
                     firstOrLastLocation={firstOrLastLocation}
                     setFirstOrLastLocation={setFirstOrLastLocation}
                   />
-                )}>
-              </Tab.Screen>
+                )}
+              />
               <Tab.Screen
                 name="Use Building"
-                children={() => <RecommendBuildingSelector buildings={buildings} onSelect={setBuilding} invertGradient={true} />}>
-              </Tab.Screen>
+                children={() => (
+                  <RecommendBuildingSelector 
+                    buildings={buildings} 
+                    selectedBuilding={building} 
+                    onSelect={setBuilding} 
+                    invertGradient={true} 
+                  />
+                )}
+              />
             </Tab.Navigator>
           )) : (
             <RecommendBuildingSelector buildings={buildings} onSelect={setBuilding} invertGradient={false}/>

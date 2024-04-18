@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal } from 'react-native';
+import React, {  useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { button, changePermit, checkBox } from './Styles';
+import { button,} from './Styles';
 import PageContainer from './UI/PageContainer';
 import PermitModal from './PermitModal';
 
@@ -14,10 +14,8 @@ const pageOptions = [
 
 const Settings = () => {
   const navigation = useNavigation();
-  //const ctx = useContext(DataContext);
 
   const [modalVisible, setModalVisible] = useState(false);
-  
 
   return (
     <PageContainer gradient={true}>

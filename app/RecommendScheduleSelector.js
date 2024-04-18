@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { recommendButtons } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { stylesRecommend } from './Styles';
 
-const RecommendScheduleSelector = ({ schedules, setSchedule, firstOrLastLocation, setFirstOrLastLocation }) => {
-  const [selectedSchedule, setSelectedSchedule] = useState(null);
-  
-  const selectScheduleHandler = (schedule_id) => {
-    setSelectedSchedule(schedule_id);
-    setSchedule(schedule_id);
-  }
+const RecommendScheduleSelector = ({ schedules, selectedSchedule, setSchedule, firstOrLastLocation, setFirstOrLastLocation }) => {
 
   return (
     <LinearGradient
@@ -35,7 +28,7 @@ const RecommendScheduleSelector = ({ schedules, setSchedule, firstOrLastLocation
         placeholder="Select item"
         searchPlaceholder="Search..."
         value={selectedSchedule}
-        onChange={item => selectScheduleHandler(item.schedule_id)}
+        onChange={item => setSchedule(item.schedule_id)}
       />  
     </View>
     <Text style={recommendButtons.txt}>Would you like to park near your first or last location?</Text>

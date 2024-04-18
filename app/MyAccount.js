@@ -1,15 +1,11 @@
 import { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { button, textInput, changeEmail, inputContLogin, stylesLogin } from './Styles'
 import PageContainer from './UI/PageContainer';
 import DataContext from './context/data-context';
 
 
 const Account = () => {
-  const navigation = useNavigation();
-  const Stack = createStackNavigator();
   const ctx = useContext(DataContext);
 
   //Modals for both email and password
@@ -46,27 +42,6 @@ const Account = () => {
 
   const handleOldEmailFocus = () => setIsOldEmailFocused(true);
   const handleOldEmailBlur = () => setIsOldEmailFocused(false);
-
-
-  // const createAccount = async () => {
-  //   const passwordHash = await Crypto.digestStringAsync(
-  //     Crypto.CryptoDigestAlgorithm.SHA256,
-  //     process.env.EXPO_PUBLIC_SEED + password
-  //   );
-
-  //   const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/create_user`, {
-  //     method: "POST",
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       email: email,
-  //       pwd: passwordHash
-  //     })
-  //   });
-
-  //   console.log(await response.json());
-  // }
 
 
   const handleChangeEmail = () => {

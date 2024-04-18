@@ -1,8 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import DataContext from './context/data-context';
-import { changePermit, checkBox } from './Styles';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { changePermit } from './Styles';
 import { button, badge } from './Styles';
 import Checkbox from './UI/Checkbox';
 
@@ -51,7 +50,6 @@ const PermitModal = ({ visible, onClose }) => {
       onClose();
     }
   };
-  console.log(permits)
   return (
     <Modal
     animationType="fade"
