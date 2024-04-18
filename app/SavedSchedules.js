@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, RefreshControl, Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DataContext from './context/data-context.js';
 import ScheduleView from './ScheduleView.js';
@@ -168,12 +168,12 @@ const Schedules = () => {
 const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEditor, createSchedule, deleteSchedule }) => {
 
   return (
-    <PageContainer gradient={true} style={{paddingTop: 108.5}}>
+    <PageContainer gradient={true}>
       <ScrollView
-        contentContainerStyle={{ alignItems: 'center', paddingVertical: 20 }}
+        contentContainerStyle={{ alignItems: 'center',  paddingTop: (Platform.OS == 'ios' ? 80 : 120), paddingBottom: 20 }}
         vertical
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules}/>}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules} progressViewOffset={100}/>}
       >
         {schedules.map((schedule) => (
           <ScheduleView key={schedule.schedule_id} schedule={schedule} onPress={toggleScheduleEditor} onDelete={deleteSchedule} />
