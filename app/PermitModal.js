@@ -65,9 +65,9 @@ const PermitModal = ({ visible, onClose }) => {
       activeOpacity={1}
       onPressOut={handlePressOut} // Use the custom handler
     >
-        <View style={{ display: 'flex', backgroundColor: '#fff', width: 300, height: 450, padding: 20, borderRadius: 10 }}>
+        <View style={{ display: 'flex', backgroundColor: '#fff', width: 300, height: 460, padding: 20, borderRadius: 10 }}>
           <ScrollView>
-            <Text style={{color: 'black', textAlign: 'center'}}>Select your permits</Text>
+            <Text style={{color: 'black', textAlign: 'center',fontWeight:'bold', marginBottom:10}}>Select your permits</Text>
             {permits.map(option => (
               <TouchableOpacity 
                 style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flexDirection: 'row',  marginVertical: 10 }} 
@@ -75,7 +75,7 @@ const PermitModal = ({ visible, onClose }) => {
                 onPress={() => handlePermitSelection(option.permit_type_id)}
               >
                 <Text>{option.type_name}</Text>
-                <View style={[checkBox, { backgroundColor: option.user_has_permit ? 'green' : 'white' }]}>
+                <View style={[checkBox, { backgroundColor: option.user_has_permit ? '#0073ef' : 'white' }]}>
                   {/* Display checkmark icon if the permit is selected */}
                   {option.user_has_permit === true && <FontAwesome5 name="check" size={20} color="white" />}
                 </View>

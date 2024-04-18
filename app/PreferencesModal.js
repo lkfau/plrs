@@ -88,8 +88,8 @@ const PreferencesModal = ({ visible, onClose }) => {
         }}>
           <ScrollView>
             <View style={{ flexDirection: 'column', marginBottom: 20 }}>
-              <Text style={{ flex: 1, textAlign: 'center', marginBottom: 15 }}>Select your recommendation preferences</Text>
-              <Text style={{ flex: 1, textAlign: 'left' }}>Would you like to park near your first or last location? </Text>
+              <Text style={{ flex: 1, textAlign: 'center', marginBottom: 15,fontWeight:'bold' }}>Select your parking lot recommendation preferences</Text>
+              <Text style={{ flex: 1, textAlign: 'left' }}>Would you like lot recommendations near your first or last building location? </Text>
             </View>
             <View style={{ flexDirection: 'row', marginBottom: 15 }}>
               <TouchableOpacity
@@ -128,7 +128,7 @@ const PreferencesModal = ({ visible, onClose }) => {
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'column', marginBottom: 20 }}>
-              <Text style={{ flex: 1, textAlign: 'left' }}>Would you like to take lot vacancy or distance to building location into account? </Text>
+              <Text style={{ flex: 1, textAlign: 'left' }}>Would you like to prioritze lot vacancy or distance to building location for your lot recommendations? </Text>
             </View>
             <View style={{ flexDirection: 'row', marginBottom: 10 }}>
               <TouchableOpacity
@@ -167,7 +167,7 @@ const PreferencesModal = ({ visible, onClose }) => {
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'column', marginBottom: 20 }}>
-              <Text style={{ flex: 1, textAlign: 'left' }}>Would you like to include metered lots in your recommendation? </Text>
+              <Text style={{ flex: 1, textAlign: 'left' }}>Would you like to include metered lots for your lot recommendations? </Text>
             </View>
             <View style={{ flexDirection: 'row', marginBottom: 10 }}>
               <TouchableOpacity

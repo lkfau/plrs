@@ -170,7 +170,7 @@ const SchedulesList = ({ schedules, loading, refreshSchedules, toggleScheduleEdi
   return (
     <PageContainer gradient={true} style={{paddingTop: 108.5}}>
       <ScrollView
-        contentContainerStyle={{ alignItems: 'center', paddingVertical: 20 }}
+        contentContainerStyle={{ alignItems: 'center', paddingVertical: 50 }}
         vertical
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={loading} onRefresh={refreshSchedules}/>}

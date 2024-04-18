@@ -108,6 +108,7 @@ const Account = () => {
     }}
   >
     <View style={inputContLogin.container}>
+    <Text style={{marginBottom:10, fontWeight:'bold'}}>Update email</Text>
       <TextInput
         style={[
           stylesLogin.inputPass,
@@ -152,6 +153,7 @@ const Account = () => {
         }}
       >
         <View style={inputContLogin.container}>
+        <Text style={{fontWeight:'bold',marginBottom:10}}>Update Password</Text>
           <TextInput
             style={[
               stylesLogin.inputPass,
