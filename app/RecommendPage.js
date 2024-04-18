@@ -68,7 +68,7 @@ const GetRecommendation = ({
   const recommendDisabled = useMemo(() => (
     (currentTab === 'Use Schedule' && (schedule === null || firstOrLastLocation === null))
     || (currentTab === 'Use Building' && building === null)
-  ), [currentTab, schedule, building]);
+  ), [currentTab, schedule, building, firstOrLastLocation]);
 
   async function fetchScheduleData() {
     try {
