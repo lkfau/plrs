@@ -124,6 +124,29 @@ export const recommendButtons = {
   },
 }
 
+export const badge = {
+  borderRadius: 5,
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingVertical: 5,
+  paddingHorizontal: 10
+}
+
+export const warning = {
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#d6a829',
+    backgroundColor: '#fade78',
+    borderRadius: 10,
+    padding: 10
+  },
+  text: {
+    fontSize: 16,
+    color: '#5c4600'
+  }
+}
 // Page-specific styles
 
 // About
@@ -400,41 +423,36 @@ export const stylesRecommendation = StyleSheet.create({
     mapContainer: {
       width: 300,
       height: 300,
-      marginBottom: 20,
-      marginLeft: 30
-    },
-    roundedMapContainer: {
       borderRadius: 15,
       overflow: 'hidden',
       alignContent: 'center',
-      marginTop: 20
+      marginVertical: 20
     },
     map: {
       flex: 1,
     },
     greaterMapContainer: {
       backgroundColor: 'white',
+      alignItems: 'center',
       paddingBottom: 10,
+      paddingHorizontal: 25,
       marginBottom: 10,
       borderRadius: 20
     },
     statusText: {
       fontSize: 18,
-      marginBottom: 10,
-      color: 'red',
-      marginLeft: 60,
       fontWeight: 'bold'
     },
     indicatorContainer: {
       flexDirection: 'row',
-      alignItems: 'center',
+      width: '100%',
+      justifyContent: 'space-evenly',
+      marginBottom: 10 
     },
     distance: {
       color: 'black',
-      marginLeft: 130,
       fontWeight: 'bold',
       fontSize: 18,
-      marginBottom: 10
     },
     button: {
       paddingVertical: 15,
@@ -455,13 +473,6 @@ export const stylesRecommendation = StyleSheet.create({
       flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       justifyContent: 'flex-end',
-    },
-    recommendationContent: {
-      paddingHorizontal: 20,
-      paddingBottom: 20,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'transparent', // Remove background color
     },
     popupContainer: {
       backgroundColor: '#fff',
@@ -498,19 +509,12 @@ export const stylesRecommendation = StyleSheet.create({
       top: '50%',
       transform: [{ translateY: -12 }],
     },
-    arrowText: {
-      fontSize: 30,
-    },
     arrowContainer: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center'
-    },
-    recommendationContent: {
-      flexGrow: 1,
-      paddingVertical: 20,
-      backgroundColor: 'transparent', // Remove background color
+      justifyContent: 'center',
+      marginHorizontal: 21
     },
     transparent: {
       opacity: 0
@@ -533,7 +537,6 @@ export const stylesRecommendation = StyleSheet.create({
       opacity: 0
     },
     recommendationContent: {
-      flexGrow: 1,
       paddingVertical: 20,
       backgroundColor: 'transparent',
     },

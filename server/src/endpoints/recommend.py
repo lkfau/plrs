@@ -14,7 +14,8 @@ class LotRecommendation:
     def __init__(self, query_result):
         self.lot_id = query_result[0]
         self.lot_name = query_result[1]
-        self.lot_rect = query_result[2:6]
+        self.payment_required = query_result[2]
+        self.lot_rect = query_result[3:7]
 
 def get_parking_lots(permit_type_ids):
     query_result = query('get_parking_lots.sql', [permit_type_ids], "all") #get parking lots
@@ -57,17 +58,17 @@ def get_best_distance(dest_x1, dest_y1, dest_x2, dest_y2, lot_x1, lot_y1, lot_x2
 def strToDate(dateString): 
     return datetime.strptime(dateString, "%Y-%m-%d %H:%M:%S").date()
 
-def sort_lots(lots, distance_or_vacancy):
-    i = 0 
+def sort_and_filter_lots(lots, distance_or_vacancy, include_metered):
+    result_lots = []
     lots.sort(key = lambda lot : lot.feet_to_destination)
+    for lot in lots:
+        if (include_metered or not lot.payment_required) and (
+              (distance_or_vacancy == 'd' and lot.fullness < 0.65) or
+              (distance_or_vacancy == 'v' and lot.fullness <= 0.4)
+        ):
+            result_lots.append(lot)
 
-    for i in range(len(lots)-1):
-        if distance_or_vacancy == 'v' and lots[i].fullness >= 0.4:
-            del lots[i]
-        elif lots[i].fullness > 0.65:
-            del lots[i]
-
-    return lots
+    return result_lots
 
 def calc_lot_fullness_float(lot_id, curtime, user_responses):
     lot_fullness_float = 0
@@ -100,6 +101,7 @@ def recommend():
     else:
         guest = True
 
+    print(guest)
     schedule_id = request.args.get('schedule_id', default=0, type=int)
     building_id = request.args.get('building_id', default=0, type=int)
 
@@ -129,13 +131,12 @@ def recommend():
         lot.longitude= (lot.lot_rect[1] + lot.lot_rect[3]) / 2
         del lot.lot_rect
 
-
         lot.fullness = calc_lot_fullness_float(lot.lot_id, curtime, feedback)
 
     # sort lots and call the function with user not preferring vacancy just to test
     if guest:
-        lots = sort_lots(lots, 'd')
+        lots = sort_and_filter_lots(lots, 'd', True)
     else:
-        lots = sort_lots(lots, userinfo.distance_or_vacancy)
+        lots = sort_and_filter_lots(lots, userinfo.distance_or_vacancy, userinfo.include_metered)
 
     return jsonify(list(map(lambda lot: lot.__dict__, lots[0:3]))), 200

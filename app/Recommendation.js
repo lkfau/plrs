@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Linking, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, Platform } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import FeedbackModal from './FeedbackModal';
-import { stylesRecommendation, button } from './Styles';
+import { stylesRecommendation, button, warning } from './Styles';
 
 const initialRegion = {
   latitude: 26.371449,
@@ -12,10 +12,10 @@ const initialRegion = {
 };
 
 const fullnessOptions = [
-  { text: 'Vacant', color: 'green', threshold: 0.25},
-  { text: 'Most likely vacant', color: 'gold', threshold: 0.5},
-  { text: 'Most likely full', color: 'orange', threshold: 0.75},
-  { text: 'Full', color: 'red', threshold: 1},
+  { text: 'Vacant', color: 'green', threshold: 0.25 },
+  { text: 'Most likely vacant', color: 'gold', threshold: 0.5 },
+  { text: 'Most likely full', color: 'orange', threshold: 0.75 },
+  { text: 'Full', color: 'red', threshold: 1 },
 ];
 
 const Recommendation = ({ recommendation }) => {
@@ -41,30 +41,31 @@ const Recommendation = ({ recommendation }) => {
   const fullnessOption = useMemo(() => fullnessOptions.find(option => recommendation.fullness < option.threshold), [recommendation.fullness]);
 
   return (
-    <>
-      <View style={stylesRecommendation.recommendationContent}>        
-        <View style={stylesRecommendation.greaterMapContainer}>
+    <View>
+      <View style={stylesRecommendation.greaterMapContainer}>
         <Text style={stylesRecommendation.lotText}>{recommendation.lot_name}</Text>
-        <View style={[stylesRecommendation.mapContainer, stylesRecommendation.roundedMapContainer]}>
-          <MapView style={stylesRecommendation.map} initialRegion={initialRegion}>      
-            <Marker coordinate={destination} title={recommendation.lot_name} />        
+        <View style={stylesRecommendation.mapContainer}>
+          <MapView style={stylesRecommendation.map} initialRegion={initialRegion}>
+            <Marker coordinate={destination} title={recommendation.lot_name} />
           </MapView>
           <TouchableOpacity style={stylesRecommendation.buttonGetDirections} onPress={openMapHandler}>
             <Text style={stylesRecommendation.buttonText}>Get Directions</Text>
           </TouchableOpacity>
         </View>
-          <View style={stylesRecommendation.indicatorContainer}>
-            <Text style={[stylesRecommendation.statusText, {color: fullnessOption.color}]}>{fullnessOption.text}</Text>
-            <Text style={stylesRecommendation.distance}>{recommendation.feet_to_destination} ft</Text>
-          </View>
+        <View style={stylesRecommendation.indicatorContainer}>
+          <Text style={[stylesRecommendation.statusText, { color: fullnessOption.color }]}>{fullnessOption.text}</Text>
+          <Text style={stylesRecommendation.distance}>{recommendation.feet_to_destination} ft</Text>
         </View>
-         
-        <TouchableOpacity style={button.containerOutline} onPress={() => setShowModal(true)}>
-          <Text style={button.title}>I Parked</Text>
-        </TouchableOpacity>    
       </View>
+      {recommendation.payment_required == 1 && <View style={warning.container}>
+        <Text style={[warning.text, {fontWeight: 'bold'}]}>Warning:</Text>
+        <Text style={warning.text}> Metered parking only!</Text>
+      </View>}
+      <TouchableOpacity style={[button.container, { margin: 0 }]} onPress={() => setShowModal(true)}>
+        <Text style={button.title}>I Parked</Text>
+      </TouchableOpacity>
       <FeedbackModal lot_id={recommendation.lot_id} visible={showModal} onHide={() => setShowModal(false)} />
-    </>
+    </View>
   );
 }
 

@@ -1,12 +1,12 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const Checkbox = ({ label, isChecked, onChange }) => {
+const Checkbox = ({ label, isChecked, onChange, size = 20}) => {
   return (
     <TouchableOpacity onPress={onChange} style={styles.checkboxContainer}>
-      <Text style={styles.checkboxText}>{label}</Text>
-      <View style={[styles.checkbox, isChecked && styles.checked]}>
-        {isChecked && <Ionicons name="checkmark-sharp" size={16} style={{color: 'white'}}></Ionicons>}
+      {label && <Text style={styles.checkboxText}>{label}</Text>}
+      <View style={[ styles.checkbox, {width: size, height: size}, isChecked && styles.checked]}>
+        {isChecked && <Ionicons name="checkmark-sharp" size={size * 0.8} style={{color: 'white'}}></Ionicons>}
       </View>
     </TouchableOpacity>
   );
@@ -15,6 +15,7 @@ const Checkbox = ({ label, isChecked, onChange }) => {
 const styles = StyleSheet.create({
   checkboxContainer: {
     alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 10,
   },
   checkboxText: {
@@ -24,11 +25,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 20,
-    height: 20,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: 1,
     borderRadius: 4,
-    borderColor: 'gray',
+    borderColor: '#ccc',
   },
   checked: {
     backgroundColor: '#0073ef',

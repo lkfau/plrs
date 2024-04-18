@@ -11,11 +11,13 @@ class Preferences:
             self.include_metered = request_data['include_metered']
 
 class Permit:
-    def __init__(self, query_result = None):
+    def __init__(self, query_result = None):          
         self.permit_type_id = query_result[0]
-        if (len(query_result) > 1):
-            self.type_name = query_result[1]
-            self.user_has_permit = query_result[2]
+        self.type_name = query_result[1]
+        self.badge_color = query_result[2]
+        self.user_has_permit = query_result[3]
+
+
 
 # save user preferences
 def save_preferences(user_id, new_preferences):
