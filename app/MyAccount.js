@@ -48,25 +48,24 @@ const Account = () => {
   const handleOldEmailBlur = () => setIsOldEmailFocused(false);
 
 
-  // const createAccount = async () => {
-  //   const passwordHash = await Crypto.digestStringAsync(
-  //     Crypto.CryptoDigestAlgorithm.SHA256,
-  //     process.env.EXPO_PUBLIC_SEED + password
-  //   );
+  const getEmail = async () => {
+    // const passwordHash = await Crypto.digestStringAsync(
+    //   Crypto.CryptoDigestAlgorithm.SHA256,
+    //   process.env.EXPO_PUBLIC_SEED + password
+    // );
 
-  //   const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/create_user`, {
-  //     method: "POST",
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       email: email,
-  //       pwd: passwordHash
-  //     })
-  //   });
+    const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/email`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+      })
+    });
 
-  //   console.log(await response.json());
-  // }
+    console.log(await response.json());
+  }
 
 
   const handleChangeEmail = () => {
@@ -90,7 +89,7 @@ const Account = () => {
   return (
     
     <PageContainer gradient={true}>
-      <TouchableOpacity style={button.containerOutline} onPress={() => setModalEmailVisible(true)}>
+      <TouchableOpacity style={button.containerOutline} onPress={() => {setModalEmailVisible(true); getEmail();}}>
         <Text style={button.title}>Change Email</Text>
       </TouchableOpacity>
       <Modal
@@ -109,17 +108,6 @@ const Account = () => {
     }}
   >
     <View style={inputContLogin.container}>
-      <TextInput
-        style={[
-          stylesLogin.inputPass,
-          isOldEmailFocused && stylesLogin.inputFocused,
-        ]}
-        placeholder="Old Email"
-        placeholderTextColor="gray"
-        value={oldEmail}
-        onFocus={handleOldEmailFocus}
-        onBlur={handleOldEmailBlur}
-      />
       <TextInput
         style={[
           stylesLogin.inputPass,

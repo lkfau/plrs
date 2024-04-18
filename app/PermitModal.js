@@ -65,7 +65,7 @@ const PermitModal = ({ visible, onClose }) => {
       activeOpacity={1}
       onPressOut={handlePressOut} // Use the custom handler
     >
-        <View style={{ display: 'flex', backgroundColor: '#fff', width: 300, height: 450, padding: 10, borderRadius: 10 }}>
+        <View style={{ display: 'flex', backgroundColor: '#fff', width: 300, height: 450, padding: 20, borderRadius: 10 }}>
           <ScrollView>
             <Text style={{color: 'black', textAlign: 'center'}}>Select your permits</Text>
             {permits.map(option => (

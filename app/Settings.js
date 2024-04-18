@@ -4,11 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import { button, changePermit, checkBox } from './Styles';
 import PageContainer from './UI/PageContainer';
 import PermitModal from './PermitModal';
+import PreferencesModal from './PreferencesModal';
 
 const pageOptions = [
   { title: 'Account', description: 'Change email, Change password, Log out' },
   { title: 'Schedules', description: 'Manage schedules' },
   { title: 'Permits', description: 'Select permit type(s)' },
+  { title: 'Preferences', description: 'Recommendation preferences' },
   { title: 'About', description: 'Mission statement, Meet the team' }
 ];
 
@@ -17,6 +19,8 @@ const Settings = () => {
   //const ctx = useContext(DataContext);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
+
   
 
   return (
@@ -28,6 +32,8 @@ const Settings = () => {
           onPress={() => {
             if (option.title === 'Permits') {
               setModalVisible(true);
+            } else if (option.title === 'Preferences') {
+              setPopupVisible(true);
             } else {
               navigation.navigate(option.title);
             }
@@ -38,6 +44,7 @@ const Settings = () => {
         </TouchableOpacity>
       ))}
       <PermitModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+      <PreferencesModal visible={popupVisible} onClose={() => setPopupVisible(false)} />
     </PageContainer>
   );
 };
