@@ -65,7 +65,7 @@ const Account = () => {
   return (
     
     <PageContainer gradient={true}>
-      <TouchableOpacity style={button.containerOutline} onPress={() => setModalEmailVisible(true)}>
+      <TouchableOpacity style={button.containerOutline} onPress={() => {setModalEmailVisible(true); getEmail();}}>
         <Text style={button.title}>Change Email</Text>
       </TouchableOpacity>
       <Modal
@@ -84,17 +84,7 @@ const Account = () => {
     }}
   >
     <View style={inputContLogin.container}>
-      <TextInput
-        style={[
-          stylesLogin.inputPass,
-          isOldEmailFocused && stylesLogin.inputFocused,
-        ]}
-        placeholder="Old Email"
-        placeholderTextColor="gray"
-        value={oldEmail}
-        onFocus={handleOldEmailFocus}
-        onBlur={handleOldEmailBlur}
-      />
+    <Text style={{marginBottom:10, fontWeight:'bold'}}>Update email</Text>
       <TextInput
         style={[
           stylesLogin.inputPass,
@@ -139,6 +129,7 @@ const Account = () => {
         }}
       >
         <View style={inputContLogin.container}>
+        <Text style={{fontWeight:'bold',marginBottom:10}}>Update Password</Text>
           <TextInput
             style={[
               stylesLogin.inputPass,

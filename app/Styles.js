@@ -188,7 +188,26 @@ export const changePermit = {
     marginBottom: 20,
   },
 }
-
+export const changePreferences = {
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  container: {
+    width: '80%',
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 15,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 20,
+  },
+}
 export const changeEmail = {
   overlay: {
     flex: 1,
