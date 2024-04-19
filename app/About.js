@@ -20,7 +20,7 @@ const About = () => {
     },
     {
       image: require('./assets/headshot4.jpg'),
-      description: 'Description for team member 4',
+      description: 'Logan Karstens graduated in Spring 2024 with a B.S. in Computer Science and a B.A. in Mathematics. As the team lead, he planned system functionality, structured the server and app, and helped the group collaborate effectively.',
     },
     {
       image: require('./assets/headshot5.jpg'),
