@@ -14,7 +14,7 @@ const FeedbackModal = ({ lot_id, visible, onHide }) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorizartion': 'Bearer ' + ctx.getSessionID()
+        'Authorization': ctx.loggedIn ? 'Bearer ' + ctx.getSessionID() : null
       },
       body: JSON.stringify({
         lot_id: lot_id,
@@ -23,6 +23,8 @@ const FeedbackModal = ({ lot_id, visible, onHide }) => {
     });
     if (response.status == 200) {
       navigation.navigate('GetRecommendation');
+    } else {
+      console.log('error saving feedback')
     }
   }
 
@@ -38,11 +40,11 @@ const FeedbackModal = ({ lot_id, visible, onHide }) => {
           </View>
           <Text style={feedback.popupText}>Is the parking lot fully occupied?</Text>
           <View style={feedback.buttonContainer}>
-            <TouchableOpacity style={[feedback.modalButton, feedback.greenButton]}>
+            <TouchableOpacity style={[feedback.modalButton, feedback.greenButton]} onPress={() => submitFeedback(true)}>
               <Text style={feedback.buttonText} onPress={() => submitFeedback(false)}>Not full</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[feedback.modalButton, feedback.redButton]}>
-              <Text style={feedback.buttonText} onPress={() => submitFeedback(true)}>Full</Text>
+            <TouchableOpacity style={[feedback.modalButton, feedback.redButton]} onPress={() => submitFeedback(true)}>
+              <Text style={feedback.buttonText}>Full</Text>
             </TouchableOpacity>
           </View>
         </View>
