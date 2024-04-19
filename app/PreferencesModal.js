@@ -1,16 +1,63 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
+import DataContext from './context/data-context';
 import { button } from './Styles';
 
 const PreferencesModal = ({ visible, onClose }) => {
-  const [firstBuildingSelected, setFirstBuildingSelected] = useState(true);
+  const ctx = useContext(DataContext);
+
+  const [loading, setLoading] = useState(true);
+
+  const [firstBuildingSelected, setFirstBuildingSelected] = useState(false);
   const [lastBuildingSelected, setLastBuildingSelected] = useState(false);
 
-  const [lotVacancySelected, setLotVacancySelected] = useState(true);
+  const [lotVacancySelected, setLotVacancySelected] = useState(false);
   const [distanceSelected, setDistanceSelected] = useState(false);
 
   const [yesMeteredSelected, setYesMeteredSelected] = useState(false);
-  const [noMeteredSelected, setNoMeteredSelected] = useState(true);
+  const [noMeteredSelected, setNoMeteredSelected] = useState(false);
+
+  const fetchPreferences = async() => {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/preferences`, {
+        headers: {'Authorization': 'Bearer ' + ctx.getSessionID()}
+    });
+
+    let preference_results = await response.json();
+    if (preference_results.first_or_last_location)
+        setLastBuildingSelected(true);
+    else
+        setFirstBuildingSelected(true);
+
+    if (preference_results.distance_or_vacancy == "d")
+        setDistanceSelected(true)
+    else
+        setLotVacancySelected(true)
+
+    if (preference_results.include_metered)
+        setYesMeteredSelected(true);
+    else
+        setNoMeteredSelected(true);
+
+    setLoading(false);
+  }
+
+  const savePreferences = async() => {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/preferences`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + ctx.getSessionID() },
+      body: JSON.stringify({
+        distance_or_vacancy: distanceSelected ? 'd' : 'v',
+        first_or_last_location: lastBuildingSelected,
+        include_metered: yesMeteredSelected
+      })
+    })
+
+    if (response.status == 200) {
+      onClose();
+    } else {
+      console.log('preference save failed')
+    }
+  }
 
   const handleFirstBuildingSelection = () => {
     if (!firstBuildingSelected) {
@@ -60,6 +107,11 @@ const PreferencesModal = ({ visible, onClose }) => {
     }
   };
 
+  useEffect(() => {
+    setLoading(true);
+    if (visible) fetchPreferences();
+  }, [visible]);
+
   return (
     <Modal
       animationType="fade"
@@ -80,13 +132,13 @@ const PreferencesModal = ({ visible, onClose }) => {
         <View style={{
           backgroundColor: '#fff',
           width: 300,
-          height: 500,
+          height: 520,
           padding: 20,
           borderRadius: 10,
           display: 'flex',
           justifyContent: 'space-between',
         }}>
-          <ScrollView>
+          {!loading && <ScrollView>
             <View style={{ flexDirection: 'column', marginBottom: 20 }}>
               <Text style={{ flex: 1, textAlign: 'center', marginBottom: 15,fontWeight:'bold' }}>Select your parking lot recommendation preferences</Text>
               <Text style={{ flex: 1, textAlign: 'left' }}>Would you like lot recommendations near your first or last building location? </Text>
@@ -205,8 +257,8 @@ const PreferencesModal = ({ visible, onClose }) => {
                 <Text style={{ color: noMeteredSelected ? 'white' : 'black' }}>No</Text>
               </TouchableOpacity>
             </View>
-          </ScrollView>
-          <TouchableOpacity style={{ ...button.containerOutline, marginTop: 10, borderRadius: 50 }}>
+          </ScrollView>}
+          <TouchableOpacity style={{ ...button.containerOutline, marginTop: 10, borderRadius: 50 }} onPress={savePreferences}>
             <Text style={button.title}>Save Preferences</Text>
           </TouchableOpacity>
         </View>

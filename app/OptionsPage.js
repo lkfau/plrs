@@ -17,7 +17,7 @@ const OptionsPage = () => {
 
   return (
     <Stack.Navigator screenOptions={({ navigation }) => {
-        if (stackNav === null) setStackNav(navigation)
+        if (stackNav === null) setTimeout(() => setStackNav(navigation), 10)
     }}>
       <Stack.Screen
         name="Options"

@@ -28,7 +28,7 @@ def create_user():
         ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
     )
 
-    if email == '' or pwd == '':
+    if not email.endswith('@fau.edu') or pwd == '':
         return 'Error; New user must have an email and password', 404
         
     pwd = custom_hash(pwd)

@@ -11,8 +11,9 @@ const PermitModal = ({ visible, onClose }) => {
 
   const fetchPermits = async() => {
     const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/permits`, {
-      headers: {'Authorization': 'Bearer ' + ctx.getSessionID()}
+        headers: {'Authorization': 'Bearer ' + ctx.getSessionID()}
     });
+    
     let permit_results = await response.json();
     setPermits(permit_results);
   }

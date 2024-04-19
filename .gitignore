@@ -1,8 +1,7 @@
-# server db creds
+# .ini files
 database.ini
-
-# server hash seed file
 seed.ini
+email.ini
 
 # dependencies
 /client/node_modules
