@@ -40,7 +40,7 @@ def check_session(session_id, email_verified=True):
     user_session = session_ids(session_id_value=session_id)
     if user_session.session_id_value and not user_session.too_old():
         query_result = query("get_user_info.sql", [session_id, email_verified], "one")
-        return user_info(query_result)
+        return user_info(query_result) if query_result else False
     else:
         return False
 

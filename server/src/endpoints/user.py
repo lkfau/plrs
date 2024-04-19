@@ -57,7 +57,6 @@ def create_user():
 @app_user.route('/verify_user_email', methods=['POST'])
 @cross_origin()
 def verify_user_email():
-    print('1')
     bearer = request.headers.get('Authorization')
     if bearer:
         userinfo = check_session(bearer.split()[1], email_verified=False)
@@ -65,7 +64,6 @@ def verify_user_email():
         return jsonify({'message': 'Unauthorized'}), 401
     
     request_data = request.get_json()
-    print('2')
     auth_code = request_data['auth_code']
     user_id = userinfo.user_id
 
@@ -79,47 +77,47 @@ def verify_user_email():
 @app_user.route('/update_user_email', methods=['POST'])
 @cross_origin()
 def update_user_email(): 
-      bearer = request.headers.get('Authorization')
-      if bearer:
-          userinfo = check_session(bearer.split()[1])
-      if (not bearer or not userinfo):
-          return jsonify({'message': 'Unauthorized'}), 401
+    bearer = request.headers.get('Authorization')
+    if bearer:
+        userinfo = check_session(bearer.split()[1])
+    if (not bearer or not userinfo):
+        return jsonify({'message': 'Unauthorized'}), 401
       
-      request_data = request.get_json()
-      email = request_data['email']
-      user_id = userinfo.user_id
+    request_data = request.get_json()
+    email = request_data['email']
+    user_id = userinfo.user_id
 
-      if email and email != '':
-          query_result = query("update_user_email.sql", [email, user_id])
-          if query_result:
-              return jsonify({'message': 'Updated user email.'}), 200
-          else:
-              return jsonify({'message': 'Error updating user.'}), 500
-      else:
-          return jsonify({'message': 'Invalid email address.'}), 400
+    if email and email != '':
+        query_result = query("update_user_email.sql", [email, user_id])
+        if query_result:
+            return jsonify({'message': 'Updated user email.'}), 200
+        else:
+            return jsonify({'message': 'Error updating user.'}), 500
+    else:
+        return jsonify({'message': 'Invalid email address.'}), 400
       
 @app_user.route('/update_user_password', methods=['POST'])
 @cross_origin()
 def update_user_password(): 
-      bearer = request.headers.get('Authorization')
-      if bearer:
-          userinfo = check_session(bearer.split()[1])
-      if (not bearer or not userinfo):
-          return jsonify({'message': 'Unauthorized'}), 401
+    bearer = request.headers.get('Authorization')
+    if bearer:
+        userinfo = check_session(bearer.split()[1])
+    if (not bearer or not userinfo):
+        return jsonify({'message': 'Unauthorized'}), 401
       
-      request_data = request.get_json()
-      old_pwd = request_data['old_pwd']
-      new_pwd = request_data['new_pwd']
-      old_pwd = custom_hash(old_pwd)
-      new_pwd = custom_hash(new_pwd)
-      user_id = userinfo.user_id
+    request_data = request.get_json()
+    old_pwd = request_data['old_pwd']
+    new_pwd = request_data['new_pwd']
+    old_pwd = custom_hash(old_pwd)
+    new_pwd = custom_hash(new_pwd)
+    user_id = userinfo.user_id
 
-      if new_pwd and len(new_pwd) >= 3: 
-          query_result = query("update_user_password.sql", [new_pwd, old_pwd, user_id])
-          print(query_result)
-          if query_result:
-              return jsonify({'message': 'Updated user password.'}), 200
-          else:
-              return jsonify({'message': 'Old password is incorrect.'}), 400
-      else:
-          return jsonify({'message': 'Invalid password.'}), 400
+    if new_pwd and len(new_pwd) >= 3: 
+        query_result = query("update_user_password.sql", [new_pwd, old_pwd, user_id])
+        print(query_result)
+        if query_result:
+            return jsonify({'message': 'Updated user password.'}), 200
+        else:
+            return jsonify({'message': 'Old password is incorrect.'}), 400
+    else:
+        return jsonify({'message': 'Invalid password.'}), 400
