@@ -1,32 +1,11 @@
-import { useContext } from 'react';
-import DataContext from './context/data-context';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native'; 
 import { feedback } from './Styles';
 
-const FeedbackModal = ({ lot_id, visible, onHide }) => {
+const FeedbackModal = ({ lot_id, visible, onFeedback, onHide }) => {
 
   const navigation = useNavigation();
-  const ctx = useContext(DataContext)
-  const submitFeedback = async (lotIsFull) => {
-    const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/feedback`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': ctx.loggedIn ? 'Bearer ' + ctx.getSessionID() : null
-      },
-      body: JSON.stringify({
-        lot_id: lot_id,
-        lot_is_full: lotIsFull
-      }),
-    });
-    if (response.status == 200) {
-      navigation.navigate('GetRecommendation');
-    } else {
-      console.log('error saving feedback')
-    }
-  }
 
   return (
     <Modal visible={visible} transparent animationType="fade">
@@ -40,10 +19,10 @@ const FeedbackModal = ({ lot_id, visible, onHide }) => {
           </View>
           <Text style={feedback.popupText}>Is the parking lot fully occupied?</Text>
           <View style={feedback.buttonContainer}>
-            <TouchableOpacity style={[feedback.modalButton, feedback.greenButton]} onPress={() => submitFeedback(true)}>
-              <Text style={feedback.buttonText} onPress={() => submitFeedback(false)}>Not full</Text>
+            <TouchableOpacity style={[feedback.modalButton, feedback.greenButton]} onPress={() => onFeedback(lot_id, false, true)}>
+              <Text style={feedback.buttonText}>Not full</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[feedback.modalButton, feedback.redButton]} onPress={() => submitFeedback(true)}>
+            <TouchableOpacity style={[feedback.modalButton, feedback.redButton]} onPress={() => onFeedback(lot_id, true, true)}>
               <Text style={feedback.buttonText}>Full</Text>
             </TouchableOpacity>
           </View>

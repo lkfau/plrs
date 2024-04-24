@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import DataContext from './context/data-context';
 import * as Crypto from 'expo-crypto';
 import { inputContCreate, stylesCreateaccount, inputCreate, btn } from './Styles';
@@ -17,6 +17,7 @@ const CreateAccountPage = () => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false);
 
+  const [invalidMessage, setInvalidMessage] = useState(null);
   const handleEmailFocus = () => setIsEmailFocused(true);
   const handleEmailBlur = () => setIsEmailFocused(false);
   const handlePasswordFocus = () => setIsPasswordFocused(true);
@@ -24,14 +25,21 @@ const CreateAccountPage = () => {
   const handleConfirmPasswordFocus = () => setIsConfirmPasswordFocused(true);
   const handleConfirmPasswordBlur = () => setIsConfirmPasswordFocused(false);
 
+  
   const createAccount = async () => {
+    setInvalidMessage(null);
     if (!email || email.length < 2) {
-      console.log('handle invalid email');
+      setInvalidMessage('Email is invalid.');
+      return;
+    }
+
+    if (password.length < 3) {
+      setInvalidMessage('Password is invalid.');
       return;
     }
 
     if (password !== confirmPassword) {
-      console.log('handle different passwords')
+      setInvalidMessage('Passwords do not match.');
       return;
     }
 
@@ -57,8 +65,17 @@ const CreateAccountPage = () => {
         ctx.logIn(data.session_id, email)
       else 
         console.log('create account fail :(')
+    } else if (response.status == 400) {
+      setInvalidMessage('Email or password invalid. Ensure the email is a valid university email address.')
+    } else if (response.status == 409) {
+      setInvalidMessage('Account with that email already exists.');
     }
   }
+
+useFocusEffect(useCallback(() => {
+  setEmail('');
+  setPassword('');
+}, []));
 
 return (
   <PageContainer gradient={true}>
@@ -99,6 +116,10 @@ return (
         onFocus={handleConfirmPasswordFocus}
         onBlur={handleConfirmPasswordBlur}
       />
+
+      {invalidMessage !== null && (
+        <Text style={{ maxWidth: 270, color: 'red', marginTop: 10 }}>{invalidMessage}</Text>
+      )}
       
       <TouchableOpacity style={btn.button} onPress={createAccount}>
         <Text style={stylesCreateaccount.buttonText}>Create Account</Text>

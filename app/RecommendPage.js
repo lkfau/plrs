@@ -109,6 +109,8 @@ const GetRecommendation = ({
     fetchBuildingData();
     if (ctx.loggedIn)
       fetchScheduleData();
+    else
+      setCurrentTab('Use Building')
   }, [ctx.loggedIn]));
 
   return (

@@ -18,7 +18,7 @@ const fullnessOptions = [
   { text: 'Full', color: 'red', threshold: 1 },
 ];
 
-const Recommendation = ({ recommendation }) => {
+const Recommendation = ({ recommendation, onFeedback }) => {
   const [showModal, setShowModal] = useState(false);
 
   const destination = useMemo(() => ({
@@ -64,7 +64,15 @@ const Recommendation = ({ recommendation }) => {
       <TouchableOpacity style={[button.container, { margin: 0 }]} onPress={() => setShowModal(true)}>
         <Text style={button.title}>I Parked</Text>
       </TouchableOpacity>
-      <FeedbackModal lot_id={recommendation.lot_id} visible={showModal} onHide={() => setShowModal(false)} />
+
+      <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+          <Text>or</Text>
+          <TouchableOpacity onPress={() => onFeedback(recommendation.lot_id, true, false)}>
+            <Text style={{marginLeft: 5, color: '#007bff', textDecorationLine: 'underline'} }>report that the lot is full.</Text>
+          </TouchableOpacity>
+      </View>
+
+      <FeedbackModal lot_id={recommendation.lot_id} visible={showModal} onFeedback={onFeedback} onHide={() => setShowModal(false)} />
     </View>
   );
 }

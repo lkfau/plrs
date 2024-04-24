@@ -29,7 +29,7 @@ def create_user():
     )
 
     if not email.endswith('@fau.edu') or pwd == '':
-        return 'Error; New user must have an email and password', 404
+        return 'Error: New user must have an FAU email and password', 400
         
     pwd = custom_hash(pwd)
 

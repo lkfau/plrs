@@ -24,14 +24,14 @@ const About = () => {
     },
     {
       image: require('./assets/headshot5.jpg'),
-      description: 'Description for team member 5',
+      description: 'Rohit Varghese is a senior at FAU pursuing a bachelors degree in computer science and works as a backend developer at FPL.',
     },
   ];
 
   return (
-    <PageContainer gradient={true} style={{ paddingTop: 108.5 }}>
+    <PageContainer gradient={true}>
       <View style={{ flex: 1 }}>
-        <ScrollView showsVerticalScrollIndicator='false'>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ marginBottom: 20, marginTop: 20}}>
             <Text style={aboutPage.header}>Mission statement</Text>
             <View style={aboutPage.textContainerStatement}>

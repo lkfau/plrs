@@ -5,6 +5,7 @@ import Schedules from '../SavedSchedules';
 import Recommend from '../RecommendPage';
 import OptionsPage from '../OptionsPage';
 import Account from '../MyAccount';
+import About from '../About';
 
 export default pageOptions = [
   {
@@ -60,6 +61,15 @@ export default pageOptions = [
     transparentTitle: false,
     showLoggedIn: true,
     showLoggedOut: false
+  },
+  {
+    title: 'About',
+    icon: 'help',
+    component: About,
+    showTitle: false,
+    transparentTitle: false,
+    showLoggedIn: false,
+    showLoggedOut: true
   },
   // {
   //   title: 'Change Password',

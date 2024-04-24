@@ -43,9 +43,10 @@ app_feedback = Blueprint('app_feedback', __name__)
 @app_feedback.route('/feedback', methods=['POST'])
 
 def feedback():
-
+    
     guest = False
     bearer = request.headers.get('Authorization')
+    print(bearer)
     if bearer:
         bearer = request.headers.get('Authorization')
         userinfo = check_session(bearer.split()[1])

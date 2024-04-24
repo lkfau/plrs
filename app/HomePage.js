@@ -4,9 +4,9 @@ import PageContainer from './UI/PageContainer';
 import { stylesHome, pageHeader, button } from './Styles';
 
 const pageOptions = [
-  { title: 'Schedules', description: 'Manage schedules' },
-  { title: 'Recommend', description: 'Get a parking lot recommendation' },
-  { title: 'Settings', description: 'Manage your account, Select permit type, Recommendation Preferences' },
+  { title: 'Recommend', description: 'Get your parking lot recommendation' },
+  { title: 'Schedules', description: 'View and edit your custom schedules' },
+  { title: 'Settings', description: 'Manage your account and preferences' },
 ];
 
 const HomePage = ({ navigation }) => {

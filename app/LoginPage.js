@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import * as Crypto from 'expo-crypto';
 import { inputContLogin, stylesLogin } from './Styles';
 import DataContext from './context/data-context';
@@ -48,6 +48,11 @@ const LoginPage = () => {
       setIncorrectInput(true);
     }
   }
+
+  useFocusEffect(useCallback(() => {
+    setEmail('');
+    setPassword('');
+  }, []));
 
   return (
     <PageContainer gradient={true}>
