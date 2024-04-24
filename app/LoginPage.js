@@ -21,6 +21,10 @@ const LoginPage = () => {
   const handlePasswordFocus = () => setIsPasswordFocused(true);
   const handlePasswordBlur = () => setIsPasswordFocused(false);
 
+  const logInDemo = () => {
+    ctx.logIn(process.env.EXPO_PUBLIC_DEMO_SESSION_ID)
+  }
+
   const logIn = async () => {
     const passwordHash = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA256,
@@ -84,7 +88,10 @@ const LoginPage = () => {
           <Text style={{ color: 'red', marginTop: 10 }}>Incorrect email and/or password</Text>
         )}
         <TouchableOpacity style={stylesLogin.button} onPress={logIn}>
-          <Text style={stylesLogin.buttonText}>Sign On</Text>
+          <Text style={stylesLogin.buttonText}>Sign In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={stylesLogin.button} onPress={logInDemo}>
+          <Text style={stylesLogin.buttonText}>Use Demo Account</Text>
         </TouchableOpacity>
         <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}>
           <Text>Don't have an account?</Text>
